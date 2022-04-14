@@ -1,7 +1,7 @@
-package com.example.banksystem.models.controllers;
+package com.example.banksystem.controllers;
 
 import com.example.banksystem.models.Bank;
-import com.example.banksystem.models.Repositories.BankRepository;
+import com.example.banksystem.repositories.BankRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
