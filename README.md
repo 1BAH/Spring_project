@@ -5,6 +5,6 @@
 >Authors
 >>Kalinin Ivan
 >
->>Zaretskaya Mariya
+>>Zaretskaia Mariia
 
 Current status: `in progress`
