@@ -3,22 +3,20 @@ package com.example.banksystem.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Transactions")
-public class Transactions {
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Accounts accountFrom;
+    private Account accountFrom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Accounts accountTo;
+    private Account accountTo;
 
     private float amount;
 
-    public Transactions() {
+    public Transaction() {
 
     }
 
@@ -30,19 +28,19 @@ public class Transactions {
         this.id = id;
     }
 
-    public Accounts getAccountFrom() {
+    public Account getAccountFrom() {
         return accountFrom;
     }
 
-    public void setAccountFrom(Accounts accountFrom) {
+    public void setAccountFrom(Account accountFrom) {
         this.accountFrom = accountFrom;
     }
 
-    public Accounts getAccountTo() {
+    public Account getAccountTo() {
         return accountTo;
     }
 
-    public void setAccountTo(Accounts accountTo) {
+    public void setAccountTo(Account accountTo) {
         this.accountTo = accountTo;
     }
 

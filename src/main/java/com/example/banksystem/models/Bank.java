@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Banks")
-public class Banks {
+public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,10 +15,10 @@ public class Banks {
     private float percentage;
 
     @OneToMany
-    private List<Accounts> accounts;
+    private List<Account> account;
 
-    public Banks() {
-        this.accounts = new ArrayList<>();
+    public Bank() {
+        this.account = new ArrayList<>();
     }
 
     public Long getId() {
@@ -46,11 +45,11 @@ public class Banks {
         this.percentage = percentage;
     }
 
-    public List<Accounts> getAccounts() {
-        return accounts;
+    public List<Account> getAccount() {
+        return account;
     }
 
-    public void setAccounts(List<Accounts> accounts) {
-        this.accounts = accounts;
+    public void setAccount(List<Account> account) {
+        this.account = account;
     }
 }

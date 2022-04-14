@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "client")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +19,10 @@ public class Client {
     private String passport;
 
     @OneToMany
-    private List<Accounts> accounts;
+    private List<Account> account;
 
     public Client() {
-        this.accounts = new ArrayList<>();
+        this.account = new ArrayList<>();
     }
 
     public Long getId() {
@@ -66,11 +65,11 @@ public class Client {
         this.passport = passport;
     }
 
-    public List<Accounts> getAccounts() {
-        return accounts;
+    public List<Account> getAccount() {
+        return account;
     }
 
-    public void setAccounts(List<Accounts> accounts) {
-        this.accounts = accounts;
+    public void setAccount(List<Account> account) {
+        this.account = account;
     }
 }

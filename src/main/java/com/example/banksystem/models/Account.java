@@ -3,9 +3,9 @@ package com.example.banksystem.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "accounts")
 
-public class Accounts {
+
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,12 +16,12 @@ public class Accounts {
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Banks bank;
+    private Bank bank;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Client holder;
 
-    public Accounts() {
+    public Account() {
 
     }
 
