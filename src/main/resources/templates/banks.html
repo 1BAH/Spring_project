@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Banks</title>
+    </head>
+
+    <body>
+        <h1>Banks</h1>
+        <a href="/">home</a>
+        <hr>
+
+        <div th:each="element : ${banks}">
+            <h5 th:text="'Bank #' + ${element.id}"/>
+            <ul>
+                <li th:text="'Name: ' + ${element.name}"/>
+                <li th:text="'Percentage: ' + ${element.percentage} + '%'"/>
+            </ul>
+            <hr>
+        </div>
+    </body>
+</html>

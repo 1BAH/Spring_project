@@ -21,6 +21,12 @@ public class Bank {
         this.accounts = new ArrayList<>();
     }
 
+    public Bank(String name, float percentage) {
+        this.name = name;
+        this.percentage = percentage;
+        this.accounts = new ArrayList<>();
+    }
+
     public Long getId() {
         return id;
     }
