@@ -19,10 +19,10 @@ public class Client {
     private String passport;
 
     @OneToMany
-    private List<Account> account;
+    private List<Account> accounts;
 
     public Client() {
-        this.account = new ArrayList<>();
+        this.accounts = new ArrayList<>();
     }
 
     public Long getId() {
@@ -65,11 +65,11 @@ public class Client {
         this.passport = passport;
     }
 
-    public List<Account> getAccount() {
-        return account;
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
-    public void setAccount(List<Account> account) {
-        this.account = account;
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 }

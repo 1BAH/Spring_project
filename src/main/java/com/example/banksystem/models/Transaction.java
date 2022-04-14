@@ -16,9 +16,7 @@ public class Transaction {
 
     private float amount;
 
-    public Transaction() {
-
-    }
+    public Transaction() {}
 
     public Long getId() {
         return id;

@@ -15,10 +15,10 @@ public class Bank {
     private float percentage;
 
     @OneToMany
-    private List<Account> account;
+    private List<Account> accounts;
 
     public Bank() {
-        this.account = new ArrayList<>();
+        this.accounts = new ArrayList<>();
     }
 
     public Long getId() {
@@ -45,11 +45,11 @@ public class Bank {
         this.percentage = percentage;
     }
 
-    public List<Account> getAccount() {
-        return account;
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
-    public void setAccount(List<Account> account) {
-        this.account = account;
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 }

@@ -3,8 +3,6 @@ package com.example.banksystem.models;
 import javax.persistence.*;
 
 @Entity
-
-
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +10,6 @@ public class Account {
 
     private float amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,9 +18,7 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY)
     private Client holder;
 
-    public Account() {
-
-    }
+    public Account() {}
 
     public void setId(Long id) {
         this.id = id;
