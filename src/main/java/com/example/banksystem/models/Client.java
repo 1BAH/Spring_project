@@ -18,11 +18,19 @@ public class Client {
 
     private String passport;
 
-    @OneToMany
+    @OneToMany(mappedBy = "holder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts;
+
+    @OneToMany(mappedBy = "accountFrom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactionsFromThisAccount;
+
+    @OneToMany(mappedBy = "accountTo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> transactionsToThisAccount;
 
     public Client() {
         this.accounts = new ArrayList<>();
+        this.transactionsFromThisAccount = new ArrayList<>();
+        this.transactionsToThisAccount = new ArrayList<>();
     }
 
     public Long getId() {

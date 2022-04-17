@@ -7,17 +7,19 @@
 
     <body>
         <h1>Form</h1>
-        <a href="/">back to home</a><br>
-        <a href="/banks">back to banks</a>
+        <button onclick="window.location.href = '/';">Home</button><br>
+        <button onclick="window.location.href = '/banks';">Banks</button>
         <hr>
 
         <div>
-            <form action="/banks/add" method="post">
+            <form action="/banks/add/form" method="get">
                 <input type="text" name="name" placeholder="Input name of bank"><br>
                 <input type="text" name="percentage" placeholder="Input percentage"><br>
                 <input type="submit" value="Submit"><br>
-                <input type="reset"><br>
+                <input type="reset" value="Reset"><br>
             </form>
         </div>
+
+        <div>Percentage should be entered in format "*.*" or "*"  ("*,*" is not supported)</div>
     </body>
 </html>

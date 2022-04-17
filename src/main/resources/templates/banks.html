@@ -7,8 +7,8 @@
 
     <body>
         <h1>Banks</h1>
-        <a href="/">home</a><br>
-        <a href="banks/add">Add new bank</a>
+        <button onclick="window.location.href = '/';">Home</button><br>
+        <button onclick="window.location.href = '/banks/add';">Add bank</button><br>
         <hr>
 
         <div th:each="element : ${banks}">
