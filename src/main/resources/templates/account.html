@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accounts</title>
+</head>
+<body>
+
+<h1>Accounts</h1>
+
+<a href="/">home</a>
+
+<hr>
+
+<div th:each="el : ${accounts}">
+    <h2>Accounts</h2>
+    <h2 th:text="${el.id}"/>
+    <h3 th:text="${el.type}"/>
+    <h3 th:text="${el.amount}"/>
+    <hr>
+</div>
+
+<div></div>
+
+</body>
+</html>
