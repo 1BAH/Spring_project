@@ -26,7 +26,7 @@ public class BankController {
         return "banks-add";
     }
 
-    @PostMapping("/banks/add")
+    @GetMapping("/banks/add/form")
     public String addPostAccountPage(@RequestParam String name, @RequestParam String percentage, Model model) {
         Bank bank = new Bank(name, Float.parseFloat(percentage));
         bankRepository.save(bank);

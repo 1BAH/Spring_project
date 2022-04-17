@@ -14,7 +14,7 @@ public class Bank {
 
     private float percentage;
 
-    @OneToMany
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts;
 
     public Bank() {
