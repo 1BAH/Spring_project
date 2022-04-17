@@ -1,5 +1,7 @@
 package com.example.banksystem.securityconfig;
 
+import com.example.banksystem.models.Client;
+import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +19,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    /*
-    to be later realised
-
     @Autowired
-    private UserRepo userRepo;
-     */
+    private ClientRepository clientRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -52,17 +50,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .password("1111")
                 .authorities("ROLE_USER");
 
-        /*
-        to be later realized
 
-        for (User user: userRepo.findAll()) {
+        for (Client client: clientRepository.findAll()) {
             auth.inMemoryAuthentication()
-                    .withUser(user.getName())
-                    .password(passwordEncoder().encode(user.getPassport()))
+                    .withUser(client.getName())
+                    .password(passwordEncoder().encode(client.getPassport()))
                     .authorities("ROLE_USER");
         }
-
-         */
     }
 
     @Bean
