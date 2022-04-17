@@ -9,14 +9,22 @@ public class Transaction {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transaction_from", nullable = false)
     private Account accountFrom;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transaction_to", nullable = false)
     private Account accountTo;
 
     private float amount;
 
     public Transaction() {}
+
+    public Transaction(Account accountFrom, Account accountTo, float amount) {
+        this.accountFrom = accountFrom;
+        this.accountTo = accountTo;
+        this.amount = amount;
+    }
 
     public Long getId() {
         return id;

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Transactions</title>
+    </head>
+
+    <body>
+        <h1>My transactions</h1>
+        <button onclick="window.location.href = '/';">Home</button><br>
+        <button onclick="window.location.href = '/transactions/make';">Make transaction</button><br>
+        <hr>
+
+        <div th:each="el : ${transactions}">
+            <h2>Accounts</h2>
+            <h3 th:text="'Amount>' + ${el.amount}"/>
+            <h3 th:text="'From account>' + ${el.accountFrom.id}"/>
+            <h3 th:text="'To account>' + ${el.accountTo.id}"/>
+            <hr>
+        </div>
+    </body>
+</html>
