@@ -6,15 +6,14 @@
 </head>
 <body>
 
-<h1>Accounts</h1>
-
-<a href="/">home</a><br>
-<a href="/accounts/add">back to accounts</a>
+<h1>Create new account</h1>
+<button onclick="window.location.href = '/';">Home</button><br>
+<button onclick="window.location.href = '/accounts';">Accounts</button><br>
 <hr>
 
 <div>
-  <form action="/account/add/form" method="get">
-    <input type="text" name="name" placeholder="Input type of account: C - credit, D - debit"><br>
+  <form action="/accounts/add/form" method="get">
+    <input type="text" name="type" placeholder="Input type of account: C - credit, D - debit"><br>
     <input type="text" name="amount" placeholder="Input amount"><br>
     <ul th:each="el : ${banks}">
       <input type="radio" th:id="${el.id}" name="bankId" th:value="${el.id}">
@@ -24,8 +23,5 @@
     <input type="reset" value="Reset"><br>
   </form>
 </div>
-
-<div></div>
-
 </body>
 </html>

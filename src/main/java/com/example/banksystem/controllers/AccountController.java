@@ -7,12 +7,15 @@ import com.example.banksystem.repositories.AccountRepository;
 import com.example.banksystem.repositories.BankRepository;
 import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class AccountController {
@@ -25,26 +28,26 @@ public class AccountController {
     @Autowired
     ClientRepository clientRepository;
 
-    @GetMapping("/account")
-    public String accountPage(Model model) {
+    @GetMapping("/accounts")
+    public String accountsPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByName(authentication.getName());
-        Iterable<Account> account = accountRepository.findAll();
-        model.addAttribute("account", account);
-        return "account";
+        List<Account> accounts = currentClient.getAccounts();
+        model.addAttribute("accounts", accounts);
+        return "accounts";
     }
 
     @GetMapping("/accounts/add")
     public String addAccountPage(Model model) {
         Iterable<Bank> banks = bankRepository.findAll();
         model.addAttribute("banks", banks);
-        return "add";
+        return "accounts-add";
     }
-    @GetMapping("/account/add/form")
+    @GetMapping("/accounts/add/form")
     public String addPostAccountPage(@RequestParam String type, @RequestParam String amount, @RequestParam String bankId, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByName(authentication.getName());
-        Account account = new Account(Float.parseFloat(amount), type.charAt(0), bankRepository.findById(Long.parseLong(bankId)).get(), currentClient);
+        Account account = new Account(Float.parseFloat(amount), type, bankRepository.findById(Long.parseLong(bankId)).get(), currentClient);
         accountRepository.save(account);
         return "redirect:/accounts";
     }
