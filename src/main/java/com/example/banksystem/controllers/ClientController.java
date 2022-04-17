@@ -18,7 +18,7 @@ public class ClientController {
         return "registration";
     }
     @GetMapping("/registration/form")
-    public String addUser(@RequestParam String name, @RequestParam String surname, @RequestParam String passport, @RequestParam String address) {
+    public String addClient(@RequestParam String name, @RequestParam String surname, @RequestParam String passport, @RequestParam String address) {
         Client client = new Client();
         client.setName(name);
         client.setSurname(surname);
