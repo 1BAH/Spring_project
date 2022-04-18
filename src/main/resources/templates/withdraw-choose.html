@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Withdraw money</title>
+</head>
+
+<body>
+<h1>Form</h1>
+<button onclick="window.location.href = '/';">Home</button><br>
+<button onclick="window.location.href = '/accounts';">Accounts</button>
+<hr>
+
+<h2>Choose account</h2>
+
+<div>
+    <form action="/accounts/withdraw/choose" method="get">
+        <ul th:each="el : ${accounts}">
+            <input type="radio" th:id="${el.id}" name="accountId" th:value="${el.id}">
+            <label th:for="${el.id}" th:text="${el.id}"/>
+        </ul>
+        <input type="submit" value="Submit"><br>
+        <input type="reset" value="Reset"><br>
+    </form>
+</div>
+
+</body>
+</html>

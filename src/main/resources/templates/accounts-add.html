@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add account</title>
+</head>
+<body>
+
+<h1>Create new account</h1>
+<button onclick="window.location.href = '/';">Home</button><br>
+<button onclick="window.location.href = '/accounts';">Accounts</button><br>
+<hr>
+
+<div>
+  <form action="/accounts/add/form" method="get">
+    <input type="text" name="type" placeholder="Input type of account: C - credit, D - debit"><br>
+    <input type="text" name="amount" placeholder="Input amount"><br>
+    <ul th:each="el : ${banks}">
+      <input type="radio" th:id="${el.id}" name="bankId" th:value="${el.id}">
+      <label th:for="${el.id}" th:text="${el.name}"/>
+    </ul>
+    <input type="submit" value="Submit"><br>
+    <input type="reset" value="Reset"><br>
+  </form>
+</div>
+</body>
+</html>
