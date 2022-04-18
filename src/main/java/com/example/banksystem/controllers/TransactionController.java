@@ -58,8 +58,16 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/make/form")
-    public String makeGetTransaction(@RequestParam String amount, @RequestParam String accountFrom, @RequestParam String accountTo) {
-        Transaction transaction = new Transaction(accountRepository.findById(Long.parseLong(accountFrom)).get(), accountRepository.findById(Long.parseLong(accountTo)).get(), Float.parseFloat(amount));
+    public String makeGetTransaction(@RequestParam float amount, @RequestParam String accountFrom, @RequestParam String accountTo) {
+        Account accFrom = accountRepository.findById(Long.parseLong(accountFrom)).get();
+        Account accTo = accountRepository.findById(Long.parseLong(accountTo)).get();
+
+        accFrom.withdrawMoney(amount);
+        accTo.putMoney(amount);
+        accountRepository.save(accFrom);
+        accountRepository.save(accTo);
+
+        Transaction transaction = new Transaction(accFrom, accTo, amount);
         transactionRepository.save(transaction);
         return "redirect:/";
     }
