@@ -4,6 +4,7 @@ import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
+import org.springframework.cloud.endpoint.RefreshEndpoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ public class ClientController {
     ClientRepository clientRepository;
 
     @Autowired
-    private RestartEndpoint restartEndpoint;
+    private RefreshEndpoint refreshEndpoint;
 
     @GetMapping("/registration")
     public String Registration(Model model) {
@@ -32,7 +33,7 @@ public class ClientController {
 
         clientRepository.save(client);
 
-        restartEndpoint.restart();
+        refreshEndpoint.refresh();
 
         return "redirect:/";
     }
