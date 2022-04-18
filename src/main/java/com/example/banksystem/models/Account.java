@@ -56,4 +56,8 @@ public class Account {
     public void withdrawMoney(float amount) {
         this.amount -= amount;
     }
+
+    public void putMoney(float amount) {
+        this.amount += amount;
+    }
 }

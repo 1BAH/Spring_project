@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.websocket.ClientEndpoint;
 import java.util.List;
 
 @Controller
@@ -47,4 +46,26 @@ public class MoneyController {
         return "redirect:/accounts";
     }
 
+    @GetMapping("/accounts/put")
+    public String putMoney(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByName(authentication.getName());
+        List<Account> accounts = currentClient.getAccounts();
+        model.addAttribute("accounts", accounts);
+        return "put-choose";
+    }
+
+    @GetMapping("/accounts/put/choose")
+    public String putMoneyChoose(@RequestParam String accountId, Model model) {
+        model.addAttribute("choice", accountId);
+        return "put";
+    }
+
+    @GetMapping("accounts/put/{accountId}")
+    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam float amount, Model model) {
+        Account account = accountRepository.findById(accountId).get();
+        account.putMoney(amount);
+        accountRepository.save(account);
+        return "redirect:/accounts";
+    }
 }
