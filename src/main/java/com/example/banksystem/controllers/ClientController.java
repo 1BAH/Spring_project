@@ -16,7 +16,7 @@ public class ClientController {
     ClientRepository clientRepository;
 
     @Autowired
-    private RefreshEndpoint refreshEndpoint;
+    private RestartEndpoint restartEndpoint;
 
     @GetMapping("/registration")
     public String Registration(Model model) {
@@ -33,7 +33,7 @@ public class ClientController {
 
         clientRepository.save(client);
 
-        refreshEndpoint.refresh();
+        restartEndpoint.restart();
 
         return "redirect:/";
     }
