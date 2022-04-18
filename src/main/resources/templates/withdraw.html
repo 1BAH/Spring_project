@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Make transaction</title>
+</head>
+<body>
+
+<h1 th:text="'Withdraw money from account #' + ${choice}"/>
+
+<button onclick="window.location.href = '/';">Home</button><br>
+<button onclick="window.location.href = '/accounts/withdraw';">Change account</button><br>
+<hr>
+
+<div>
+    <form th:action="${choice}" method="get">
+        <input type="text" name="amount" placeholder="Input amount"><br>
+        <input type="submit" value="Submit"><br>
+        <input type="reset" value="Reset"><br>
+    </form>
+</div>
+</body>

@@ -52,4 +52,8 @@ public class Account {
     public String getType() {
         return type;
     }
+
+    public void withdrawMoney(float amount) {
+        this.amount -= amount;
+    }
 }
