@@ -1,6 +1,7 @@
 package com.example.banksystem.models;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 public class Transaction {
@@ -16,11 +17,11 @@ public class Transaction {
     @JoinColumn(name = "transaction_to", nullable = false)
     private Account accountTo;
 
-    private float amount;
+    private BigDecimal amount;
 
     public Transaction() {}
 
-    public Transaction(Account accountFrom, Account accountTo, float amount) {
+    public Transaction(Account accountFrom, Account accountTo, BigDecimal amount) {
         this.accountFrom = accountFrom;
         this.accountTo = accountTo;
         this.amount = amount;
@@ -50,11 +51,11 @@ public class Transaction {
         this.accountTo = accountTo;
     }
 
-    public float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/make/form")
-    public String makeGetTransaction(@RequestParam float amount, @RequestParam String accountFrom, @RequestParam String accountTo) {
+    public String makeGetTransaction(@RequestParam BigDecimal amount, @RequestParam String accountFrom, @RequestParam String accountTo) {
         Account accFrom = accountRepository.findById(Long.parseLong(accountFrom)).get();
         Account accTo = accountRepository.findById(Long.parseLong(accountTo)).get();
 
