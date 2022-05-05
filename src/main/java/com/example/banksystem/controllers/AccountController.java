@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,7 @@ public class AccountController {
     public String addPostAccountPage(@RequestParam String type, @RequestParam String amount, @RequestParam String bankId, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByName(authentication.getName());
-        Account account = new Account(Float.parseFloat(amount), type, bankRepository.findById(Long.parseLong(bankId)).get(), currentClient);
+        Account account = new Account(new BigDecimal(amount), type, bankRepository.findById(Long.parseLong(bankId)).get(), currentClient);
         accountRepository.save(account);
         return "redirect:/accounts";
     }

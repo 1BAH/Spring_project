@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -39,7 +40,7 @@ public class MoneyController {
     }
 
     @GetMapping("accounts/withdraw/{accountId}")
-    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam float amount, Model model) {
+    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
         Account account = accountRepository.findById(accountId).get();
         account.withdrawMoney(amount);
         accountRepository.save(account);
@@ -62,7 +63,7 @@ public class MoneyController {
     }
 
     @GetMapping("accounts/put/{accountId}")
-    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam float amount, Model model) {
+    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
         Account account = accountRepository.findById(accountId).get();
         account.putMoney(amount);
         accountRepository.save(account);
