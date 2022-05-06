@@ -1,10 +1,14 @@
 package com.example.banksystem.models;
 
+import com.example.banksystem.exceptions.WithdrawError;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 public class Account {
+    private static BigDecimal zero = new BigDecimal(0);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,13 +58,26 @@ public class Account {
         return type;
     }
 
-    public void withdrawMoney(BigDecimal amount1) {
+    public void withdrawMoney(BigDecimal amount1) throws WithdrawError {
         BigDecimal amount2 = getAmount();
-        this.amount = amount2.subtract(amount1);
+        BigDecimal newAmount = amount2.subtract(amount1);
+
+        if (type.equals("C") || (newAmount.compareTo(zero) >= 0)) {
+            this.amount = newAmount;
+        } else {
+            throw new WithdrawError("Not enough money", id);
+        }
     }
 
     public void putMoney(BigDecimal amount1) {
         BigDecimal amount2 = getAmount();
         this.amount = amount2.add(amount1);
+    }
+
+    public void percents(float percentage) {
+        if (type.equals("C") || (zero.compareTo(amount) > 0)) {
+            BigDecimal amount2 = getAmount();
+            this.amount = amount2.multiply(new BigDecimal(String.valueOf(1 + percentage / 100)));
+        }
     }
 }

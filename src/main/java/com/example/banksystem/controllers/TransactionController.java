@@ -1,5 +1,6 @@
 package com.example.banksystem.controllers;
 
+import com.example.banksystem.exceptions.WithdrawError;
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.models.Transaction;
@@ -59,17 +60,28 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/make/form")
-    public String makeGetTransaction(@RequestParam BigDecimal amount, @RequestParam String accountFrom, @RequestParam String accountTo) {
+    public String makeGetTransaction(@RequestParam BigDecimal amount, @RequestParam String accountFrom, @RequestParam String accountTo, Model model) {
         Account accFrom = accountRepository.findById(Long.parseLong(accountFrom)).get();
         Account accTo = accountRepository.findById(Long.parseLong(accountTo)).get();
+        boolean error = false;
 
-        accFrom.withdrawMoney(amount);
-        accTo.putMoney(amount);
-        accountRepository.save(accFrom);
-        accountRepository.save(accTo);
+        try {
+            accFrom.withdrawMoney(amount);
+            accTo.putMoney(amount);
+            accountRepository.save(accFrom);
+            accountRepository.save(accTo);
 
-        Transaction transaction = new Transaction(accFrom, accTo, amount);
-        transactionRepository.save(transaction);
-        return "redirect:/";
+            Transaction transaction = new Transaction(accFrom, accTo, amount);
+            transactionRepository.save(transaction);
+        } catch (WithdrawError e) {
+            error = true;
+        }
+
+        if (error) {
+            return "redirect:/accounts/withdraw/" + accountFrom + "/error";
+        } else {
+            return "redirect:/";
+        }
+
     }
 }
