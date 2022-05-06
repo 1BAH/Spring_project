@@ -1,9 +1,11 @@
 package com.example.banksystem.controllers;
 
+import com.example.banksystem.exceptions.WithdrawError;
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.AccountRepository;
 import com.example.banksystem.repositories.ClientRepository;
+import org.hibernate.persister.walking.spi.WalkingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,9 +44,20 @@ public class MoneyController {
     @GetMapping("accounts/withdraw/{accountId}")
     public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
         Account account = accountRepository.findById(accountId).get();
-        account.withdrawMoney(amount);
+        try {
+            account.withdrawMoney(amount);
+        } catch (WithdrawError e) {
+            return "redirect:/accounts/withdraw/{accountId}/error";
+        }
+
         accountRepository.save(account);
         return "redirect:/accounts";
+    }
+
+    @GetMapping("accounts/withdraw/{accountId}/error")
+    public String errorPage(@PathVariable(value = "accountId") long accountId, Model model) {
+        model.addAttribute("accountId", accountId);
+        return "error";
     }
 
     @GetMapping("/accounts/put")
