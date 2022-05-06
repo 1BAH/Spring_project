@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ClientController {
     @Autowired
-    ClientRepository clientRepository;
+    RestartEndpoint restartEndpoint;
 
     @Autowired
-    private RestartEndpoint restartEndpoint;
+    ClientRepository clientRepository;
 
     @GetMapping("/registration")
     public String Registration(Model model) {
@@ -33,7 +33,17 @@ public class ClientController {
 
         clientRepository.save(client);
 
-        restartEndpoint.restart();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                restartEndpoint.restart();
+            }
+        });
+
+        thread.setDaemon(false);
+        thread.start();
+
+
 
         return "redirect:/";
     }
