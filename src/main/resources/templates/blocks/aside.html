@@ -1,0 +1,24 @@
+<div th:fragment="aside">
+    <div class="bd-aside sticky-xl-top text-dark align-self-start mb-3 px-2">
+        <h2 class="h5 pt-4 pb-3  border-bottom border-secondary">User</h2>
+        <nav class="small" id="toc">
+            <ul class="list-unstyled">
+                <li class="my-2">
+                    <button class="btn d-inline-flex align-items-center" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#more-collapse" aria-controls="more-collapse">See more</button>
+                    <ul class="list-unstyled ps-3 collapse" id="more-collapse" style="">
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/accounts/add">Create account</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/banks/add">Create bank</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/transactions/make">Make transaction</a></li>
+                    </ul>
+                </li>
+                <li class="my-2">
+                    <button class="btn d-inline-flex align-items-center" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#actions-collapse" aria-controls="actions-collapse">Actions</button>
+                    <ul class="list-unstyled ps-3 collapse" id="actions-collapse" style="">
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/logout">Sign out</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/profile">My profile</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
