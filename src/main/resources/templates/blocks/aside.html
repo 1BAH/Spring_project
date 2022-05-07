@@ -1,6 +1,6 @@
 <div th:fragment="aside" th:id="navbarHeader" th:class="collapse">
     <div class="bd-aside sticky-xl-top text-dark align-self-start mb-3 px-2">
-        <h2 class="h5 pt-4 pb-3  border-bottom border-secondary">User</h2>
+        <h2 class="h5 pt-4 pb-3 mx-2 border-bottom border-secondary" th:text="${user.name} + ' ' + ${user.surname}"/>
         <nav class="small" id="toc">
             <ul class="list-unstyled">
                 <li class="my-2">

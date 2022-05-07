@@ -1,7 +1,5 @@
 package com.example.banksystem.models;
 
-import com.example.banksystem.exceptions.WithdrawError;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -58,14 +56,14 @@ public class Account {
         return type;
     }
 
-    public void withdrawMoney(BigDecimal amount1) throws WithdrawError {
+    public void withdrawMoney(BigDecimal amount1) {
         BigDecimal amount2 = getAmount();
         BigDecimal newAmount = amount2.subtract(amount1);
 
         if (type.equals("C") || (newAmount.compareTo(zero) >= 0)) {
             this.amount = newAmount;
         } else {
-            throw new WithdrawError("Not enough money", id);
+            System.out.println("ERROR");
         }
     }
 
@@ -75,7 +73,7 @@ public class Account {
     }
 
     public void percents(float percentage) {
-        if (type.equals("C") || (zero.compareTo(amount) > 0)) {
+        if (type.equals("C") && (zero.compareTo(amount) > 0)) {
             BigDecimal amount2 = getAmount();
             this.amount = amount2.multiply(new BigDecimal(String.valueOf(1 + percentage / 100)));
         }
