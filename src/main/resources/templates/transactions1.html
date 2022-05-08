@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:insert="blocks/head :: head"></head>
+
+    <body>
+        <header th:insert="blocks/header :: header"></header>
+
+        <aside th:insert="blocks/aside :: aside"></aside>
+
+        <main>
+            <p class="display-5 font-weight-bold mx-5 mt-2">Transaction</p>
+
+            <p class="mx-5 mt-2 fs-4 text-decoration-underline">Step 1</p>
+
+            <div class="display6 font-weight-bold mx-5 mt-2">
+                <form action="/transactions/make/step-1/form" method="get" class="row g-3 needs-validation" novalidate>
+                    <p class="bd-example">Choose account:</p>
+                    <div class="card-group">
+                        <div th:each="acc : ${accounts}">
+                            <div class="card m-2 border-warning" style="width: 11rem;">
+                                <div  class="m-2">
+                                    <img src="https://i.ibb.co/Bj6cbwD/money-bag.png" style="width: 100%" alt="money-bag">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${acc.id}"/>
+                                    <p class="card-text" th:text="'Amount: ' + ${acc.amount}"/>
+                                    <p class="card-text" th:text="'Bank: ' + ${acc.getBank().name}"/>
+                                    <p class="card-text" th:text="'Type: ' + ${acc.type}"/>
+                                    <input type="radio" class="btn-check"
+                                           name="accountFrom" th:id="${acc.id}"
+                                           th:value="${acc.id}"
+                                           autocomplete="off" required>
+                                    <label class="btn btn-outline-warning" th:for="${acc.id}">Choose this</label>
+                                    <div class="invalid-feedback">
+                                        Choose the bank
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <p>Send money to</p>
+                        <input type="radio" class="btn-check"
+                               name="self" id="my"
+                               value="true"
+                               autocomplete="off" required>
+                        <label class="btn btn-outline-dark" for="my">My account</label>
+
+                        <input type="radio" class="btn-check"
+                               name="self" id="other"
+                               value="false"
+                               autocomplete="off" required>
+                        <label class="btn btn-outline-dark" for="other">Other account</label>
+
+                        <div class="invalid-feedback">
+                            Choose the option
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button class="btn btn-outline-info" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                (function () {
+                    'use strict'
+
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.querySelectorAll('.needs-validation')
+
+                    // Loop over them and prevent submission
+                    Array.prototype.slice.call(forms)
+                        .forEach(function (form) {
+                            form.addEventListener('submit', function (event) {
+                                if (!form.checkValidity()) {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                }
+
+                                form.classList.add('was-validated')
+                            }, false)
+                        })
+                })()
+            </script>
+        </main>
+
+        <footer th:insert="blocks/footer :: footer"></footer>
+    </body>
+
+</html>

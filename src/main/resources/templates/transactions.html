@@ -1,22 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Transactions</title>
-    </head>
+    <head th:insert="blocks/head :: head"></head>
 
     <body>
-        <h1>My transactions</h1>
-        <button onclick="window.location.href = '/';">Home</button><br>
-        <button onclick="window.location.href = '/transactions/make';">Make transaction</button><br>
-        <hr>
+        <header th:insert="blocks/header :: header"></header>
 
-        <div th:each="el : ${transactions}">
-            <h2>Accounts</h2>
-            <h3 th:text="'Amount>' + ${el.amount}"/>
-            <h3 th:text="'From account>' + ${el.accountFrom.id}"/>
-            <h3 th:text="'To account>' + ${el.accountTo.id}"/>
-            <hr>
-        </div>
+        <aside th:insert="blocks/aside :: aside"></aside>
+
+        <main>
+            <p class="display-2 font-weight-bold mx-5 mt-2">Transactions</p>
+
+            <article>
+                <div class="bd mt-5 mb-3 mt-xl-0 mb-xl-2" style="display: block; text-align: left;">
+                    <table class="table table-warning table-striped mt-2">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">From account</th>
+                            <th scope="col">To account</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="el : ${transactions}">
+                        <tr>
+                            <th scope="row" th:text="${el.id}"/>
+                            <td th:text="${el.accountFrom.id}"/>
+                            <td th:text="${el.accountTo.id}"/>
+                            <td th:text="${el.amount}"/>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </article>
+
+            <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/transactions/make';">Make transaction</button>
+        </main>
+
+        <footer th:insert="blocks/footer :: footer"></footer>
     </body>
 </html>

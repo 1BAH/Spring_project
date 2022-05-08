@@ -56,14 +56,21 @@ public class Account {
         return type;
     }
 
-    public void withdrawMoney(BigDecimal amount1) {
+    public boolean withdrawMoney(BigDecimal amount1, boolean commision) {
         BigDecimal amount2 = getAmount();
+
+        if (commision) {
+            amount1 = amount1.multiply(new BigDecimal(bank.getPercentage() / 100 + 1));
+        }
+
         BigDecimal newAmount = amount2.subtract(amount1);
 
-        if (type.equals("C") || (newAmount.compareTo(zero) >= 0)) {
+
+        if (type.equals("Credit") || (newAmount.compareTo(zero) >= 0)) {
             this.amount = newAmount;
+            return true;
         } else {
-            System.out.println("ERROR");
+            return false;
         }
     }
 
@@ -73,9 +80,17 @@ public class Account {
     }
 
     public void percents(float percentage) {
-        if (type.equals("C") && (zero.compareTo(amount) > 0)) {
+        if (type.equals("Credit") && (zero.compareTo(amount) > 0)) {
             BigDecimal amount2 = getAmount();
             this.amount = amount2.multiply(new BigDecimal(String.valueOf(1 + percentage / 100)));
         }
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 }

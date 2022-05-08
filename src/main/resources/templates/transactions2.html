@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<aside th:insert="blocks/aside :: aside"></aside>
+
+<main>
+    <p class="display-5 font-weight-bold mx-5 mt-2">Transaction</p>
+
+    <p class="mx-5 mt-2 fs-4 text-decoration-underline">Step 2</p>
+
+    <div class="display6 font-weight-bold mx-5 mt-2">
+        <form th:action="'/transactions/make/step-2/' + ${chosenAcc} + '/form'" method="get" class="row g-3 needs-validation" novalidate>
+            <p class="bd-example">Choose account where to send money:</p>
+
+            <div class="col-md-4">
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">Amount:</span>
+                    <input name="accountTo" type="text" class="form-control"
+                           id="validationCustomUsername" aria-describedby="inputGroupPrepend" required placeholder="account ID">
+                    <div class="valid-feedback">
+                        OK
+                    </div>
+                    <div class="invalid-feedback">
+                        Enter account ID
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+
+</html>

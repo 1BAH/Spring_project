@@ -42,7 +42,7 @@ public class MoneyController {
     @GetMapping("accounts/withdraw/{accountId}")
     public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
         Account account = accountRepository.findById(accountId).get();
-        account.withdrawMoney(amount);
+        account.withdrawMoney(amount, false);
         return "redirect:/accounts";
     }
 
