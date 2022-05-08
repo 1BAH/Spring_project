@@ -2,7 +2,7 @@ package com.example.banksystem.controllers;
 
 import org.junit.jupiter.api.Test;
 
-public class HomePageController {
+public class HomePageControllerTest {
     @Test
     void hello() {
     }
