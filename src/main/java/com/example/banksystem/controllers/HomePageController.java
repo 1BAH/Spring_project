@@ -24,6 +24,7 @@ public class HomePageController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByName(authentication.getName());
         model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Home");
         return "home";
     }
 }

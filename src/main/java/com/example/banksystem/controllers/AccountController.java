@@ -36,21 +36,27 @@ public class AccountController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByName(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
+        model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
+        model.addAttribute("title", "Accounts");
         return "accounts";
     }
 
     @GetMapping("/accounts/add")
     public String addAccountPage(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByName(authentication.getName());
+        model.addAttribute("user", currentClient);
         Iterable<Bank> banks = bankRepository.findAll();
         model.addAttribute("banks", banks);
+        model.addAttribute("title", "Account form");
         return "accounts-add";
     }
     @GetMapping("/accounts/add/form")
-    public String addPostAccountPage(@RequestParam String type, @RequestParam String amount, @RequestParam String bankId, Model model) {
+    public String addPostAccountPage(@RequestParam String type, @RequestParam String bankId, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByName(authentication.getName());
-        Account account = new Account(new BigDecimal(amount), type, bankRepository.findById(Long.parseLong(bankId)).get(), currentClient);
+        Account account = new Account(new BigDecimal(0), type, bankRepository.findById(Long.parseLong(bankId)).get(), currentClient);
         accountRepository.save(account);
         return "redirect:/accounts";
     }

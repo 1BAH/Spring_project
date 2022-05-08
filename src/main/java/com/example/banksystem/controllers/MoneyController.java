@@ -43,13 +43,7 @@ public class MoneyController {
     public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
         Account account = accountRepository.findById(accountId).get();
         account.withdrawMoney(amount);
-        return "redirect:/accounts/withdraw/{accountId}/error";
-    }
-
-    @GetMapping("accounts/withdraw/{accountId}/error")
-    public String errorPage(@PathVariable(value = "accountId") long accountId, Model model) {
-        model.addAttribute("accountId", accountId);
-        return "error";
+        return "redirect:/accounts";
     }
 
     @GetMapping("/accounts/put")

@@ -1,36 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Home page</title>
-
-        <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAqgB+AKoA+QCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAPkAqgB+AKoA+QCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA+QCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8SvDb/GsRP/xrET/8Ywkn/AqwH/wCqAP8RuzP/GsRP/xnDS/8Ergz/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/OeOt/0jy2f844qn/Tffm/yzWhP8MtiX/VP7+/z3nt/9L9eP/M92a/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/znjrf8v2Y7/AKoA/zfhp/8y3Jj/Erw4/1X///8CrAj/MduU/zrkrv8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP85463/L9mO/wCqAP834af/MtyY/wOtCf8Ntyn/AKoB/zHblP865K7/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/OeOt/z/pvv8jzWv/RvDR/yzWhP8AqgD/GsRN/yLMZ/9B68T/OOKo/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/znjrf9E7s3/L9mN/0nz3f8o0nj/ELox/1X///8z3Zn/MNqQ/w+5Lf8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP85463/L9mO/wCqAP834af/MtyY/xW/QP9V////AKoB/wmzG/8KtB7/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/OeOt/y/Zjv8AqgD/N+Gn/zLcmP8Vv0D/Vf///wCqAf8y3Jf/N+Gn/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/znjrf9J89v/OeOt/0336P8r1YL/Drgq/1X//v8+6Ln/TPbm/zDakf8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8RuzP/GcNL/xnDS/8XwUT/AqwG/wCqAP8QujH/GcNL/xfBRv8DrQn/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAPkAqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAPkAqgB+AKoA+QCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAP8AqgD/AKoA/wCqAPkAqgB+gAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAA=="
-             rel="icon"
-             type="image/x-icon" />
-
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-              rel="stylesheet"
-              integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-              crossorigin="anonymous">
-
-        <style>
-            aside {
-                position: sticky;
-                float: right;
-                background-color: rgba(186, 225, 239, 0.52);
-                right: 0px;
-                width: 250px;
-                margin-top: 0px;
-                height: 100%;
-            }
-        </style>
-    </head>
+    <head th:insert="blocks/head :: head"></head>
 
     <body class="bg-light">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-                crossorigin="anonymous"></script>
-
         <header th:insert="blocks/header :: header"></header>
 
         <aside th:insert="blocks/aside :: aside"></aside>

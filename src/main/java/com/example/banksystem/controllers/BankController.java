@@ -31,6 +31,7 @@ public class BankController {
         model.addAttribute("user", currentClient);
         Iterable<Bank> banks = bankRepository.findAll();
         model.addAttribute("banks", banks);
+        model.addAttribute("title", "Banks");
         return "banks";
     }
 
@@ -39,6 +40,7 @@ public class BankController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByName(authentication.getName());
         model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Bank creation");
         return "banks-add";
     }
 
