@@ -6,7 +6,7 @@ name: CI-branch-testController
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ testController, banktests ]
+    branches: [ testController ]
   pull_request:
     branches: [ testController, banktests ]
 
