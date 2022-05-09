@@ -48,6 +48,9 @@ jobs:
           mysql user: root # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
           mysql password: root # Required if "mysql user" exists. The password for the "mysql user"
 
+      - name: Running tests
+        run: |
+          mvn test
 
       - name: Running testController version
         run: |
