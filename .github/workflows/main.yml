@@ -27,6 +27,12 @@ jobs:
         with:
           ref: dev
           
+      - name: Set up running for CI
+        run: |
+          cd src/main/resources/scriptsCI
+          ./ciExit.sh
+          cd ../../../../
+          
       - name: Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop
           
@@ -49,4 +55,3 @@ jobs:
           mvn clean package
           cd target
           java -jar BankSystem-1.0.jar
-          echo ^C
