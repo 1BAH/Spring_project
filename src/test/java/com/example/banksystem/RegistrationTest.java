@@ -47,7 +47,7 @@ public class RegistrationTest {
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
-    public void givenId_whenGetExistingPerson_thenStatus200andPersonReturned() throws Exception {
+    public void redirect() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
@@ -63,5 +63,73 @@ public class RegistrationTest {
         mockMvc.perform(mockRequest)
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
+    }
+
+    @Test
+    public void nameIsEmpty() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+
+        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+
+        System.out.println("user");
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+                .param("surname", "sur")
+                .param("address", "add")
+                .param("passport", "pass");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void surnameIsEmpty() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+
+        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+
+        System.out.println("user");
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+                .param("name", "user")
+                .param("address", "add")
+                .param("passport", "pass");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void addressIsEmpty() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+
+        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+
+        System.out.println("user");
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+                .param("name", "user")
+                .param("surname", "sur")
+                .param("passport", "pass");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void passportIsEmpty() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+
+        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+
+        System.out.println("user");
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+                .param("name", "user")
+                .param("surname", "sur")
+                .param("address", "add");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is4xxClientError());
     }
 }
