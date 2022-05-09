@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomePageController {
     @GetMapping("/")
-    public String mainPage(Model model) {
+    public String mainPage(String model) {
         return "redirect:/home";
     }
 
@@ -15,4 +15,5 @@ public class HomePageController {
     public String homePage(Model model) {
         return "home";
     }
+
 }

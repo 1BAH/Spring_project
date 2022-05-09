@@ -4,7 +4,6 @@ import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
-import org.springframework.cloud.endpoint.RefreshEndpoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

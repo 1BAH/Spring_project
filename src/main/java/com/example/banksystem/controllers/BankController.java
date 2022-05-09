@@ -15,7 +15,7 @@ public class BankController {
     BankRepository bankRepository;
 
     @GetMapping("/banks")
-    public String banksPage(Model model) {
+    public String banksPage(int model) {
         Iterable<Bank> banks = bankRepository.findAll();
         model.addAttribute("banks", banks);
         return "banks";
