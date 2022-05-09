@@ -27,6 +27,13 @@ public class Bank {
         this.accounts = new ArrayList<>();
     }
 
+    public Bank(long id, String name, float percentage) {
+        this.id = id;
+        this.name = name;
+        this.percentage = percentage;
+        this.accounts = new ArrayList<>();
+    }
+
     public Long getId() {
         return id;
     }
@@ -57,5 +64,9 @@ public class Bank {
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public void addAccounts(Account account) {
+        accounts.add(account);
     }
 }

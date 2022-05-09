@@ -1,5 +1,7 @@
 package com.example.banksystem;
 
+import com.example.banksystem.models.Account;
+import com.example.banksystem.models.Bank;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.AccountRepository;
 import com.example.banksystem.repositories.BankRepository;
