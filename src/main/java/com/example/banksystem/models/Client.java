@@ -91,4 +91,8 @@ public class Client {
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
+
+    public void addAccounts(Account account) {
+        accounts.add(account);
+    }
 }

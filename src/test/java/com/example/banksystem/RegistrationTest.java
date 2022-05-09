@@ -1,5 +1,7 @@
 package com.example.banksystem;
 
+import com.example.banksystem.models.Account;
+import com.example.banksystem.models.Bank;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.AccountRepository;
 import com.example.banksystem.repositories.BankRepository;
@@ -18,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.math.BigDecimal;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
