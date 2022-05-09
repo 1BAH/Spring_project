@@ -14,17 +14,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.math.BigDecimal;
-
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
@@ -56,8 +49,6 @@ public class RegistrationTest {
 
         Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
 
-        System.out.println("user");
-
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
                 .param("name", "user")
                 .param("surname", "sur")
@@ -75,8 +66,6 @@ public class RegistrationTest {
 
         Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
 
-        System.out.println("user");
-
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
                 .param("surname", "sur")
                 .param("address", "add")
@@ -91,8 +80,6 @@ public class RegistrationTest {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
-
-        System.out.println("user");
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
                 .param("name", "user")
@@ -109,8 +96,6 @@ public class RegistrationTest {
 
         Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
 
-        System.out.println("user");
-
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
                 .param("name", "user")
                 .param("surname", "sur")
@@ -125,8 +110,6 @@ public class RegistrationTest {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
-
-        System.out.println("user");
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
                 .param("name", "user")

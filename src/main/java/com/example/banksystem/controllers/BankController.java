@@ -31,6 +31,7 @@ public class BankController {
         model.addAttribute("user", currentClient);
         Iterable<Bank> banks = bankRepository.findAll();
         model.addAttribute("banks", banks);
+        model.addAttribute("title", "Banks");
         return "banks";
     }
 
