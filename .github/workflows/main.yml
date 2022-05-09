@@ -30,7 +30,8 @@ jobs:
       - name: Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop
           
-      - uses: mirromutth/mysql-action@v1.1
+      - name: Creating MySQL connection
+        uses: mirromutth/mysql-action@v1.1
         with:
           host port: 3306 # Optional, default value is 3306. The port of host
           container port: 3306 # Optional, default value is 3306. The port of container
@@ -48,4 +49,4 @@ jobs:
           mvn clean package
           cd target
           java -jar BankSystem-1.0.jar
-          ^C
+          echo ^C
