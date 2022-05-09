@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<aside th:insert="blocks/aside :: aside"></aside>
+
+<main>
+    <p class="display-5 font-weight-bold mx-5 mt-2">Transaction</p>
+
+    <p class="mx-5 mt-2 fs-4 text-decoration-underline">Step 4</p>
+
+    <div class="col-md-4 font-weight-bold mx-5 mt-2">
+        <div class="list-group">
+            <p>Check the information:</p>
+
+            <ul class="list-group">
+                <li class="list-group-item" th:text="'From account: ' + ${fromAcc.id}"/>
+                <li class="list-group-item" th:text="'To account: ' + ${toAcc.id}"/>
+                <li class="list-group-item" th:text="'Amount: ' + ${amount}"/>
+                <li th:class="${colored} ? 'list-group-item text-success' : 'list-group-item text-danger'" th:text="'Commision: ' + ${commision} + '%'"/>
+                <li class="list-group-item text-info" th:text="'Total: ' + ${realAmount}">
+            </ul>
+        </div>
+    </div>
+
+
+
+    <div class="display6 font-weight-bold mx-5 mt-2">
+        <form th:action="'/transactions/make/' + ${fromAcc.id} + '/' + ${toAcc.id} + '/' + ${amount} + '/' + ${colored}" method="get" class="row g-3 needs-validation" novalidate>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        I have checked all the information above
+                    </label>
+                    <div class="invalid-feedback">
+                        You must agree before submitting
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/transactions/make';">Retry</button>
+
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+
+</html>

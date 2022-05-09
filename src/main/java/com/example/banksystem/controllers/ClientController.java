@@ -1,21 +1,33 @@
 package com.example.banksystem.controllers;
 
+import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Client;
+import com.example.banksystem.models.Transaction;
 import com.example.banksystem.repositories.ClientRepository;
+import com.example.banksystem.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
+import org.springframework.cloud.endpoint.RefreshEndpoint;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 public class ClientController {
-    @Autowired
-    ClientRepository clientRepository;
+    @Autowired(required = false)
+    RestartEndpoint restartEndpoint;
 
     @Autowired
-    private RestartEndpoint restartEndpoint;
+    TransactionRepository transactionRepository;
+
+    @Autowired
+    ClientRepository clientRepository;
 
     @GetMapping("/registration")
     public String Registration(Model model) {
@@ -32,8 +44,41 @@ public class ClientController {
 
         clientRepository.save(client);
 
-        restartEndpoint.restart();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                restartEndpoint.restart();
+            }
+        });
+
+        thread.setDaemon(false);
+        thread.start();
+
+
 
         return "redirect:/";
+    }
+
+    @GetMapping("profile")
+    public String profile(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByName(authentication.getName());
+        List<Account> accounts = currentClient.getAccounts();
+
+        Iterable<Transaction> transactions = transactionRepository.findAll();
+
+        List<Transaction> currentClientTransactions = new ArrayList<>();
+
+        for (Transaction transaction: transactions) {
+            if (accounts.contains(transaction.getAccountFrom())) {
+                currentClientTransactions.add(transaction);
+            }
+        }
+
+        model.addAttribute("transactions", currentClientTransactions);
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Profile");
+        model.addAttribute("accounts", accounts);
+        return "profile";
     }
 }

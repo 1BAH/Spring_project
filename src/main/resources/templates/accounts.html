@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Accounts</title>
-</head>
-<body>
+    <head th:insert="blocks/head :: head"></head>
+    <body>
+        <header th:insert="blocks/header :: header"></header>
 
-<h1>Accounts</h1>
-<button onclick="window.location.href = '/';">Home</button><br>
-<button onclick="window.location.href = '/accounts/add';">Add account</button><br>
-<hr>
+        <aside th:insert="blocks/aside :: aside"></aside>
 
-<div th:each="el : ${accounts}">
-    <h2>Accounts</h2>
-    <h2 th:text="${el.id}"/>
-    <h3 th:text="${el.type}"/>
-    <h3 th:text="${el.amount}"/>
-    <hr>
-</div>
+        <main>
+            <p class="display-2 font-weight-bold mx-5 mt-2">Accounts</p>
 
-<div></div>
+            <article>
+                <div class="bd mt-5 mb-3 mt-xl-0 mb-xl-2" style="display: block; text-align: left;">
+                    <table class="table table-warning table-striped mt-2">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="el : ${accounts}">
+                        <tr>
+                            <th scope="row" th:text="${el.id}"/>
+                            <td th:text="${el.type}"/>
+                            <td th:text="${el.amount}"/>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-</body>
+            </article>
+
+            <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/accounts/add';">Create new account</button>
+
+        </main>
+
+        <footer th:insert="blocks/footer :: footer"></footer>
+
+    </body>
 </html>

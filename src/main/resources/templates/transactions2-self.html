@@ -8,23 +8,32 @@
 <aside th:insert="blocks/aside :: aside"></aside>
 
 <main>
-    <p class="display-5 font-weight-bold mx-5 mt-2">Withdraw money</p>
+    <p class="display-5 font-weight-bold mx-5 mt-2">Transaction</p>
 
     <p class="mx-5 mt-2 fs-4 text-decoration-underline">Step 2</p>
 
     <div class="display6 font-weight-bold mx-5 mt-2">
-        <form th:action="${choice}" method="get" class="row g-3 needs-validation" novalidate>
-            <p class="bd-example">Enter the amount of money:</p>
-
-            <div class="col-md-4">
-                <div class="input-group has-validation">
-                    <span class="input-group-text" id="inputGroupPrepend">Amount:</span>
-                    <input name="amount" type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required placeholder="0.0">
-                    <div class="valid-feedback">
-                        OK
-                    </div>
-                    <div class="invalid-feedback">
-                        Input amount
+        <form th:action="'/transactions/make/step-2-self/' + ${chosenAcc} + '/form'" method="get" class="row g-3 needs-validation" novalidate>
+            <p class="bd-example">Choose account where to send money:</p>
+            <div class="card-group">
+                <div th:each="acc : ${accounts}">
+                    <div class="card m-2 border-warning" style="width: 11rem;">
+                        <div  class="m-2">
+                            <img src="https://i.ibb.co/Bj6cbwD/money-bag.png" style="width: 100%" alt="money-bag">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${acc.id}"/>
+                            <p class="card-text" th:text="'Amount: ' + ${acc.amount}"/>
+                            <p class="card-text" th:text="'Bank: ' + ${acc.getBank().name}"/>
+                            <input type="radio" class="btn-check"
+                                   name="accountTo" th:id="${acc.id}"
+                                   th:value="${acc.id}"
+                                   autocomplete="off" required>
+                            <label class="btn btn-outline-warning" th:for="${acc.id}">Choose this</label>
+                            <div class="invalid-feedback">
+                                Choose the account
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,4 +69,5 @@
 
 <footer th:insert="blocks/footer :: footer"></footer>
 </body>
+
 </html>

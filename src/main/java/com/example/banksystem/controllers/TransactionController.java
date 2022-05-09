@@ -12,8 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,31 +46,142 @@ public class TransactionController {
             }
         }
 
+        model.addAttribute("user", currentClient);
         model.addAttribute("transactions", currentClientTransactions);
+        model.addAttribute("title", "Transactions");
         return "transactions";
     }
 
     @GetMapping("/transactions/make")
-    public String makeTransaction(Model model) {
+    public String makeTransaction() {
+        return "redirect:/transactions/step-1";
+    }
+
+    @GetMapping("/transactions/step-1")
+    public String step1(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByName(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
+        model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
-        return "transactions-make";
+        model.addAttribute("title", "Step 1");
+        return "transactions1";
     }
 
-    @GetMapping("/transactions/make/form")
-    public String makeGetTransaction(@RequestParam float amount, @RequestParam String accountFrom, @RequestParam String accountTo) {
-        Account accFrom = accountRepository.findById(Long.parseLong(accountFrom)).get();
-        Account accTo = accountRepository.findById(Long.parseLong(accountTo)).get();
+    @GetMapping("/transactions/make/step-1/form")
+    public String step1results(Model model, @RequestParam long accountFrom, @RequestParam boolean self) {
+        if (self) {
+            return "redirect:/transactions/make/step-2-self/" + accountFrom;
+        } else {
+            return "redirect:/transactions/make/step-2/" + accountFrom;
+        }
+    }
 
-        accFrom.withdrawMoney(amount);
-        accTo.putMoney(amount);
-        accountRepository.save(accFrom);
-        accountRepository.save(accTo);
+    @GetMapping("/transactions/make/step-2-self/{fromId}")
+    public String step2self(Model model, @PathVariable(value = "fromId") long fromId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByName(authentication.getName());
+        List<Account> accounts = currentClient.getAccounts();
+        model.addAttribute("user", currentClient);
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("title", "Step 2");
+        model.addAttribute("chosenAcc", fromId);
+        return "transactions2-self";
+    }
 
-        Transaction transaction = new Transaction(accFrom, accTo, amount);
-        transactionRepository.save(transaction);
-        return "redirect:/";
+    @GetMapping("/transactions/make/step-2/{fromId}")
+    public String step2(Model model, @PathVariable(value = "fromId") long fromId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByName(authentication.getName());
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Step 2");
+        model.addAttribute("chosenAcc", fromId);
+        return "transactions2";
+    }
+
+    @GetMapping("/transactions/make/step-2-self/{fromId}/form")
+    public String step1selfResults(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
+        return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
+    }
+
+    @GetMapping("/transactions/make/step-2/{fromId}/form")
+    public String step1results(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
+        return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
+    }
+
+    @GetMapping("/transactions/make/step-3/{fromId}/{toId}")
+    public String step3(Model model, @PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByName(authentication.getName());
+        List<Account> accounts = currentClient.getAccounts();
+
+        Account accFrom = accountRepository.findById(fromId).get();
+        Account accTo = accountRepository.findById(toId).get();
+
+        float commision = 1;
+
+        model.addAttribute("user", currentClient);
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("title", "Step 3");
+        model.addAttribute("fromAcc", accFrom);
+        model.addAttribute("toAcc", accTo);
+        return "transactions3";
+    }
+
+    @GetMapping("/transactions/make/step-4/{fromId}/{toId}/form")
+    public String step4(@RequestParam BigDecimal amount, @PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId, Model model) {
+        Account accFrom = accountRepository.findById(fromId).get();
+        Account accTo = accountRepository.findById(toId).get();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByName(authentication.getName());
+
+        float commision = 0;
+        boolean colored = true;
+
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Step 4");
+        model.addAttribute("fromAcc", accFrom);
+        model.addAttribute("toAcc", accTo);
+        model.addAttribute("amount", amount);
+
+        if (accFrom.getBank().getId() != accTo.getBank().getId()) {
+            commision = accTo.getBank().getPercentage();
+            colored = false;
+        }
+
+        model.addAttribute("colored", colored);
+        model.addAttribute("commision", commision);
+        model.addAttribute("realAmount", amount.multiply(new BigDecimal(1 + commision / 100)).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+        return "transactions4";
+    }
+
+    @GetMapping("/transactions/make/{fromId}/{toId}/{amount}/{withCommision}")
+    public String makeGetTransaction(@PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId, @PathVariable(value = "amount") BigDecimal amount, @PathVariable(value = "withCommision") boolean withCommision, Model model) {
+        Account accFrom = accountRepository.findById(fromId).get();
+        Account accTo = accountRepository.findById(toId).get();
+
+        if (accFrom.withdrawMoney(amount, !withCommision)) {
+            accTo.putMoney(amount);
+            accountRepository.save(accFrom);
+            accountRepository.save(accTo);
+
+            Transaction transaction = new Transaction(accFrom, accTo, amount);
+            transactionRepository.save(transaction);
+            return "redirect:/transactions";
+        } else {
+            return "redirect:/transactions/transaction-error";
+        }
+    }
+
+    @GetMapping("/transactions/transaction-error")
+    public String transactionError(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByName(authentication.getName());
+        List<Account> accounts = currentClient.getAccounts();
+        model.addAttribute("user", currentClient);
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("title", "ERROR");
+        return "unsuccessful";
     }
 }

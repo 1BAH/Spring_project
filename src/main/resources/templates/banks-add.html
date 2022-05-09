@@ -1,25 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Add bank</title>
-    </head>
+    <head th:insert="blocks/head :: head"></head>
 
     <body>
-        <h1>Form</h1>
-        <button onclick="window.location.href = '/';">Home</button><br>
-        <button onclick="window.location.href = '/banks';">Banks</button>
-        <hr>
+        <header th:insert="blocks/header :: header"></header>
 
-        <div>
-            <form action="/banks/add/form" method="get">
-                <input type="text" name="name" placeholder="Input name of bank"><br>
-                <input type="text" name="percentage" placeholder="Input percentage"><br>
-                <input type="submit" value="Submit"><br>
-                <input type="reset" value="Reset"><br>
-            </form>
-        </div>
+        <aside th:insert="blocks/aside :: aside"></aside>
 
-        <div>Percentage should be entered in format "*.*" or "*"  ("*,*" is not supported)</div>
+        <main>
+            <p class="display-5 font-weight-bold mx-5 mt-2">Bank creation</p>
+
+            <div class="display6 font-weight-bold mx-5 mt-2">
+                <form action="/banks/add/form" method="get" class="row g-3 needs-validation" novalidate>
+                    <div class="col-md-4">
+                        <label for="validationCustom01" class="form-label" >First name</label>
+                        <input name="name" type="text" class="form-control" id="validationCustom01" placeholder="Bank Name" required>
+                        <div class="valid-feedback">
+                            OK
+                        </div>
+                        <div class="invalid-feedback">
+                            Input bank name
+                        </div>
+
+                        <label for="validationCustomUsername" class="form-label">Username</label>
+                        <div class="input-group has-validation">
+                            <input name="percentage" type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required placeholder="0.0">
+                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                            <div class="valid-feedback">
+                                OK
+                            </div>
+                            <div class="invalid-feedback">
+                                Input percentage
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-outline-warning" type="submit">Submit form</button>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                (function () {
+                    'use strict'
+
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.querySelectorAll('.needs-validation')
+
+                    // Loop over them and prevent submission
+                    Array.prototype.slice.call(forms)
+                        .forEach(function (form) {
+                            form.addEventListener('submit', function (event) {
+                                if (!form.checkValidity()) {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                }
+
+                                form.classList.add('was-validated')
+                            }, false)
+                        })
+                })()
+            </script>
+        </main>
+
+        <footer th:insert="blocks/footer :: footer"></footer>
     </body>
 </html>
