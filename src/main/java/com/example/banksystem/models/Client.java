@@ -33,6 +33,17 @@ public class Client {
         this.transactionsToThisAccount = new ArrayList<>();
     }
 
+    public Client(long id, String name, String surname, String address, String passport) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.address = address;
+        this.passport = passport;
+        this.accounts = new ArrayList<>();
+        this.transactionsToThisAccount = new ArrayList<>();
+        this.transactionsFromThisAccount = new ArrayList<>();
+    }
+
     public Long getId() {
         return id;
     }
