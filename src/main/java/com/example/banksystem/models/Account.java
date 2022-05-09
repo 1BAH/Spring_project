@@ -1,14 +1,17 @@
 package com.example.banksystem.models;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 public class Account {
+    private static BigDecimal zero = new BigDecimal(0);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private float amount;
+    private BigDecimal amount;
 
     private String type;
 
@@ -22,7 +25,7 @@ public class Account {
 
     public Account() {}
 
-    public Account(float amount, String type, Bank bank, Client holder) {
+    public Account(BigDecimal amount, String type, Bank bank, Client holder) {
         this.amount = amount;
         this.type = type;
         this.bank = bank;
@@ -33,7 +36,7 @@ public class Account {
         this.id = id;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -45,7 +48,7 @@ public class Account {
         return id;
     }
 
-    public Float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -53,11 +56,41 @@ public class Account {
         return type;
     }
 
-    public void withdrawMoney(float amount) {
-        this.amount -= amount;
+    public boolean withdrawMoney(BigDecimal amount1, boolean commision) {
+        BigDecimal amount2 = getAmount();
+
+        if (commision) {
+            amount1 = amount1.multiply(new BigDecimal(bank.getPercentage() / 100 + 1));
+        }
+
+        BigDecimal newAmount = amount2.subtract(amount1);
+
+
+        if (type.equals("Credit") || (newAmount.compareTo(zero) >= 0)) {
+            this.amount = newAmount;
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void putMoney(float amount) {
-        this.amount += amount;
+    public void putMoney(BigDecimal amount1) {
+        BigDecimal amount2 = getAmount();
+        this.amount = amount2.add(amount1);
+    }
+
+    public void percents(float percentage) {
+        if (type.equals("Credit") && (zero.compareTo(amount) > 0)) {
+            BigDecimal amount2 = getAmount();
+            this.amount = amount2.multiply(new BigDecimal(String.valueOf(1 + percentage / 100)));
+        }
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 }

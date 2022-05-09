@@ -1,0 +1,37 @@
+<div th:fragment="header">
+    <div class="px-3 py-2 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-warning text-decoration-none">
+                    <h1 class="d-flex align-items-center fs-4 text-warning mb-0 ml-2">Home</h1>
+                </a>
+
+
+
+                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                        <a href="/profile" class="nav-link text-white">
+                            My profile
+                        </a>
+                    </li>
+                </ul>
+
+                <button class="navbar-toggler collapsed navbar navbar-dark bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="true" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="px-3 py-2 border-bottom mb-3 collapse" id="navbarHeader">
+        <div class="container d-flex flex-wrap justify-content-center">
+            <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+                <button type="button" class="btn btn-outline-warning me-2" onclick="window.location.href = '/banks';">Banks</button>
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-dark" onclick="window.location.href = '/accounts';">Accounts</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="window.location.href = '/transactions';">Transactions</button>
+            </div>
+        </div>
+    </div>
+</div>

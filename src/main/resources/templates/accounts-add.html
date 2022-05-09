@@ -1,27 +1,99 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Add account</title>
-</head>
-<body>
+  <head th:insert="blocks/head :: head"></head>
+  <body>
+    <header th:insert="blocks/header :: header"></header>
 
-<h1>Create new account</h1>
-<button onclick="window.location.href = '/';">Home</button><br>
-<button onclick="window.location.href = '/accounts';">Accounts</button><br>
-<hr>
+    <aside th:insert="blocks/aside :: aside"></aside>
 
-<div>
-  <form action="/accounts/add/form" method="get">
-    <input type="text" name="type" placeholder="Input type of account: C - credit, D - debit"><br>
-    <input type="text" name="amount" placeholder="Input amount"><br>
-    <ul th:each="el : ${banks}">
-      <input type="radio" th:id="${el.id}" name="bankId" th:value="${el.id}">
-      <label th:for="${el.id}" th:text="${el.name}"/>
-    </ul>
-    <input type="submit" value="Submit"><br>
-    <input type="reset" value="Reset"><br>
-  </form>
-</div>
-</body>
+    <main>
+      <p class="display-5 font-weight-bold mx-5 mt-2">Account creation</p>
+
+      <div class="display6 font-weight-bold mx-5 mt-2">
+        <form action="/accounts/add/form" method="get" class="row g-3 needs-validation" novalidate>
+          <p class="bd-example">Choose bank:</p>
+          <div class="card-group">
+            <div th:each="bank : ${banks}">
+              <div class="card m-2" style="width: 11rem;">
+                <img src="https://i.ibb.co/qYCWPSz/bank.png" class="card-img-top" alt="bank">
+                <div class="card-body">
+                  <h5 class="card-title" th:text="${bank.name}"/>
+                  <p class="card-text" th:text="'Percentage: ' + ${bank.percentage} + '%'"/>
+                  <input type="radio" class="btn-check"
+                         name="bankId" th:id="${bank.id}"
+                         th:value="${bank.id}"
+                         autocomplete="off" required>
+                  <label class="btn btn-outline-warning" th:for="${bank.id}">Choose this</label>
+                  <div class="invalid-feedback">
+                    Choose the bank
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="col-12">
+            <p>Choose account type:</p>
+            <input type="radio" class="btn-check"
+                   name="type" id="Debit"
+                   value="Debit"
+                   autocomplete="off" required>
+            <label class="btn btn-outline-info" for="Debit">Debit</label>
+
+            <input type="radio" class="btn-check"
+                   name="type" id="Credit"
+                   value="Credit"
+                   autocomplete="off" required>
+            <label class="btn btn-outline-info" for="Credit">Credit</label>
+
+            <div class="invalid-feedback">
+              Choose type
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+              <label class="form-check-label" for="invalidCheck">
+                Agree to terms and conditions
+              </label>
+              <div class="invalid-feedback">
+                You must agree before submitting.
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-outline-warning" type="submit">Submit form</button>
+          </div>
+        </form>
+      </div>
+
+      <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+          'use strict'
+
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          var forms = document.querySelectorAll('.needs-validation')
+
+          // Loop over them and prevent submission
+          Array.prototype.slice.call(forms)
+                  .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                      if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                      }
+
+                      form.classList.add('was-validated')
+                    }, false)
+                  })
+        })()
+      </script>
+    </main>
+
+    <footer th:insert="blocks/footer :: footer"></footer>
+  </body>
 </html>
