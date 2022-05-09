@@ -15,7 +15,7 @@ public class HomePageController {
     ClientRepository clientRepository;
 
     @GetMapping("/")
-    public String mainPage(Model model) {
+    public String mainPage(String model) {
         return "redirect:/home";
     }
 
@@ -27,4 +27,5 @@ public class HomePageController {
         model.addAttribute("title", "Home");
         return "home";
     }
+
 }
