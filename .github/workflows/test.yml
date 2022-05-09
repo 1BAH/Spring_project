@@ -21,10 +21,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout to dev
+      - name: Checkout to testController
         uses: actions/checkout@v3
         with:
-          ref: dev
+          ref: testController
           
       - name: Set up running for CI
         run: |
