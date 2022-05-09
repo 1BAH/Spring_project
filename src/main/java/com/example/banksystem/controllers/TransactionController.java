@@ -146,7 +146,7 @@ public class TransactionController {
         model.addAttribute("amount", amount);
 
         if (accFrom.getBank().getId() != accTo.getBank().getId()) {
-            commision = accTo.getBank().getPercentage();
+            commision = accFrom.getBank().getPercentage();
             colored = false;
         }
 
