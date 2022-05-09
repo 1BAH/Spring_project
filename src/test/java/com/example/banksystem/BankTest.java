@@ -8,9 +8,7 @@ import com.example.banksystem.repositories.ClientRepository;
 import com.example.banksystem.repositories.TransactionRepository;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,9 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 public class BankTest {
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
     @Autowired
     MockMvc mockMvc;
 
