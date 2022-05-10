@@ -56,9 +56,9 @@ public class AccountTest {
         ArrayList<Account> accounts = new ArrayList<>();
 
         Account account1 = new Account(1, new BigDecimal(1000), "Account1", bank, client);
-        accounts.add(account1);
+        client.addAccounts(account1);
         Account account2 = new Account(2, new BigDecimal(2000), "Account2", bank, client);
-        accounts.add(account2);
+        client.addAccounts(account2);
 
         Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
         Mockito.when(accountRepository.findAll()).thenReturn(accounts);
