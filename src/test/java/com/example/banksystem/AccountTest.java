@@ -117,7 +117,7 @@ public class AccountTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "Account creation"))
+                .andExpect(model().attribute("title", "Account form"))
                 .andExpect(model().attribute("user", client));
     }
 }
