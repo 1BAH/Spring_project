@@ -88,7 +88,7 @@ public class TransactionTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/transactions"));
+                .andExpect(redirectedUrl("/transactions/step-1"));
     }
 
     @Test
