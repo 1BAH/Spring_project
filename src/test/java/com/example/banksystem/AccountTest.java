@@ -74,6 +74,10 @@ public class AccountTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void redirect() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+
+        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/accounts/add/form")
                 .param("type", "TestAccount")
