@@ -73,6 +73,7 @@ public class AccountTest {
     public void redirect() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
+        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
         Mockito.when(accountRepository.findAll()).thenReturn(client.getAccounts());
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
