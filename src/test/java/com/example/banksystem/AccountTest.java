@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -53,21 +52,19 @@ public class AccountTest {
         Client client = new Client(3, "user", "sur", "add", "pass");
         Bank bank = new Bank(1, "bank", 10);
 
-        ArrayList<Account> accounts = new ArrayList<>();
-
         Account account1 = new Account(1, new BigDecimal(1000), "Account1", bank, client);
         client.addAccounts(account1);
         Account account2 = new Account(2, new BigDecimal(2000), "Account2", bank, client);
         client.addAccounts(account2);
 
         Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
-        Mockito.when(accountRepository.findAll()).thenReturn(accounts);
+        Mockito.when(accountRepository.findAll()).thenReturn(client.getAccounts());
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/accounts");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("accounts", accounts))
+                .andExpect(model().attribute("accounts", client.getAccounts()))
                 .andExpect(model().attribute("user", client));
     }
 
