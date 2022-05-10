@@ -72,6 +72,11 @@ public class AccountTest {
     @WithMockUser(username = "user", password = "pass")
     public void redirect() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
+        Bank bank = new Bank(1, "bank", 10);
+        Account account1 = new Account(1, new BigDecimal(1000), "Account1", bank, client);
+        client.addAccounts(account1);
+        Account account2 = new Account(2, new BigDecimal(2000), "Account2", bank, client);
+        client.addAccounts(account2);
 
         Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
         Mockito.when(accountRepository.findAll()).thenReturn(client.getAccounts());
