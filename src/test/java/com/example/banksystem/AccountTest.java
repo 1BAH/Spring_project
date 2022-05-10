@@ -72,13 +72,10 @@ public class AccountTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void redirect() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
         Client client = new Client(3,"user", "sur", "add", "pass");
-        Account account1 = new Account(1, new BigDecimal(1000), "Account1", bank, client);
 
         Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
-        Mockito.when(accountRepository.save(Mockito.any())).thenReturn(account1);
-        Mockito.when(bankRepository.findById(Mockito.any())).thenReturn(Optional.of(bank));
+        Mockito.when(accountRepository.findAll()).thenReturn(client.getAccounts());
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/accounts/add/form")
