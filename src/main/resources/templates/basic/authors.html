@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<main>
+    <article class="my-3">
+        <p class="display-6 font-weight-bold mx-5 mt-2">Authors</p>
+
+        <div class="display6 font-weight-bold mx-5 mt-2">
+            <div class="card-group">
+                <div>
+                    <div class="card m-2 border-warning" style="width: 21rem;">
+                        <div class="m-2">
+                            <a href="https://github.com/1BAH"><img src="https://i.ibb.co/fHNXH7J/fox.png" alt="fox" style="width: 100%"></a>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Leading developer and designer</h5>
+                            <p class="card-text text-danger">Kalinin Iwan</p>
+                        </div>
+                    </div>
+                    <div class="card m-2 border-warning" style="width: 11rem;">
+                        <div class="m-2">
+                            <a href="https://github.com/Mmonmarie"><img src="https://i.ibb.co/fHNXH7J/fox.png" alt="fox" style="width: 100%"></a>
+                            <img src="https://i.ibb.co/Bj6cbwD/money-bag.png" style="width: 100%" alt="money-bag">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Developer and tester</h5>
+                            <p class="card-text text-danger">Zaretskaia Mariia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>
