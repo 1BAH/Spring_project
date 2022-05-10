@@ -1,5 +1,7 @@
 package com.example.banksystem;
 
+import com.example.banksystem.models.Account;
+import com.example.banksystem.models.Bank;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.AccountRepository;
 import com.example.banksystem.repositories.BankRepository;
@@ -7,6 +9,7 @@ import com.example.banksystem.repositories.ClientRepository;
 import com.example.banksystem.repositories.TransactionRepository;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +20,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.math.BigDecimal;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
-public class HomePageTest {
+public class InfoPagesTests {
     @Autowired
     MockMvc mockMvc;
 
@@ -44,17 +48,24 @@ public class HomePageTest {
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
-    @WithMockUser(username = "user", password = "pass")
-    public void banks() throws Exception {
-        Client client = new Client(3,"user", "sur", "add", "pass");
+    public void faq() throws Exception {
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
-
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/home");
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/faq");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("user", client))
-                .andExpect(model().attribute("title", "Home"));
+                .andExpect(model().attribute("title", "FAQ"));
+    }
+
+    @Test
+    public void authors() throws Exception {
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/authors");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "About us"));
     }
 }

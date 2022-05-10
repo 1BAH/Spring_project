@@ -49,7 +49,7 @@ public class PutTests {
 
     @Test
     @WithMockUser(username = "user", password = "pass")
-    public void testName() throws Exception {
+    public void putFirstPage() throws Exception {
         Bank bank = new Bank(1, "bank", 10);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
