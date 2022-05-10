@@ -32,7 +32,7 @@ public class MoneyController {
         model.addAttribute("accounts", accounts);
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Withdraw money");
-        return "withdraw-choose";
+        return "operations/withdraw-choose";
     }
 
     @GetMapping("/withdraw/choose")
@@ -42,7 +42,7 @@ public class MoneyController {
         Client currentClient = clientRepository.findByName(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Withdraw money");
-        return "withdraw";
+        return "operations/withdraw";
     }
 
     @GetMapping("/withdraw/{accountId}")
@@ -63,7 +63,7 @@ public class MoneyController {
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "ERROR");
-        return "unsuccessful";
+        return "operations/unsuccessful";
     }
 
     @GetMapping("/put")
@@ -74,7 +74,7 @@ public class MoneyController {
         model.addAttribute("accounts", accounts);
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Put money");
-        return "put-choose";
+        return "operations/put-choose";
     }
 
     @GetMapping("/put/choose")
@@ -84,7 +84,7 @@ public class MoneyController {
         Client currentClient = clientRepository.findByName(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Put money");
-        return "put";
+        return "operations/put";
     }
 
     @GetMapping("/put/{accountId}")

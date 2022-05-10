@@ -49,7 +49,7 @@ public class TransactionController {
         model.addAttribute("user", currentClient);
         model.addAttribute("transactions", currentClientTransactions);
         model.addAttribute("title", "Transactions");
-        return "transactions";
+        return "transactions/transactions";
     }
 
     @GetMapping("/transactions/make")
@@ -65,7 +65,7 @@ public class TransactionController {
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "Step 1");
-        return "transactions1";
+        return "transactions/transactions1";
     }
 
     @GetMapping("/transactions/make/step-1/form")
@@ -86,7 +86,7 @@ public class TransactionController {
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "Step 2");
         model.addAttribute("chosenAcc", fromId);
-        return "transactions2-self";
+        return "transactions/transactions2-self";
     }
 
     @GetMapping("/transactions/make/step-2/{fromId}")
@@ -96,7 +96,7 @@ public class TransactionController {
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Step 2");
         model.addAttribute("chosenAcc", fromId);
-        return "transactions2";
+        return "transactions/transactions2";
     }
 
     @GetMapping("/transactions/make/step-2-self/{fromId}/form")
@@ -125,7 +125,7 @@ public class TransactionController {
         model.addAttribute("title", "Step 3");
         model.addAttribute("fromAcc", accFrom);
         model.addAttribute("toAcc", accTo);
-        return "transactions3";
+        return "transactions/transactions3";
     }
 
     @GetMapping("/transactions/make/step-4/{fromId}/{toId}/form")
@@ -153,7 +153,7 @@ public class TransactionController {
         model.addAttribute("colored", colored);
         model.addAttribute("commision", commision);
         model.addAttribute("realAmount", amount.multiply(new BigDecimal(1 + commision / 100)).setScale(2, BigDecimal.ROUND_HALF_DOWN));
-        return "transactions4";
+        return "transactions/transactions4";
     }
 
     @GetMapping("/transactions/make/{fromId}/{toId}/{amount}/{withCommision}")
@@ -182,6 +182,6 @@ public class TransactionController {
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "ERROR");
-        return "unsuccessful";
+        return "operations/unsuccessful";
     }
 }
