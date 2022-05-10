@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
-public class BankTest {
+public class BankTests {
     @Autowired
     MockMvc mockMvc;
 
