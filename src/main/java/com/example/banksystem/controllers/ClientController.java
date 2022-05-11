@@ -7,7 +7,6 @@ import com.example.banksystem.repositories.ClientRepository;
 import com.example.banksystem.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
-import org.springframework.cloud.endpoint.RefreshEndpoint;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;

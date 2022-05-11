@@ -17,7 +17,7 @@ public class HomePageController {
     ClientRepository clientRepository;
 
     @GetMapping("/")
-    public String mainPage(String model) {
+    public String mainPage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
 
@@ -42,5 +42,4 @@ public class HomePageController {
         model.addAttribute("title", "Start work");
         return "starter";
     }
-
 }
