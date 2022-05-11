@@ -93,6 +93,28 @@ public class WithdrawTest {
 
     @Test
     @WithMockUser(username = "user", password = "pass")
+    public void withdrawOperation() throws Exception {
+        Bank bank = new Bank(1, "bank", 10);
+        Client client = new Client(3,"user", "sur", "add", "pass");
+        Account account = new Account(2, new BigDecimal(1111), "Credit", bank, client);
+        bank.addAccounts(account);
+        client.addAccounts(account);
+
+        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/withdraw/2")
+                .param("amount", "111");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/accounts"));
+
+        Assert.assertTrue(new BigDecimal(1000).compareTo(account.getAmount()) == 0);
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
     public void chooseIdIsEmpty() throws Exception {
         Bank bank = new Bank(1, "bank", 10);
         Client client = new Client(3,"user", "sur", "add", "pass");
@@ -107,26 +129,6 @@ public class WithdrawTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is4xxClientError());
-    }
-
-    public void withdraw1() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
-        Client client = new Client(3,"user", "sur", "add", "pass");
-        Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
-        bank.addAccounts(account);
-        client.addAccounts(account);
-
-        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
-
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/withdraw/2")
-                .param("amount", "111");
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/accounts"));
-
-        Assert.assertTrue(new BigDecimal(1111).compareTo(account.getAmount()) == 0);
     }
 
     @Test
@@ -145,5 +147,70 @@ public class WithdrawTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void withdrawCreditBelowZero() throws Exception {
+        Bank bank = new Bank(1, "bank", 10);
+        Client client = new Client(3,"user", "sur", "add", "pass");
+        Account account = new Account(2, new BigDecimal(0), "Credit", bank, client);
+        bank.addAccounts(account);
+        client.addAccounts(account);
+
+        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/withdraw/2")
+                .param("amount", "111");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/accounts"));
+
+        Assert.assertTrue(new BigDecimal(-111).compareTo(account.getAmount()) == 0);
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void withdrawDebitBelowZero() throws Exception {
+        Bank bank = new Bank(1, "bank", 10);
+        Client client = new Client(3,"user", "sur", "add", "pass");
+        Account account = new Account(2, new BigDecimal(0), "Debit", bank, client);
+        bank.addAccounts(account);
+        client.addAccounts(account);
+
+        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/withdraw/2")
+                .param("amount", "111");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/withdraw/withdraw-error"));
+
+        Assert.assertTrue(new BigDecimal(0).compareTo(account.getAmount()) == 0);
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void withdrawError() throws Exception {
+        Bank bank = new Bank(1, "bank", 10);
+        Client client = new Client(3,"user", "sur", "add", "pass");
+        Account account = new Account(2, new BigDecimal(0), "Debit", bank, client);
+        bank.addAccounts(account);
+        client.addAccounts(account);
+
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/withdraw/withdraw-error");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "ERROR"))
+                .andExpect(model().attribute("user", client))
+                .andExpect(model().attribute("accounts", client.getAccounts()));
     }
 }
