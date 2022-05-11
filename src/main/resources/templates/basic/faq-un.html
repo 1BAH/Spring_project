@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: start"></header>
+
+<main>
+    <article class="my-3">
+        <p class="display-6 font-weight-bold text-warning mx-5 mt-2">FAQ</p>
+
+        <div class="display6 font-weight-bold mx-5 mt-2">
+            <div class="card-group">
+                <div>
+                    <div class="card m-2 border-info" style="width: 21rem;">
+                        <div class="m-2">
+                            <img src="https://i.ibb.co/8N0H303/conversation.png" alt="conversation" style="width: 100%">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Connection is lost after singing up</h5>
+                            <p class="card-text font-weight-bold text-warning">Answer</p>
+                            <p class="card-text text-info">
+                                It's usually happening on linux systems.
+                                Don't panic - the server is restarting. Wait some seconds and then reload the page.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="my-2">
+                <div class="col-md-12">
+                    If you find any bugs or problems please contact us via e-mail: kalinin.is@phystech.edu
+                </div>
+            </div>
+        </div>
+    </article>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

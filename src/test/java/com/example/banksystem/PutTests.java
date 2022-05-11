@@ -56,7 +56,7 @@ public class PutTests {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/put");
@@ -77,7 +77,7 @@ public class PutTests {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/put/choose")
@@ -99,7 +99,7 @@ public class PutTests {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/put/choose");

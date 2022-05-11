@@ -27,7 +27,7 @@ public class MoneyController {
     @GetMapping("/withdraw")
     public String withdrawMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("accounts", accounts);
         model.addAttribute("user", currentClient);
@@ -39,7 +39,7 @@ public class MoneyController {
     public String withdrawMoneyChoose(@RequestParam String accountId, Model model) {
         model.addAttribute("choice", accountId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Withdraw money");
         return "operations/withdraw";
@@ -58,7 +58,7 @@ public class MoneyController {
     @GetMapping("/withdraw/withdraw-error")
     public String transactionError(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
@@ -69,7 +69,7 @@ public class MoneyController {
     @GetMapping("/put")
     public String putMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("accounts", accounts);
         model.addAttribute("user", currentClient);
@@ -81,7 +81,7 @@ public class MoneyController {
     public String putMoneyChoose(@RequestParam String accountId, Model model) {
         model.addAttribute("choice", accountId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Put money");
         return "operations/put";

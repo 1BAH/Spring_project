@@ -26,7 +26,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/registration", "/registration/form", "/authors", "/faq").permitAll()
+                .antMatchers("/", "/home", "/registration", "/registration/form", "/authors", "/faq", "/start").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll()
@@ -53,8 +53,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
         for (Client client: clientRepository.findAll()) {
             auth.inMemoryAuthentication()
-                    .withUser(client.getName())
-                    .password(passwordEncoder().encode(client.getPassport()))
+                    .withUser(client.getPassport())
+                    .password(passwordEncoder().encode(client.getSurname()))
                     .authorities("ROLE_USER");
         }
     }
