@@ -50,7 +50,7 @@ jobs:
 
       - name: Building project
         run: |
-          mvn clean package
+          mvn compile
 
       - name: Running tests
         run: |
