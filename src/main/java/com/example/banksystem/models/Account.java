@@ -32,6 +32,14 @@ public class Account {
         this.holder = holder;
     }
 
+    public Account(long id, BigDecimal amount, String type, Bank bank, Client holder) {
+        this.id = id;
+        this.amount = amount;
+        this.type = type;
+        this.bank = bank;
+        this.holder = holder;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

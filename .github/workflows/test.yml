@@ -48,9 +48,19 @@ jobs:
           mysql user: root # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
           mysql password: root # Required if "mysql user" exists. The password for the "mysql user"
 
+      - name: Building project
+        run: |
+          mvn test-compile
+
+      - name: Running tests
+        run: |
+          mvn test
+          
+      - name: Building jar
+        run: |
+          mvn package
 
       - name: Running testController version
         run: |
-          mvn clean package
           cd target
-          java -jar BankSystem-1.0.jar
+          java -jar BankSystem-2.0.jar

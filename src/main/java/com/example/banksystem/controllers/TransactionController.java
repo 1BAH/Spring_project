@@ -33,7 +33,7 @@ public class TransactionController {
     @GetMapping("/transactions")
     private String transactionsPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
 
         List<Account> accounts = currentClient.getAccounts();
         Iterable<Transaction> transactions = transactionRepository.findAll();
@@ -49,7 +49,7 @@ public class TransactionController {
         model.addAttribute("user", currentClient);
         model.addAttribute("transactions", currentClientTransactions);
         model.addAttribute("title", "Transactions");
-        return "transactions";
+        return "transactions/transactions";
     }
 
     @GetMapping("/transactions/make")
@@ -60,12 +60,12 @@ public class TransactionController {
     @GetMapping("/transactions/step-1")
     public String step1(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "Step 1");
-        return "transactions1";
+        return "transactions/transactions1";
     }
 
     @GetMapping("/transactions/make/step-1/form")
@@ -80,52 +80,50 @@ public class TransactionController {
     @GetMapping("/transactions/make/step-2-self/{fromId}")
     public String step2self(Model model, @PathVariable(value = "fromId") long fromId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "Step 2");
         model.addAttribute("chosenAcc", fromId);
-        return "transactions2-self";
+        return "transactions/transactions2-self";
     }
 
     @GetMapping("/transactions/make/step-2/{fromId}")
     public String step2(Model model, @PathVariable(value = "fromId") long fromId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Step 2");
         model.addAttribute("chosenAcc", fromId);
-        return "transactions2";
+        return "transactions/transactions2";
     }
 
     @GetMapping("/transactions/make/step-2-self/{fromId}/form")
-    public String step1selfResults(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
+    public String step2selfResults(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
         return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
     }
 
     @GetMapping("/transactions/make/step-2/{fromId}/form")
-    public String step1results(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
+    public String step2results(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
         return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
     }
 
     @GetMapping("/transactions/make/step-3/{fromId}/{toId}")
     public String step3(Model model, @PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
 
         Account accFrom = accountRepository.findById(fromId).get();
         Account accTo = accountRepository.findById(toId).get();
-
-        float commision = 1;
 
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "Step 3");
         model.addAttribute("fromAcc", accFrom);
         model.addAttribute("toAcc", accTo);
-        return "transactions3";
+        return "transactions/transactions3";
     }
 
     @GetMapping("/transactions/make/step-4/{fromId}/{toId}/form")
@@ -134,7 +132,7 @@ public class TransactionController {
         Account accTo = accountRepository.findById(toId).get();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
 
         float commision = 0;
         boolean colored = true;
@@ -153,7 +151,7 @@ public class TransactionController {
         model.addAttribute("colored", colored);
         model.addAttribute("commision", commision);
         model.addAttribute("realAmount", amount.multiply(new BigDecimal(1 + commision / 100)).setScale(2, BigDecimal.ROUND_HALF_DOWN));
-        return "transactions4";
+        return "transactions/transactions4";
     }
 
     @GetMapping("/transactions/make/{fromId}/{toId}/{amount}/{withCommision}")
@@ -177,11 +175,11 @@ public class TransactionController {
     @GetMapping("/transactions/transaction-error")
     public String transactionError(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "ERROR");
-        return "unsuccessful";
+        return "operations/unsuccessful";
     }
 }

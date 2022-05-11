@@ -27,17 +27,18 @@ public class BankController {
     @GetMapping("/banks")
     public String banksPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         model.addAttribute("user", currentClient);
         Iterable<Bank> banks = bankRepository.findAll();
         model.addAttribute("banks", banks);
+        model.addAttribute("title", "Banks");
         return "banks";
     }
 
     @GetMapping("/banks/add")
     public String banksAddPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Bank creation");
         return "banks-add";

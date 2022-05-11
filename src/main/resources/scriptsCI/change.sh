@@ -38,7 +38,7 @@ public class ScheduledTasks {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(90000);
+                    Thread.sleep(60000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

@@ -27,6 +27,13 @@ public class Transaction {
         this.amount = amount;
     }
 
+    public Transaction(Long id, Account accountFrom, Account accountTo, BigDecimal amount) {
+        this.id = id;
+        this.accountFrom = accountFrom;
+        this.accountTo = accountTo;
+        this.amount = amount;
+    }
+
     public Long getId() {
         return id;
     }
