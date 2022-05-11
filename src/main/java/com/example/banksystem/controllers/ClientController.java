@@ -31,6 +31,7 @@ public class ClientController {
 
     @GetMapping("/registration")
     public String Registration(Model model) {
+        model.addAttribute("title", "Registration");
         return "registration";
     }
 
@@ -54,15 +55,13 @@ public class ClientController {
         thread.setDaemon(false);
         thread.start();
 
-
-
         return "redirect:/";
     }
 
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public String profile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
 
         Iterable<Transaction> transactions = transactionRepository.findAll();

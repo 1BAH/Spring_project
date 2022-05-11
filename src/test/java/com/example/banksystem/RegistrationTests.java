@@ -44,6 +44,15 @@ public class RegistrationTests {
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
+    public void registration() throws  Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "Registration"));
+    }
+
+    @Test
     public void redirect() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 

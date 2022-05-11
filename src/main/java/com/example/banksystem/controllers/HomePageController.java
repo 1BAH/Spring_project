@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Objects;
+
 @Controller
 public class HomePageController {
     @Autowired
@@ -16,16 +18,29 @@ public class HomePageController {
 
     @GetMapping("/")
     public String mainPage(String model) {
-        return "redirect:/home";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            return "redirect:/start";
+        } else {
+            return "redirect:/home";
+        }
     }
 
     @GetMapping("/home")
     public String homePage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Home");
         return "home";
+    }
+
+    @GetMapping("/start")
+    public String startPage(Model model) {
+        model.addAttribute("title", "Start work");
+        return "starter";
     }
 
 }

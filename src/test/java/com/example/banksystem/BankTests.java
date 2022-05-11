@@ -57,7 +57,7 @@ public class BankTests {
         Bank bank2 = new Bank("TestBank2", 2);
         banks.add(bank2);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
         Mockito.when(bankRepository.findAll()).thenReturn(banks);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/banks");
@@ -109,7 +109,7 @@ public class BankTests {
     public void bankAdd() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/banks/add");
 

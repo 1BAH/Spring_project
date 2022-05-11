@@ -58,7 +58,7 @@ public class AccountTest {
         Account account2 = new Account(2, new BigDecimal(2000), "Account2", bank, client);
         client.addAccounts(account2);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
         Mockito.when(accountRepository.findAll()).thenReturn(client.getAccounts());
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/accounts");
@@ -77,7 +77,7 @@ public class AccountTest {
 
         Account account = new Account(1, new BigDecimal(1000), "Account1", bank, client);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
         Mockito.when(accountRepository.save(Mockito.any())).thenReturn(account);
         Mockito.when(bankRepository.findById(Mockito.any())).thenReturn(Optional.of(bank));
 
@@ -118,7 +118,7 @@ public class AccountTest {
     public void accountAdd() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/accounts/add");
 

@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 public class HomePageTests {
@@ -45,10 +44,10 @@ public class HomePageTests {
 
     @Test
     @WithMockUser(username = "user", password = "pass")
-    public void banks() throws Exception {
+    public void homePage() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/home");
 
@@ -56,5 +55,37 @@ public class HomePageTests {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("user", client))
                 .andExpect(model().attribute("title", "Home"));
+    }
+
+    @Test
+    public void startPage() throws Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/start");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "Start work"));
+    }
+
+    @Test
+    public void rootUnauthorised() throws Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/start"));
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void rootAuthorised() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/home"));
     }
 }
