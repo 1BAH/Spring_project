@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -56,7 +57,7 @@ public class WithdrawTest {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw");
@@ -77,7 +78,7 @@ public class WithdrawTest {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw/choose")
@@ -99,7 +100,7 @@ public class WithdrawTest {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw/choose");
@@ -115,7 +116,7 @@ public class WithdrawTest {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(java.util.Optional.of(account));
+        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw/2")
@@ -137,7 +138,7 @@ public class WithdrawTest {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(java.util.Optional.of(account));
+        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw/2");
