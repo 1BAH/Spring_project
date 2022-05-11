@@ -100,12 +100,12 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/make/step-2-self/{fromId}/form")
-    public String step1selfResults(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
+    public String step2selfResults(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
         return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
     }
 
     @GetMapping("/transactions/make/step-2/{fromId}/form")
-    public String step1results(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
+    public String step2results(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
         return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
     }
 
@@ -117,8 +117,6 @@ public class TransactionController {
 
         Account accFrom = accountRepository.findById(fromId).get();
         Account accTo = accountRepository.findById(toId).get();
-
-        float commision = 1;
 
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
