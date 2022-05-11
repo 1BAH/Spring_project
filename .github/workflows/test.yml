@@ -50,11 +50,15 @@ jobs:
 
       - name: Building project
         run: |
-          mvn clean package
+          mvn test-compile
 
       - name: Running tests
         run: |
           mvn test
+          
+      - name: Building jar
+        run: |
+          mvn package
 
       - name: Running testController version
         run: |
