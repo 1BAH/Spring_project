@@ -7,13 +7,13 @@
 >
 >>Zaretskaia Mariia
 
-Current status: `version 1.0 is available`
+Current status: `version 2.0 is available`
 
 ## Run Settings
 
 *To run the application visit [http://localhost:3333](http://localhost:3333/)*
 
-##Requirements
+## Requirements
 
 - MySQL database
 
@@ -24,7 +24,7 @@ Current status: `version 1.0 is available`
 > >
 > >That is all
 
-##FAQ
+## FAQ
 
 > I'm a macOS user and there are problems with database connection. What should I do?
 
