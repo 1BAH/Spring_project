@@ -12,34 +12,35 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.Objects;
 
 @Controller
-public class HomePageController {
+public class FooterController {
     @Autowired
     ClientRepository clientRepository;
 
-    @GetMapping("/")
-    public String mainPage() {
+    @GetMapping("/authors")
+    public String authors(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
 
+        model.addAttribute("title", "About us");
+
         if (Objects.isNull(currentClient)) {
-            return "redirect:/start";
+            return "basic/authors-un";
         } else {
-            return "redirect:/home";
+            return "basic/authors";
         }
     }
 
-    @GetMapping("/home")
-    public String homePage(Model model) {
+    @GetMapping("faq")
+    public String faq(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
-        model.addAttribute("user", currentClient);
-        model.addAttribute("title", "Home");
-        return "home";
-    }
 
-    @GetMapping("/start")
-    public String startPage(Model model) {
-        model.addAttribute("title", "Start work");
-        return "starter";
+        model.addAttribute("title", "FAQ");
+
+        if (Objects.isNull(currentClient)) {
+            return "basic/faq-un";
+        } else {
+            return "basic/faq";
+        }
     }
 }

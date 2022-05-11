@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+/**
+ * Spring Security configuration
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
@@ -22,11 +25,16 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
     private ClientRepository clientRepository;
 
+    /**
+     * Set restrictions to pages
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/registration", "/registration/form").permitAll()
+                .antMatchers("/", "/home", "/registration", "/registration/form", "/authors", "/faq", "/start").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll()
@@ -39,6 +47,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.addFilterAfter(new Filter(), BasicAuthenticationFilter.class);
     }
 
+    /**
+     * Add users from database and crease two basic users: "user"-"pass" and "root'-"root"
+     * @param auth
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
@@ -46,19 +59,23 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .password(passwordEncoder().encode("pass"))
                 .authorities("ROLE_ADMIN")
                 .and()
-                .withUser("Alex")
-                .password("1111")
+                .withUser("root")
+                .password("root")
                 .authorities("ROLE_USER");
 
 
         for (Client client: clientRepository.findAll()) {
             auth.inMemoryAuthentication()
-                    .withUser(client.getName())
-                    .password(passwordEncoder().encode(client.getPassport()))
+                    .withUser(client.getPassport())
+                    .password(passwordEncoder().encode(client.getSurname()))
                     .authorities("ROLE_USER");
         }
     }
 
+    /**
+     * Encoding for passwords
+     * @return Encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

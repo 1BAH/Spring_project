@@ -27,26 +27,26 @@ public class MoneyController {
     @GetMapping("/withdraw")
     public String withdrawMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("accounts", accounts);
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Withdraw money");
-        return "withdraw-choose";
+        return "operations/withdraw-choose";
     }
 
     @GetMapping("/withdraw/choose")
     public String withdrawMoneyChoose(@RequestParam String accountId, Model model) {
         model.addAttribute("choice", accountId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Withdraw money");
-        return "withdraw";
+        return "operations/withdraw";
     }
 
     @GetMapping("/withdraw/{accountId}")
-    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
+    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
         Account account = accountRepository.findById(accountId).get();
         if (account.withdrawMoney(amount, false)) {
             accountRepository.save(account);
@@ -58,37 +58,37 @@ public class MoneyController {
     @GetMapping("/withdraw/withdraw-error")
     public String transactionError(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "ERROR");
-        return "unsuccessful";
+        return "operations/unsuccessful";
     }
 
     @GetMapping("/put")
     public String putMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("accounts", accounts);
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Put money");
-        return "put-choose";
+        return "operations/put-choose";
     }
 
     @GetMapping("/put/choose")
     public String putMoneyChoose(@RequestParam String accountId, Model model) {
         model.addAttribute("choice", accountId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Put money");
-        return "put";
+        return "operations/put";
     }
 
     @GetMapping("/put/{accountId}")
-    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
+    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
         Account account = accountRepository.findById(accountId).get();
         account.putMoney(amount);
         accountRepository.save(account);
