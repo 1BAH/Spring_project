@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
-public class RegistrationTest {
+public class RegistrationTests {
     @Autowired
     MockMvc mockMvc;
 
@@ -42,6 +42,15 @@ public class RegistrationTest {
 
     @MockBean
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    @Test
+    public void registration() throws  Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "Registration"));
+    }
 
     @Test
     public void redirect() throws Exception {
