@@ -49,14 +49,14 @@ public class PutTests {
 
     @Test
     @WithMockUser(username = "user", password = "pass")
-    public void testName() throws Exception {
+    public void putFirstPage() throws Exception {
         Bank bank = new Bank(1, "bank", 10);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/put");
@@ -77,7 +77,7 @@ public class PutTests {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/put/choose")
@@ -99,7 +99,7 @@ public class PutTests {
         bank.addAccounts(account);
         client.addAccounts(account);
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/put/choose");

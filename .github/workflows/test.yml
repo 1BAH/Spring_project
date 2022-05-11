@@ -59,4 +59,4 @@ jobs:
       - name: Running testController version
         run: |
           cd target
-          java -jar BankSystem-1.0.jar
+          java -jar BankSystem-2.0.jar

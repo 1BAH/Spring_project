@@ -1,5 +1,6 @@
 package com.example.banksystem;
 
+import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Bank;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.AccountRepository;
@@ -18,12 +19,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
-public class BankTest {
+public class AccountTest {
     @Autowired
     MockMvc mockMvc;
 
@@ -47,58 +49,54 @@ public class BankTest {
 
     @Test
     @WithMockUser(username = "user", password = "pass")
-    public void banks() throws Exception {
-        Client client = new Client(3,"user", "sur", "add", "pass");
+    public void accounts() throws Exception {
+        Client client = new Client(3, "user", "sur", "add", "pass");
+        Bank bank = new Bank(1, "bank", 10);
 
-        ArrayList<Bank> banks = new ArrayList<>();
+        Account account1 = new Account(1, new BigDecimal(1000), "Account1", bank, client);
+        client.addAccounts(account1);
+        Account account2 = new Account(2, new BigDecimal(2000), "Account2", bank, client);
+        client.addAccounts(account2);
 
-        Bank bank1 = new Bank("TestBank1", 1);
-        banks.add(bank1);
-        Bank bank2 = new Bank("TestBank2", 2);
-        banks.add(bank2);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+        Mockito.when(accountRepository.findAll()).thenReturn(client.getAccounts());
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
-        Mockito.when(bankRepository.findAll()).thenReturn(banks);
-
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/banks");
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/accounts");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("banks", banks))
+                .andExpect(model().attribute("accounts", client.getAccounts()))
                 .andExpect(model().attribute("user", client));
     }
 
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void redirect() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+        Bank bank = new Bank(1, "bank", 10);
+
+        Account account = new Account(1, new BigDecimal(1000), "Account1", bank, client);
+
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+        Mockito.when(accountRepository.save(Mockito.any())).thenReturn(account);
+        Mockito.when(bankRepository.findById(Mockito.any())).thenReturn(Optional.of(bank));
+
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/banks/add/form")
-                .param("name", "TestBank")
-                .param("percentage", "3");
+                .get("/accounts/add/form")
+                .param("type", "TestAccount")
+                .param("bankId", "3");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/banks"));
+                .andExpect(redirectedUrl("/accounts"));
     }
 
     @Test
     @WithMockUser(username = "user", password = "pass")
-    public void nameIsEmpty() throws Exception {
+    public void typeIsEmpty() throws Exception {
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/banks/add/form")
-                .param("percentage", "3");
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().is4xxClientError());
-    }
-
-
-    @Test
-    @WithMockUser(username = "user", password = "pass")
-    public void percentageIsEmpty() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/banks/add/form")
-                .param("name", "TestBank");
+                .get("/accounts/add/form")
+                .param("bankId", "3");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is4xxClientError());
@@ -106,16 +104,27 @@ public class BankTest {
 
     @Test
     @WithMockUser(username = "user", password = "pass")
-    public void bankAdd() throws Exception {
+    public void bankIdIsEmpty() throws Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/accounts/add/form")
+                .param("type", "TestAccount");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void accountAdd() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.findByName(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/banks/add");
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/accounts/add");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "Bank creation"))
+                .andExpect(model().attribute("title", "Account form"))
                 .andExpect(model().attribute("user", client));
     }
 }

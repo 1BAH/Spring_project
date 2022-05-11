@@ -1,25 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Registration</title>
-</head>
+<head th:insert="blocks/head :: head"></head>
+
 <body>
+<header th:insert="blocks/header :: start"></header>
 
-<h1>Form</h1>
-<button onclick="window.location.href = '/';">Home</button><br>
+<main>
+  <p class="display-5 font-weight-bold mx-5 mt-2 text-warning">Registration</p>
 
-<hr>
-<div>
-  <form action="/registration/form" method="get">
-    <input type="text" name="name" placeholder="Input name"><br>
-    <input type="text" name="surname" placeholder="Input surname"><br>
-    <input type="text" name="address" placeholder="Input address"><br>
-    <input type="text" name="passport" placeholder="Input passport"><br>
-    <input type="submit" value="Submit"><br>
-    <input type="reset" value="Reset"><br>
-  </form>
-</div>
+  <p class="fs-5 font-weight-bold mx-5 mt-2">After the registration you can sign in with your passport as Username and surname as Password</p>
 
+  <div class="display6 font-weight-bold mx-5 mt-2">
+    <form action="/registration/form" method="get" class="row g-3 needs-validation" novalidate>
+      <div class="col-md-8">
+        <div class="input-group has-validation">
+          <span class="input-group-text" id="Name">Name:</span>
+          <input name="name" type="text" class="form-control"
+                 id="validationName" aria-describedby="Name" required
+                 placeholder="Johann Sebastian">
+          <div class="valid-feedback">
+            OK
+          </div>
+          <div class="invalid-feedback">
+            Enter your name
+          </div>
+        </div>
+        <div class="input-group has-validation">
+          <span class="input-group-text" id="Surname">Surname:</span>
+          <input name="surname" type="text" class="form-control"
+                 id="validationSurname" aria-describedby="Surname" required
+                 placeholder="Bach">
+          <div class="valid-feedback">
+            OK
+          </div>
+          <div class="invalid-feedback">
+            Enter your surname
+          </div>
+        </div>
+        <div class="input-group has-validation">
+          <span class="input-group-text" id="Address">Address:</span>
+          <input name="address" type="text" class="form-control"
+                 id="validationAddress" aria-describedby="Address" required
+                 placeholder="Leipzig">
+          <div class="valid-feedback">
+            OK
+          </div>
+          <div class="invalid-feedback">
+            Enter your address
+          </div>
+        </div>
+        <div class="input-group has-validation">
+          <span class="input-group-text" id="Passport">Passport:</span>
+          <input name="passport" type="text" class="form-control"
+                 id="validationPassport" aria-describedby="Passport" required
+                 placeholder="00 00 000000">
+          <div class="valid-feedback">
+            OK
+          </div>
+          <div class="invalid-feedback">
+            Enter your passport
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-outline-info" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+              .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                  if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                  }
+
+                  form.classList.add('was-validated')
+                }, false)
+              })
+    })()
+  </script>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
+
 </html>
