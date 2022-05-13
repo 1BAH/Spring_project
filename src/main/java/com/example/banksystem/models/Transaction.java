@@ -8,28 +8,54 @@ import java.math.BigDecimal;
  */
 @Entity
 public class Transaction {
+
+    /**
+     * Transaction's id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Transaction's accountFrom
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_from", nullable = false)
     private Account accountFrom;
 
+    /**
+     * Transaction's accountTo
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_to", nullable = false)
     private Account accountTo;
 
+    /**
+     * Transaction's amount
+     */
     private BigDecimal amount;
 
     public Transaction() {}
 
+    /**
+     * Constructor of Transaction objects of three parameters
+     * @param accountFrom - where money were taken from
+     * @param accountTo - where money were sent to
+     * @param amount
+     */
     public Transaction(Account accountFrom, Account accountTo, BigDecimal amount) {
         this.accountFrom = accountFrom;
         this.accountTo = accountTo;
         this.amount = amount;
     }
 
+    /**
+     * Constructor of Transaction objects of four parameters
+     * @param id
+     * @param accountFrom - where money were taken from
+     * @param accountTo  - where money were sent to
+     * @param amount - the amount of money that where sent
+     */
     public Transaction(Long id, Account accountFrom, Account accountTo, BigDecimal amount) {
         this.id = id;
         this.accountFrom = accountFrom;
@@ -55,15 +81,15 @@ public class Transaction {
 
     /**
      * Get the account where money were taken from
-     * @return account where money were taken from
+     * @return accountFrom where money were taken from
      */
     public Account getAccountFrom() {
         return accountFrom;
     }
 
     /**
-     * Set the account where money were sent to
-     * @param accountFrom - where money were sent to
+     * Set the account where money were taken from
+     * @param accountFrom - where money were taken from
      */
     public void setAccountFrom(Account accountFrom) {
         this.accountFrom = accountFrom;
@@ -92,6 +118,7 @@ public class Transaction {
     public BigDecimal getAmount() {
         return amount;
     }
+
     /**
      * Get the amount of money that where sent
      * @param amount - the amount of money that where sent
