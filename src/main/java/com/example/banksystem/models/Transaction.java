@@ -41,7 +41,7 @@ public class Transaction {
      * Constructor of Transaction objects of three parameters
      * @param accountFrom - where money were taken from
      * @param accountTo - where money were sent to
-     * @param amount
+     * @param amount - the amount of money that where sent
      */
     public Transaction(Account accountFrom, Account accountTo, BigDecimal amount) {
         this.accountFrom = accountFrom;
