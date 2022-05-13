@@ -38,13 +38,13 @@
         <div class="display6 font-weight-bold mx-5 mt-2">
             <div class="card-group">
                 <div th:each="acc : ${accounts}">
-                    <div th:class="${acc.amount < 0} ? 'card m-2 border-danger' : 'card m-2 border-warning'" style="width: 11rem;">
+                    <div th:class="${acc.current_amount < 0} ? 'card m-2 border-danger' : 'card m-2 border-warning'" style="width: 11rem;">
                         <div class="m-2">
                             <img src="https://i.ibb.co/Bj6cbwD/money-bag.png" style="width: 100%" alt="money-bag">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title" th:text="${acc.id}"/>
-                            <p th:class="${acc.amount < 0} ? 'card-text text-danger'" th:text="'Amount: ' + ${acc.amount}"/>
+                            <p th:class="${acc.current_amount < 0} ? 'card-text text-danger'" th:text="'Amount: ' + ${acc.current_amount}"/>
                             <p class="card-text" th:text="'Bank: ' + ${acc.getBank().name}"/>
                             <p class="card-text" th:text="'Type: ' + ${acc.type}"/>
                         </div>

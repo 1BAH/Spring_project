@@ -11,7 +11,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal amount;
+    private BigDecimal previous_amount;
+
+    private BigDecimal current_amount;
 
     private String type;
 
@@ -26,7 +28,7 @@ public class Account {
     public Account() {}
 
     public Account(BigDecimal amount, String type, Bank bank, Client holder) {
-        this.amount = amount;
+        this.current_amount = amount;
         this.type = type;
         this.bank = bank;
         this.holder = holder;
@@ -34,7 +36,7 @@ public class Account {
 
     public Account(long id, BigDecimal amount, String type, Bank bank, Client holder) {
         this.id = id;
-        this.amount = amount;
+        this.current_amount = amount;
         this.type = type;
         this.bank = bank;
         this.holder = holder;
@@ -44,8 +46,8 @@ public class Account {
         this.id = id;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setCurrent_amount(BigDecimal amount) {
+        this.current_amount = amount;
     }
 
     public void setType(String type) {
@@ -56,8 +58,16 @@ public class Account {
         return id;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getCurrent_amount() {
+        return current_amount;
+    }
+
+    public BigDecimal getPrevious_amount() {
+        return previous_amount;
+    }
+
+    public void setPrevious_amount(BigDecimal previous_amount) {
+        this.previous_amount = previous_amount;
     }
 
     public String getType() {
@@ -65,7 +75,7 @@ public class Account {
     }
 
     public boolean withdrawMoney(BigDecimal amount1, boolean commision) {
-        BigDecimal amount2 = getAmount();
+        BigDecimal amount2 = current_amount;
 
         if (commision) {
             amount1 = amount1.multiply(new BigDecimal(bank.getPercentage() / 100 + 1));
@@ -75,7 +85,8 @@ public class Account {
 
 
         if (type.equals("Credit") || (newAmount.compareTo(zero) >= 0)) {
-            this.amount = newAmount;
+            previous_amount = current_amount;
+            current_amount = newAmount;
             return true;
         } else {
             return false;
@@ -83,14 +94,16 @@ public class Account {
     }
 
     public void putMoney(BigDecimal amount1) {
-        BigDecimal amount2 = getAmount();
-        this.amount = amount2.add(amount1);
+        BigDecimal amount2 = current_amount;
+        previous_amount = current_amount;
+        current_amount = amount2.add(amount1);
     }
 
     public void percents(float percentage) {
-        if (type.equals("Credit") && (zero.compareTo(amount) > 0)) {
-            BigDecimal amount2 = getAmount();
-            this.amount = amount2.multiply(new BigDecimal(String.valueOf(1 + percentage / 100)));
+        if (type.equals("Credit") && (zero.compareTo(current_amount) > 0)) {
+            BigDecimal amount2 = current_amount;
+            previous_amount = current_amount;
+            current_amount = amount2.multiply(new BigDecimal(String.valueOf(1 + percentage / 100)));
         }
     }
 

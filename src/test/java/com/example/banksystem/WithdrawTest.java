@@ -110,7 +110,7 @@ public class WithdrawTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/accounts"));
 
-        Assert.assertTrue(new BigDecimal(1000).compareTo(account.getAmount()) == 0);
+        Assert.assertTrue(new BigDecimal(1000).compareTo(account.getCurrent_amount()) == 0);
     }
 
     @Test
@@ -168,7 +168,7 @@ public class WithdrawTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/accounts"));
 
-        Assert.assertTrue(new BigDecimal(-111).compareTo(account.getAmount()) == 0);
+        Assert.assertTrue(new BigDecimal(-111).compareTo(account.getCurrent_amount()) == 0);
     }
 
     @Test
@@ -190,7 +190,7 @@ public class WithdrawTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/withdraw/withdraw-error"));
 
-        Assert.assertTrue(new BigDecimal(0).compareTo(account.getAmount()) == 0);
+        Assert.assertTrue(new BigDecimal(0).compareTo(account.getCurrent_amount()) == 0);
     }
 
     @Test

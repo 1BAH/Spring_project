@@ -23,7 +23,7 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title" th:text="${acc.id}"/>
-                            <p class="card-text" th:text="'Amount: ' + ${acc.amount}"/>
+                            <p class="card-text" th:text="'Amount: ' + ${acc.current_amount}"/>
                             <p class="card-text" th:text="'Bank: ' + ${acc.getBank().name}"/>
                             <input type="radio" class="btn-check"
                                    name="accountTo" th:id="${acc.id}"

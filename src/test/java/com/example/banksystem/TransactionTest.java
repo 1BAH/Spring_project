@@ -465,8 +465,9 @@ public class TransactionTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/transactions"));
 
-        Assert.assertTrue(new BigDecimal(900).compareTo(account1.getAmount()) == 0);
-        Assert.assertTrue(new BigDecimal(1100).compareTo(account2.getAmount()) == 0);
+
+        Assert.assertTrue(new BigDecimal(900).compareTo(account1.getCurrent_amount().setScale(2, BigDecimal.ROUND_HALF_UP)) == 0);
+        Assert.assertTrue(new BigDecimal(1100).compareTo(account2.getCurrent_amount().setScale(2, BigDecimal.ROUND_HALF_UP)) == 0);
     }
 
     @Test
@@ -492,8 +493,8 @@ public class TransactionTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/transactions"));
 
-        Assert.assertTrue(new BigDecimal(890).compareTo(account1.getAmount().setScale(2, BigDecimal.ROUND_HALF_UP)) == 0);
-        Assert.assertTrue(new BigDecimal(1100).compareTo(account2.getAmount()) == 0);
+        Assert.assertTrue(new BigDecimal(890).compareTo(account1.getCurrent_amount().setScale(2, BigDecimal.ROUND_HALF_UP)) == 0);
+        Assert.assertTrue(new BigDecimal(1100).compareTo(account2.getCurrent_amount()) == 0);
     }
 
     @Test
@@ -519,8 +520,8 @@ public class TransactionTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/transactions/transaction-error"));
 
-        Assert.assertTrue(new BigDecimal(0).compareTo(account1.getAmount()) == 0);
-        Assert.assertTrue(new BigDecimal(1000).compareTo(account2.getAmount()) == 0);
+        Assert.assertTrue(new BigDecimal(0).compareTo(account1.getCurrent_amount()) == 0);
+        Assert.assertTrue(new BigDecimal(1000).compareTo(account2.getCurrent_amount()) == 0);
     }
 
     @Test

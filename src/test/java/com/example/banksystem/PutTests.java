@@ -127,7 +127,7 @@ public class PutTests {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/accounts"));
 
-        Assert.assertTrue(new BigDecimal(1111).compareTo(account.getAmount()) == 0);
+        Assert.assertTrue(new BigDecimal(1111).compareTo(account.getCurrent_amount()) == 0);
     }
 
     @Test
