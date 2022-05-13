@@ -170,7 +170,7 @@ public class Client {
     }
 
     /**
-     * Set all address
+     * Set all accounts
      * @param accounts of client
      */
     public void setAccounts(List<Account> accounts) {
