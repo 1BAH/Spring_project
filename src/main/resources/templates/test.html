@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head th:insert="blocks/head :: head"></head>
+
+<body class="bg-light">
+<header th:insert="blocks/header :: start"></header>
+
+<main>
+    <p class="display-1 font-weight-bold mx-5 mt-2">Welcome to Bank System Application</p>
+
+    <button type="button" id="get">Получить список</button>
+    <ul id="list"></ul>
+
+    <script>
+        function sayHi(who) {
+            alert('Hi ' + who);
+        }
+
+        function getData() {
+            const url = '/try';
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.onload = () => {
+                console.log(xhr.status);
+                if (xhr.status !== 200) {
+                    return;
+                }
+                console.log(xhr.response);
+                const response = JSON.parse(xhr.response);
+                console.log(response);
+                let keys = Object.keys(response);
+                console.log(keys.length)
+                let html = [];
+                keys.forEach(function (item) {
+                    html.push(`<li>${response[item]}</li>`);
+                    console.log(response[item]);
+                })
+                document.querySelector('#list').innerHTML = html.join('');
+                setInterval(sayHi, 3000, response[keys[0]])
+            }
+            xhr.send();
+        }
+
+        document.querySelector('#get').addEventListener('click', () => {
+            getData();
+        })
+
+    </script>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

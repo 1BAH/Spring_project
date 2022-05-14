@@ -1,12 +1,19 @@
 package com.example.banksystem.scheduled;
 
+import com.example.banksystem.Foo;
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.AccountRepository;
 import com.example.banksystem.repositories.BankRepository;
+import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import javax.swing.*;
 
 /**
  * Scheduled task
@@ -18,6 +25,9 @@ public class ScheduledTasks {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    ClientRepository clientRepository;
 
     /**
      * Percentage pays for credit every minute
@@ -34,4 +44,21 @@ public class ScheduledTasks {
             }
         }
     }
+
+    @Scheduled(fixedRate = 5000)
+    public void foo() {
+        Foo.setBar(Foo.getBar() + 1);
+    }
+
+
+/*
+    @Scheduled(fixedRate = 5000)
+    public void check() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+
+    }
+    
+ */
 }
