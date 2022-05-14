@@ -9,24 +9,25 @@
 
 Current status: `version 2.0 is available`
 
+
+## What's new
+
+>1. Site design is changed
+>2. My profile
+>3. Navigation bar
+>4. FAQ and About us pages
+>5. Jar distribution
+
+
 ## Run Settings
 
 *To run the application visit [http://localhost:3333](http://localhost:3333/)*
 
 ## Requirements
 
-- MySQL database
+- MySQL database `banksys`
 
->What we suggest doing
-> >Use MAMP app to run your local MySQL server
-> >
-> >Then open [phpMyAdmin](http://localhost/phpMyAdmin/) and create a new database called `banksys`
-> >
-> >That is all
-
-## FAQ
-
-> I'm a macOS user and there are problems with database connection. What should I do?
+## Setting the MySQL database on MacOS
 
 If you use MAMP as we suggested then the solution of this problem is to change `application.properties`:
 
@@ -60,39 +61,26 @@ management.endpoint.restart.enabled=true
 
 then go to page [phpMyAdmin](http://localhost/phpMyAdmin/) and create a `banksys` database
 
-> I'm a Linux user and there are problems with database connection. What should I do?
+Or install MySQL server and run 
 
-To solve the problem you should install phpMyAdmin and configure it.
-After this you should go to phpMyAdmin page and create a `banksys` database and change `application.properties:
-
-```properties
-server.port=3333
-
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/banksys
-spring.datasource.username=root
-spring.datasource.password=root
-spring.datasource.driver-class-name =com.mysql.jdbc.Driver
-#spring.jpa.show-sql: true
-
-management.endpoint.restart.enabled=true
+```console
+mysql> CREATE DATABASE banksys;
 ```
+Use user root with password root and database port 3306
 
-after:
-```properties
-server.port=3333
+## Setting the MySQL database on Ubuntu (use same commands on other Linux OS)
 
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:<DatabasePort>/banksys
-spring.datasource.username=<UserName>
-spring.datasource.password=<UserPassword>
-spring.datasource.driver-class-name =com.mysql.jdbc.Driver
-#spring.jpa.show-sql: true
-
-management.endpoint.restart.enabled=true
+```console
+sudo apt upgrade
+sudo apt install mysql-server
+sudo apt install mysql-client
+#Start server
+sudo service mysql start
+#Log in to MySQL server
+sudo mysql -u root -p
+#Then enter password - root
+#In MySQL 
+mysql> CREATE DATABASE banksys;
+#To exit MySQl
+mysql> \q
 ```
-
-where
-- `<UserName>` - user's name which you used to log in to phpMyAdmin
-- `<UserPassword>` - user's password
-- `<DatabasePort>` - connection port to database (find it at phpMyAdmin page)
