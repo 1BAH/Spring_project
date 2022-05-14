@@ -1,0 +1,54 @@
+<script th:fragment="script">
+    function switchIconOff() {
+        document.getElementById("bellOff").hidden = false;
+        document.getElementById("bellOn").hidden = true;
+    }
+
+    function switchIconOn() {
+        document.getElementById("bellOff").hidden = true;
+        document.getElementById("bellOn").hidden = false;
+    }
+
+    function getData() {
+        const url = '/data';
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.onload = () => {
+            if (xhr.status !== 200) {
+                return;
+            }
+            const response = JSON.parse(xhr.response);
+            let keys = Object.keys(response);
+            let html = [];
+
+            keys.forEach(function (item) {
+                // language=HTML
+                html.push(`<li><div class="alert alert-warning shadow alert-dismissible fade show" role="alert">
+                ${response[item]}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" id="${item}" onclick="changeAlert(${item})"></button>
+            </div></li>`);
+            })
+
+
+            if (keys.length > 0) {
+                switchIconOn();
+            }
+
+            document.querySelector('#alerts').innerHTML = html.join('');
+        }
+        xhr.send();
+    }
+
+    setInterval(getData, 2000);
+
+    function changeAlert(id) {
+        const url = '/close/' + id;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.send();
+    }
+
+    document.querySelector('#alarm').addEventListener('click', () => {
+        switchIconOff();
+    })
+</script>

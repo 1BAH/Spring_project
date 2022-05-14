@@ -23,6 +23,10 @@ public class Account {
      */
     private BigDecimal amount;
 
+    private byte alert;
+
+    private long lastTransactionId;
+
     /**
      * Account's type
      */
@@ -56,6 +60,7 @@ public class Account {
         this.type = type;
         this.bank = bank;
         this.holder = holder;
+        this.alert = 0;
     }
 
     /**
@@ -72,6 +77,7 @@ public class Account {
         this.type = type;
         this.bank = bank;
         this.holder = holder;
+        this.alert = 0;
     }
 
     /**
@@ -157,12 +163,13 @@ public class Account {
 
     /**
      * This method accrues percentages on the amount
-     * @param percentage -  with which does the bank give money
+     * @param percentage bank rate
      */
     public void percents(float percentage) {
         if (type.equals("Credit") && (zero.compareTo(amount) > 0)) {
+            setAlert((byte) 2);
             BigDecimal amount2 = getAmount();
-            this.amount = amount2.multiply(new BigDecimal(String.valueOf(1 + percentage / 100)));
+            amount = amount2.multiply(new BigDecimal(String.valueOf(1 + percentage / 100)));
         }
     }
 
@@ -180,5 +187,36 @@ public class Account {
      */
     public void setBank(Bank bank) {
         this.bank = bank;
+    }
+
+    public byte getAlert() {
+        return alert;
+    }
+
+    public void setAlert(byte alert) {
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        this.alert = alert;
+    }
+
+    public long getLastTransactionId() {
+        return lastTransactionId;
+    }
+
+    public void setLastTransactionId(long lastTransactionId) {
+        this.lastTransactionId = lastTransactionId;
+    }
+
+    public Client getHolder() {
+        return holder;
+    }
+
+    public void setHolder(Client holder) {
+        this.holder = holder;
     }
 }
