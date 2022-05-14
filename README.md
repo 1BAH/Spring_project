@@ -64,23 +64,23 @@ then go to page [phpMyAdmin](http://localhost/phpMyAdmin/) and create a `banksys
 Or install MySQL server and run 
 
 ```console
-mysql> CREATE DATABASE banksys;
+$ mysql> CREATE DATABASE banksys;
 ```
 Use user root with password root and database port 3306
 
 ## Setting the MySQL database on Ubuntu (use same commands on other Linux OS)
 
 ```console
-sudo apt upgrade
-sudo apt install mysql-server
-sudo apt install mysql-client
+$ sudo apt upgrade
+$ sudo apt install mysql-server
+$ sudo apt install mysql-client
 #Start server
-sudo service mysql start
+$ sudo service mysql start
 #Log in to MySQL server
-sudo mysql -u root -p
+$ sudo mysql -u root -p
 #Then enter password - root
 #In MySQL 
-mysql> CREATE DATABASE banksys;
+$ mysql> CREATE DATABASE banksys;
 #To exit MySQl
-mysql> \q
+$ mysql> \q
 ```
