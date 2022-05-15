@@ -1,5 +1,6 @@
 package com.example.banksystem.controllers;
 
+import com.example.banksystem.BankSystemApplication;
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.models.Transaction;
@@ -7,7 +8,6 @@ import com.example.banksystem.repositories.ClientRepository;
 import com.example.banksystem.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
-import org.springframework.cloud.endpoint.RefreshEndpoint;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,9 +20,6 @@ import java.util.List;
 
 @Controller
 public class ClientController {
-    @Autowired(required = false)
-    RestartEndpoint restartEndpoint;
-
     @Autowired
     TransactionRepository transactionRepository;
 
@@ -45,15 +42,17 @@ public class ClientController {
 
         clientRepository.save(client);
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                restartEndpoint.restart();
+        Thread restartThread = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                BankSystemApplication.restart();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 
-        thread.setDaemon(false);
-        thread.start();
+        restartThread.setDaemon(false);
+        restartThread.start();
 
         return "redirect:/";
     }

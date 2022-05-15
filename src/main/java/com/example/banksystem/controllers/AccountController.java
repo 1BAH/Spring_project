@@ -51,7 +51,7 @@ public class AccountController {
     }
 
     @GetMapping("/accounts/add/form")
-    public String addPostAccountPage(@RequestParam String type, @RequestParam String bankId, Model model) {
+    public String addPostAccountPage(@RequestParam String type, @RequestParam String bankId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
         Account account = new Account(new BigDecimal(0), type, bankRepository.findById(Long.parseLong(bankId)).get(), currentClient);
