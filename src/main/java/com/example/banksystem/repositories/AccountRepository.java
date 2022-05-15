@@ -3,7 +3,8 @@ package com.example.banksystem.repositories;
 import com.example.banksystem.models.Account;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
-
+/**
+ * Account repository extends CrudRepository
+ */
 public interface AccountRepository extends CrudRepository<Account, Long> {
 }

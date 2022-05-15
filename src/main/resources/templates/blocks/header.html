@@ -12,6 +12,21 @@
                             My profile
                         </a>
                     </li>
+                    <li>
+                        <button id="alarm" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                            <img id="bellOff" src="https://i.ibb.co/FqNtPZx/notification-bell.png" alt="notification-bell" width="32px">
+                            <img id="bellOn" src="https://i.ibb.co/Xbd9K8Q/notifications.png" alt="notifications" width="32px" hidden>
+                        </button>
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title text-warning" id="offcanvasNavbarLabel">Notifications</h5>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" id="alerts"></ul>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
 
                 <button class="navbar-toggler collapsed navbar navbar-dark bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="true" aria-label="Toggle navigation">

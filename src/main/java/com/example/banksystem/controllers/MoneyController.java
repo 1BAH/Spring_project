@@ -46,7 +46,7 @@ public class MoneyController {
     }
 
     @GetMapping("/withdraw/{accountId}")
-    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
+    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
         Account account = accountRepository.findById(accountId).get();
         if (account.withdrawMoney(amount, false)) {
             accountRepository.save(account);
@@ -88,7 +88,7 @@ public class MoneyController {
     }
 
     @GetMapping("/put/{accountId}")
-    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
+    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
         Account account = accountRepository.findById(accountId).get();
         account.putMoney(amount);
         accountRepository.save(account);

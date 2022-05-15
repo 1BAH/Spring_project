@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<aside th:insert="blocks/aside :: aside"></aside>
+
+<main>
+    <p class="display-3 font-weight-bold mx-5 mt-2 text-warning" th:text="'Transaction #' + ${transaction.id}"/>
+    <p class="display-6 font-weight-bold mx-5 mt-2">Information</p>
+
+    <article class="my-3">
+        <div class="col-md-5 font-weight-bold mx-5 mt-2 align-self-start" style="left: 200px;">
+            <div class="list-group border-warning">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-4 list-group-item-warning">From account:</li>
+                    <li class="list-group-item col-7" th:text="${transaction.accountFrom.id}"/>
+                </ul>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-4 list-group-item-warning">To account:</li>
+                    <li class="list-group-item col-7" th:text="${transaction.accountTo.id}"/>
+                </ul>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-4 list-group-item-warning">Amount:</li>
+                    <li class="list-group-item col-7" th:text="${transaction.amount}"/>
+                </ul>
+            </div>
+        </div>
+    </article>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+<div th:insert="/blocks/notification :: script"/>
+
+</body>
+</html>

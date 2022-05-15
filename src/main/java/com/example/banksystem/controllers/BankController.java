@@ -10,11 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class BankController {
@@ -45,7 +41,7 @@ public class BankController {
     }
 
     @GetMapping("/banks/add/form")
-    public String addPostAccountPage(@RequestParam String name, @RequestParam String percentage, Model model) {
+    public String addPostAccountPage(@RequestParam String name, @RequestParam String percentage) {
         Bank bank = new Bank(name, Float.parseFloat(percentage));
         bankRepository.save(bank);
         return "redirect:/banks";

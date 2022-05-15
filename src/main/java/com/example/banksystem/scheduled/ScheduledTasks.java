@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * Scheduled task
+ */
 @Component
 public class ScheduledTasks {
     @Autowired
@@ -16,6 +19,9 @@ public class ScheduledTasks {
     @Autowired
     AccountRepository accountRepository;
 
+    /**
+     * Percentage pays for credit every minute
+     */
     @Scheduled(cron = "0 * * * * *")
     public void percents() {
         Iterable<Bank> banks = bankRepository.findAll();

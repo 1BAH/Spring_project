@@ -53,7 +53,7 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/make")
-    public String makeTransaction() {
+    public String startTransaction() {
         return "redirect:/transactions/step-1";
     }
 
@@ -69,7 +69,7 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/make/step-1/form")
-    public String step1results(Model model, @RequestParam long accountFrom, @RequestParam boolean self) {
+    public String step1results(@RequestParam long accountFrom, @RequestParam boolean self) {
         if (self) {
             return "redirect:/transactions/make/step-2-self/" + accountFrom;
         } else {
@@ -100,12 +100,12 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/make/step-2-self/{fromId}/form")
-    public String step2selfResults(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
+    public String step2selfResults(@PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
         return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
     }
 
     @GetMapping("/transactions/make/step-2/{fromId}/form")
-    public String step2results(Model model, @PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
+    public String step2results(@PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
         return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
     }
 
@@ -155,17 +155,24 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions/make/{fromId}/{toId}/{amount}/{withCommision}")
-    public String makeGetTransaction(@PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId, @PathVariable(value = "amount") BigDecimal amount, @PathVariable(value = "withCommision") boolean withCommision, Model model) {
+    public String makeTransaction(@PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId, @PathVariable(value = "amount") BigDecimal amount, @PathVariable(value = "withCommision") boolean withCommision) {
         Account accFrom = accountRepository.findById(fromId).get();
         Account accTo = accountRepository.findById(toId).get();
 
         if (accFrom.withdrawMoney(amount, !withCommision)) {
+            accTo.setAlert((byte) 1);
             accTo.putMoney(amount);
+
+
             accountRepository.save(accFrom);
-            accountRepository.save(accTo);
+
 
             Transaction transaction = new Transaction(accFrom, accTo, amount);
             transactionRepository.save(transaction);
+
+            accTo.setLastTransactionId(transaction.getId());
+            accountRepository.save(accTo);
+
             return "redirect:/transactions";
         } else {
             return "redirect:/transactions/transaction-error";
@@ -181,5 +188,24 @@ public class TransactionController {
         model.addAttribute("accounts", accounts);
         model.addAttribute("title", "ERROR");
         return "operations/unsuccessful";
+    }
+
+    @GetMapping("/transaction/{id}")
+    public String transactionInfo(Model model, @PathVariable(name = "id") long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+        model.addAttribute("user", currentClient);
+
+        Transaction transaction = transactionRepository.findById(id).get();
+
+        if (currentClient.getId() == transaction.getAccountFrom().getHolder().getId()
+                || currentClient.getId() == transaction.getAccountTo().getHolder().getId()) {
+            model.addAttribute("title", "Transaction @" + id);
+            model.addAttribute("transaction", transaction);
+            return "transactions/info";
+        } else {
+            model.addAttribute("title", "ERROR");
+            return "restricted";
+        }
     }
 }
