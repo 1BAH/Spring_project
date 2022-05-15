@@ -1,5 +1,6 @@
 package com.example.banksystem.controllers;
 
+import com.example.banksystem.BankSystemApplication;
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.models.Transaction;
@@ -19,9 +20,6 @@ import java.util.List;
 
 @Controller
 public class ClientController {
-    @Autowired(required = false)
-    RestartEndpoint restartEndpoint;
-
     @Autowired
     TransactionRepository transactionRepository;
 
@@ -44,15 +42,17 @@ public class ClientController {
 
         clientRepository.save(client);
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                restartEndpoint.restart();
+        Thread restartThread = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                BankSystemApplication.restart();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 
-        thread.setDaemon(false);
-        thread.start();
+        restartThread.setDaemon(false);
+        restartThread.start();
 
         return "redirect:/";
     }
