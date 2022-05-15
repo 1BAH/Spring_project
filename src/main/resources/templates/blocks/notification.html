@@ -32,6 +32,8 @@
 
             if (keys.length > 0) {
                 switchIconOn();
+            } else {
+                switchIconOff();
             }
 
             document.querySelector('#alerts').innerHTML = html.join('');
@@ -39,7 +41,7 @@
         xhr.send();
     }
 
-    setInterval(getData, 2000);
+    setInterval(getData, 1000);
 
     function changeAlert(id) {
         const url = '/close/' + id;
