@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: start"></header>
+
+<main>
+    <p class="display-1 font-weight-bold mx-5 mt-2">Welcome to Bank System Application</p>
+
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/authors';">About us</button>
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/faq';">FAQs</button>
+
+    <div style="text-align: center; margin-bottom: 10px;">
+        <img src="https://i.ibb.co/qYCWPSz/bank.png" alt="bank">
+    </div>
+
+    <p class="display-5 font-weight-bold mx-5 mt-2">Choose what to do next</p>
+
+    <button type="button" class="btn mx-4 my-2 btn-outline-info" onclick="window.location.href = '/login';">Already have a profile - sign in</button>
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/registration';">Register</button>
+
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

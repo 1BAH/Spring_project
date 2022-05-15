@@ -1,0 +1,30 @@
+<div th:fragment="aside" th:id="navbarHeader" th:class="collapse">
+    <div class="bd-aside sticky-xl-top text-dark align-self-start mb-3 px-2">
+        <h2 class="h5 pt-4 pb-3 mx-2 border-bottom border-secondary" th:text="${user.name} + ' ' + ${user.surname}"/>
+        <nav class="small" id="toc">
+            <ul class="list-unstyled">
+                <li class="my-2">
+                    <button class="btn d-inline-flex align-items-center" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#more-collapse" aria-controls="more-collapse">Actions</button>
+                    <ul class="list-unstyled ps-3 collapse" id="more-collapse" style="">
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/accounts/add">Create account</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/banks/add">Create bank</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/transactions/make">Make transaction</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/withdraw">Withdraw money</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/put">Put money</a></li>
+                    </ul>
+                </li>
+                <li class="my-2">
+                    <button class="btn d-inline-flex align-items-center" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#actions-collapse" aria-controls="actions-collapse">Account</button>
+                    <ul class="list-unstyled ps-3 collapse" id="actions-collapse" style="">
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/logout">Sign out</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/registration">Sign up</a></li>
+                        <li><a class="d-inline-flex align-items-center rounded text-secondary p-1" href="/login">Sign in</a></li>
+                    </ul>
+                </li>
+                <li class="my-2">
+                    <button class="btn d-inline-flex align-items-center" onclick="window.location.href = '/profile';">Me</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

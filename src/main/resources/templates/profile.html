@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<aside th:insert="blocks/aside :: aside"></aside>
+
+<main>
+    <p class="display-3 font-weight-bold mx-5 mt-2 text-warning" th:text="'User #' + ${user.id}"/>
+    <p class="display-6 font-weight-bold mx-5 mt-2">Information</p>
+
+    <article class="my-3">
+        <div class="col-md-4 font-weight-bold mx-5 mt-2 align-self-start" style="left: 200px;">
+            <div class="list-group border-warning">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-3 list-group-item-warning">Name:</li>
+                    <li class="list-group-item col-7" th:text="${user.name}"/>
+                </ul>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-3 list-group-item-warning">Surname:</li>
+                    <li class="list-group-item col-7" th:text="${user.surname}"/>
+                </ul>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-3 list-group-item-warning">Passport:</li>
+                    <li class="list-group-item col-7" th:text="${user.passport}"/>
+                </ul>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-3 list-group-item-warning">Address:</li>
+                    <li class="list-group-item col-7" th:text="${user.address}"/>
+                </ul>
+            </div>
+        </div>
+
+        <p class="display-6 font-weight-bold mx-5 mt-2">My accounts</p>
+
+        <div class="display6 font-weight-bold mx-5 mt-2">
+            <div class="card-group">
+                <div th:each="acc : ${accounts}">
+                    <div th:class="${acc.amount < 0} ? 'card m-2 border-danger' : 'card m-2 border-warning'" style="width: 11rem;">
+                        <div class="m-2">
+                            <img src="https://i.ibb.co/Bj6cbwD/money-bag.png" style="width: 100%" alt="money-bag">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${acc.id}"/>
+                            <p th:class="${acc.amount < 0} ? 'card-text text-danger'" th:text="'Amount: ' + ${acc.amount}"/>
+                            <p class="card-text" th:text="'Bank: ' + ${acc.getBank().name}"/>
+                            <p class="card-text" th:text="'Type: ' + ${acc.type}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <p class="display-6 font-weight-bold mx-5 mt-2">My transactions</p>
+    <div class="display6 font-weight-bold mx-5 mt-2">
+        <div class="card-group">
+            <div th:each="tr : ${transactions}">
+                <div class="card m-2 border-info" style="width: 11rem;">
+                    <div  class="m-2">
+                        <img src="https://i.ibb.co/fHVcHGv/transaction.png" style="width: 100%" alt="transaction">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${tr.id}"/>
+                        <p class="card-text" th:text="'Amount: ' + ${tr.amount}"/>
+                        <p class="card-text" th:text="'From account: ' + ${tr.accountFrom.id}"/>
+                        <p class="card-text" th:text="'To account: ' + ${tr.accountTo.id}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+<div th:insert="/blocks/notification :: script"/>
+
+</body>
+</html>

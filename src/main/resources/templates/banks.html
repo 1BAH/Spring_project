@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Banks</title>
-    </head>
+    <head th:insert="blocks/head :: head"></head>
 
     <body>
-        <h1>Banks</h1>
-        <button onclick="window.location.href = '/';">Home</button><br>
-        <button onclick="window.location.href = '/banks/add';">Add bank</button><br>
-        <hr>
+        <header th:insert="blocks/header :: header"></header>
 
-        <div th:each="element : ${banks}">
-            <h5 th:text="'Bank #' + ${element.id}"/>
-            <ul>
-                <li th:text="'Name: ' + ${element.name}"/>
-                <li th:text="'Percentage: ' + ${element.percentage} + '%'"/>
-            </ul>
-            <hr>
-        </div>
+        <aside th:insert="blocks/aside :: aside"></aside>
+
+        <main>
+            <p class="display-2 font-weight-bold mx-5 mt-2">Banks</p>
+
+            <article>
+                <div class="bd mt-5 mb-3 mt-xl-0 mb-xl-2" style="display: block; text-align: left;">
+                    <table class="table table-warning table-striped mt-2">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Percentage</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="el : ${banks}">
+                        <tr>
+                            <th scope="row" th:text="${el.id}"/>
+                            <td th:text="${el.name}"/>
+                            <td th:text="${el.percentage}"/>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/banks/add';">Create new bank</button>
+        </main>
+
+        <footer th:insert="blocks/footer :: footer"></footer>
+        <div th:insert="/blocks/notification :: script"/>
     </body>
 </html>

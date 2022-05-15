@@ -1,0 +1,85 @@
+<div th:fragment="header">
+    <div class="px-3 py-2 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-warning text-decoration-none">
+                    <h1 class="d-flex align-items-center fs-4 text-warning mb-0 ml-2">Home</h1>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                        <a href="/profile" class="nav-link text-white">
+                            My profile
+                        </a>
+                    </li>
+                    <li>
+                        <button id="alarm" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                            <img id="bellOff" src="https://i.ibb.co/FqNtPZx/notification-bell.png" alt="notification-bell" width="32px">
+                            <img id="bellOn" src="https://i.ibb.co/Xbd9K8Q/notifications.png" alt="notifications" width="32px" hidden>
+                        </button>
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title text-warning" id="offcanvasNavbarLabel">Notifications</h5>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" id="alerts"></ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <button class="navbar-toggler collapsed navbar navbar-dark bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="true" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="px-3 py-2 border-bottom mb-3 collapse" id="navbarHeader">
+        <div class="container d-flex flex-wrap justify-content-center">
+            <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+                <button type="button" class="btn btn-outline-warning me-2" onclick="window.location.href = '/banks';">Banks</button>
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-dark" onclick="window.location.href = '/accounts';">Accounts</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="window.location.href = '/transactions';">Transactions</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="start">
+    <div class="px-3 py-2 bg-dark text-white">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-warning text-decoration-none">
+                    <h1 class="d-flex align-items-center fs-4 text-warning mb-0 ml-2">Home</h1>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                        <div class="nav-link text-white">
+                            Bank system app
+                        </div>
+                    </li>
+                </ul>
+
+                <button class="navbar-toggler collapsed navbar navbar-dark bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#startHeader" aria-controls="startHeader" aria-expanded="true" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="px-3 py-2 border-bottom mb-3 collapse" id="startHeader">
+        <div class="container d-flex flex-wrap justify-content-center">
+            <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+                <button type="button" class="btn btn-outline-warning me-2" onclick="window.location.href = '/login';">Sign in</button>
+            </form>
+
+            <div class="text-end">
+                <button type="button" class="btn btn-outline-dark" onclick="window.location.href = '/registration';">Sign up</button>
+            </div>
+        </div>
+    </div>
+</div>

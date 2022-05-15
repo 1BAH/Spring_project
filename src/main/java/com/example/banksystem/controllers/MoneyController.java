@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -23,46 +24,71 @@ public class MoneyController {
     @Autowired
     AccountRepository accountRepository;
 
-    @GetMapping("/accounts/withdraw")
+    @GetMapping("/withdraw")
     public String withdrawMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("accounts", accounts);
-        return "withdraw-choose";
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Withdraw money");
+        return "operations/withdraw-choose";
     }
 
-    @GetMapping("/accounts/withdraw/choose")
+    @GetMapping("/withdraw/choose")
     public String withdrawMoneyChoose(@RequestParam String accountId, Model model) {
         model.addAttribute("choice", accountId);
-        return "withdraw";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Withdraw money");
+        return "operations/withdraw";
     }
 
-    @GetMapping("accounts/withdraw/{accountId}")
-    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam float amount, Model model) {
+    @GetMapping("/withdraw/{accountId}")
+    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
         Account account = accountRepository.findById(accountId).get();
-        account.withdrawMoney(amount);
-        accountRepository.save(account);
-        return "redirect:/accounts";
+        if (account.withdrawMoney(amount, false)) {
+            accountRepository.save(account);
+            return "redirect:/accounts";
+        }
+        return "redirect:/withdraw/withdraw-error";
     }
 
-    @GetMapping("/accounts/put")
+    @GetMapping("/withdraw/withdraw-error")
+    public String transactionError(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+        List<Account> accounts = currentClient.getAccounts();
+        model.addAttribute("user", currentClient);
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("title", "ERROR");
+        return "operations/unsuccessful";
+    }
+
+    @GetMapping("/put")
     public String putMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByName(authentication.getName());
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("accounts", accounts);
-        return "put-choose";
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Put money");
+        return "operations/put-choose";
     }
 
-    @GetMapping("/accounts/put/choose")
+    @GetMapping("/put/choose")
     public String putMoneyChoose(@RequestParam String accountId, Model model) {
         model.addAttribute("choice", accountId);
-        return "put";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Put money");
+        return "operations/put";
     }
 
-    @GetMapping("accounts/put/{accountId}")
-    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam float amount, Model model) {
+    @GetMapping("/put/{accountId}")
+    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
         Account account = accountRepository.findById(accountId).get();
         account.putMoney(amount);
         accountRepository.save(account);
