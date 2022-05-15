@@ -1,5 +1,6 @@
 package com.example.banksystem.controllers;
 
+import com.example.banksystem.BankSystemApplication;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ClientController {
-    @Autowired
-    RestartEndpoint restartEndpoint;
-
     @Autowired
     ClientRepository clientRepository;
 
@@ -33,15 +31,17 @@ public class ClientController {
 
         clientRepository.save(client);
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                restartEndpoint.restart();
+        Thread restartThread = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                BankSystemApplication.restart();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 
-        thread.setDaemon(false);
-        thread.start();
+        restartThread.setDaemon(false);
+        restartThread.start();
 
 
 
