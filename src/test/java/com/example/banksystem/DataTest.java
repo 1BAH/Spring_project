@@ -9,13 +9,16 @@ import com.example.banksystem.repositories.ClientRepository;
 import com.example.banksystem.repositories.TransactionRepository;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -58,14 +61,29 @@ public class DataTest {
         client.addAccounts(account1);
         Account account2 = new Account(2, new BigDecimal(2000), "Account2", bank, client);
         client.addAccounts(account2);
+        Account account3 = new Account(2, new BigDecimal(3000), "Account2", bank, client);
+        client.addAccounts(account3);
 
-        Map<String, String> map = new LinkedHashMap<>();
+        account2.setAlert((byte) 2);
+        account1.setAlert((byte) 1);
+
+        String response = "{";
+
+        response += "\"" + account1.getId()
+                + "\":\"Account @" + account1.getId()
+                + " was filled up <a href=\\\"/transaction/" + account1.getLastTransactionId()
+                + "\\\" class=\\\"nav-link fst-italic text-warning\\\">See more</a>\","
+                + "\"" + account2.getId() + "\":\"Credit account @" + account2.getId() + " fee\"}";
 
         Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/data");
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/data");
 
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isOk());
+        MvcResult result = mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Assert.assertEquals(response, result.getResponse().getContentAsString());
     }
 
     @Test
@@ -74,14 +92,18 @@ public class DataTest {
         Bank bank = new Bank(1, "bank", 10);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
+        account.setAlert((byte) 2);
         bank.addAccounts(account);
         client.addAccounts(account);
 
         Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(java.util.Optional.of(account));
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/choose/2")
-                .param("alert", "0");
+                .get("/close/2");
 
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk());
+
+        Assert.assertEquals(0, account.getAlert());
     }
 }
