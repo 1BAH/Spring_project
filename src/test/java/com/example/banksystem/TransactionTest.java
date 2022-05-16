@@ -464,8 +464,8 @@ public class TransactionTest {
                 .param("amount", "100");
 
         mockMvc.perform(mockRequest)
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("transaction", transaction));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/transactions"));
 
         Assert.assertTrue(new BigDecimal(900).compareTo(account1.getAmount()) == 0);
         Assert.assertTrue(new BigDecimal(1100).compareTo(account2.getAmount()) == 0);
