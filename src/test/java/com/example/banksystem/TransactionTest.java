@@ -10,7 +10,6 @@ import com.example.banksystem.repositories.ClientRepository;
 import com.example.banksystem.repositories.TransactionRepository;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.BaseMatcher;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +22,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -458,6 +456,9 @@ public class TransactionTest {
         client.addAccounts(account1);
         client.addAccounts(account2);
 
+        Transaction transaction = new Transaction(account1, account2, new BigDecimal(100));
+        transactionRepository.save(transaction);
+
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/transactions/make/1/2/100/true");
 
@@ -484,6 +485,9 @@ public class TransactionTest {
         bank.addAccounts(account2);
         client.addAccounts(account1);
         client.addAccounts(account2);
+
+        Transaction transaction = new Transaction(account1, account2, new BigDecimal(100));
+        transactionRepository.save(transaction);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/transactions/make/1/2/100/false");
