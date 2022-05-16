@@ -456,7 +456,7 @@ public class TransactionTest {
         client.addAccounts(account1);
         client.addAccounts(account2);
 
-        Transaction transaction = new Transaction(account1, account2, new BigDecimal(100));
+        Transaction transaction = new Transaction(1L, account1, account2, new BigDecimal(100));
         transactionRepository.save(transaction);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
@@ -486,7 +486,7 @@ public class TransactionTest {
         client.addAccounts(account1);
         client.addAccounts(account2);
 
-        Transaction transaction = new Transaction(account1, account2, new BigDecimal(100));
+        Transaction transaction = new Transaction(1L, account1, account2, new BigDecimal(100));
         transactionRepository.save(transaction);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
