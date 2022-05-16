@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Controller for account pages
+ * Controller for account pages and forms
  */
 @Controller
 public class AccountController {
