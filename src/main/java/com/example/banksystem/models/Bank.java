@@ -105,7 +105,7 @@ public class Bank {
      * Set percentage with which does the bank give money
      * @param percentage - with which does the bank give money
      */
-    public void setPercentage(Float percentage) {
+    public void setPercentage(float percentage) {
         this.percentage = percentage;
     }
 

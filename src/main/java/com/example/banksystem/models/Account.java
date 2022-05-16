@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  */
 @Entity
 public class Account {
-    private static BigDecimal zero = new BigDecimal(0);
+    private static final BigDecimal zero = new BigDecimal(0);
 
     /**
      * Account's id
