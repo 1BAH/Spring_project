@@ -446,14 +446,21 @@ public class TransactionTest {
         Client client = new Client(3, "user", "sur", "add", "pass");
         Bank bank = new Bank(1, "bank", 10);
 
-        Account account1 = new Account(1L, new BigDecimal(1000), "Credit", bank, client);
-        Account account2 = new Account(2L, new BigDecimal(1000), "Credit", bank, client);
+        Account account1 = new Account((long) 1, new BigDecimal(1000), "Credit", bank, client);
+        Account account2 = new Account((long) 2, new BigDecimal(1000), "Credit", bank, client);
 
-        Transaction transaction = new Transaction(1L, account1, account2, new BigDecimal(100));
+        Transaction transaction = new Transaction((long) 1, account1, account2, new BigDecimal(100));
         transactionRepository.save(transaction);
 
         Mockito.when(accountRepository.findById((long) 1)).thenReturn(Optional.of(account1));
         Mockito.when(accountRepository.findById((long) 2)).thenReturn(Optional.of(account2));
+        Mockito.when(transactionRepository.save(Mockito.any(Transaction.class)))
+                .thenAnswer(invocationOnMock -> {
+                    if (invocationOnMock.getArguments()[0] instanceof Transaction){
+                        ((Transaction) invocationOnMock.getArguments()[0]).setId(1L);
+                    }
+                    return null;
+                });
         bank.addAccounts(account1);
         bank.addAccounts(account2);
         client.addAccounts(account1);
@@ -461,7 +468,7 @@ public class TransactionTest {
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/transactions/make/1/2/100/true")
-                .param("amount", "100");
+                .param("transaction", "3");;
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is3xxRedirection())
@@ -482,6 +489,14 @@ public class TransactionTest {
 
         Mockito.when(accountRepository.findById((long) 1)).thenReturn(Optional.of(account1));
         Mockito.when(accountRepository.findById((long) 2)).thenReturn(Optional.of(account2));
+        Mockito.when(transactionRepository.save(Mockito.any(Transaction.class)))
+                        .thenAnswer(invocationOnMock -> {
+                            if (invocationOnMock.getArguments()[0] instanceof Transaction){
+                                ((Transaction) invocationOnMock.getArguments()[0]).setId(1L);
+                            }
+                            return null;
+                        });
+
         bank.addAccounts(account1);
         bank.addAccounts(account2);
         client.addAccounts(account1);
