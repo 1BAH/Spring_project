@@ -6,7 +6,9 @@ name: CI-branch-dev
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ dev ]
+    branches: 
+    - dev
+    - release/*
   pull_request:
     branches: [ dev ]
 
@@ -54,3 +56,21 @@ jobs:
           mvn clean package
           cd target
           java -jar BankSystem-2.0.RELEASE.jar
+          
+  Package-distribution:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout to dev
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+      - name: Creating jar file
+        run: |
+          mvn clean package
+      - name: Upload jar file
+        uses: actions/upload-artifact@v3
+        with: 
+          name: BankSystemApplication
+          path: target/BankSystem-2.0.RELEASE.jar 
+  
