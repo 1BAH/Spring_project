@@ -10,7 +10,6 @@ import com.example.banksystem.repositories.ClientRepository;
 import com.example.banksystem.repositories.TransactionRepository;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.BaseMatcher;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +22,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -448,11 +446,18 @@ public class TransactionTest {
         Client client = new Client(3, "user", "sur", "add", "pass");
         Bank bank = new Bank(1, "bank", 10);
 
-        Account account1 = new Account(1L, new BigDecimal(1000), "Credit", bank, client);
-        Account account2 = new Account(2L, new BigDecimal(1000), "Credit", bank, client);
+        Account account1 = new Account((long) 1, new BigDecimal(1000), "Credit", bank, client);
+        Account account2 = new Account((long) 2, new BigDecimal(1000), "Credit", bank, client);
 
         Mockito.when(accountRepository.findById((long) 1)).thenReturn(Optional.of(account1));
         Mockito.when(accountRepository.findById((long) 2)).thenReturn(Optional.of(account2));
+        Mockito.when(transactionRepository.save(Mockito.any(Transaction.class)))
+                .thenAnswer(invocationOnMock -> {
+                    if (invocationOnMock.getArguments()[0] instanceof Transaction){
+                        ((Transaction) invocationOnMock.getArguments()[0]).setId(1L);
+                    }
+                    return null;
+                });
         bank.addAccounts(account1);
         bank.addAccounts(account2);
         client.addAccounts(account1);
@@ -480,6 +485,14 @@ public class TransactionTest {
 
         Mockito.when(accountRepository.findById((long) 1)).thenReturn(Optional.of(account1));
         Mockito.when(accountRepository.findById((long) 2)).thenReturn(Optional.of(account2));
+        Mockito.when(transactionRepository.save(Mockito.any(Transaction.class)))
+                        .thenAnswer(invocationOnMock -> {
+                            if (invocationOnMock.getArguments()[0] instanceof Transaction){
+                                ((Transaction) invocationOnMock.getArguments()[0]).setId(1L);
+                            }
+                            return null;
+                        });
+
         bank.addAccounts(account1);
         bank.addAccounts(account2);
         client.addAccounts(account1);
