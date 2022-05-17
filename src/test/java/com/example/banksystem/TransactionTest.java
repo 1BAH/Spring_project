@@ -90,7 +90,7 @@ public class TransactionTest {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/transactions/step-1"));
+                .andExpect(redirectedUrl("/transactions/make/step-1"));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class TransactionTest {
         Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/transactions/step-1");
+                .get("/transactions/make/step-1");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
