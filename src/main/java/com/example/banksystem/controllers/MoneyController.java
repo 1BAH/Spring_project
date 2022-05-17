@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Controller for money operations
+ */
 @Controller
 public class MoneyController {
     @Autowired
@@ -24,6 +27,11 @@ public class MoneyController {
     @Autowired
     AccountRepository accountRepository;
 
+    /**
+     * Page /withdraw - step 1: choice of account where to withdraw money from
+     * @param model
+     * @return withdraw-choose template
+     */
     @GetMapping("/withdraw")
     public String withdrawMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -35,6 +43,12 @@ public class MoneyController {
         return "operations/withdraw-choose";
     }
 
+    /**
+     * Page /withdraw/choose - step 2: enter the amount of money
+     * @param accountId id of chosen account
+     * @param model
+     * @return withdraw template
+     */
     @GetMapping("/withdraw/choose")
     public String withdrawMoneyChoose(@RequestParam String accountId, Model model) {
         model.addAttribute("choice", accountId);
@@ -45,6 +59,12 @@ public class MoneyController {
         return "operations/withdraw";
     }
 
+    /**
+     * Trying to complete the operation otherwise redirecting to an error page
+     * @param accountId id of chosen account
+     * @param amount amount of money to be withdrawn
+     * @return redirects to /accounts page if there are enough money on account otherwise to /withdraw/withdraw-error page
+     */
     @GetMapping("/withdraw/{accountId}")
     public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
         Account account = accountRepository.findById(accountId).get();
@@ -55,6 +75,11 @@ public class MoneyController {
         return "redirect:/withdraw/withdraw-error";
     }
 
+    /**
+     * Page /withdraw/withdraw-error - an error page for withdraw operations
+     * @param model
+     * @return unsuccessful template
+     */
     @GetMapping("/withdraw/withdraw-error")
     public String transactionError(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,6 +91,11 @@ public class MoneyController {
         return "operations/unsuccessful";
     }
 
+    /**
+     * Page /put - step 1: choice of account where to put money on
+     * @param model
+     * @return put-choose template
+     */
     @GetMapping("/put")
     public String putMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -77,6 +107,12 @@ public class MoneyController {
         return "operations/put-choose";
     }
 
+    /**
+     * Page /put/choose - step 2: enter the amount of money
+     * @param accountId id of chosen account
+     * @param model
+     * @return put template
+     */
     @GetMapping("/put/choose")
     public String putMoneyChoose(@RequestParam String accountId, Model model) {
         model.addAttribute("choice", accountId);
@@ -87,6 +123,12 @@ public class MoneyController {
         return "operations/put";
     }
 
+    /**
+     * Put the money on account and saves it to database
+     * @param accountId id of chosen account
+     * @param amount amount of money to be withdrawn
+     * @return redirects to /accounts page
+     */
     @GetMapping("/put/{accountId}")
     public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
         Account account = accountRepository.findById(accountId).get();

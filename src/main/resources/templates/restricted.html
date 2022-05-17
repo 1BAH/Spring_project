@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<aside th:insert="blocks/aside :: aside"></aside>
+
+<main>
+    <p class="display-5 text-danger font-weight-bold mx-5 mt-2">Page view error</p>
+
+    <p class="mx-5 mt-2 fs-5">You don't have enough rights to view that page</p>
+
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/';">Back to home page</button>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+<div th:insert="blocks/notification :: script"></div>
+</body>
+</html>

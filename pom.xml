@@ -12,9 +12,9 @@
 
     <groupId>com.example</groupId>
     <artifactId>BankSystem</artifactId>
-    <version>2.0.RELEASE</version>
-    <name>BankSystem</name>
-    <description>BankSystem</description>
+    <version>2.1.SHRIMP</version>
+    <name>BankSystem-v2.1-shrimp</name>
+    <description>Bank system application</description>
 
     <properties>
         <java.version>11</java.version>
@@ -117,5 +117,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

@@ -1,40 +1,40 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI-branch-master
+name: CI-branch-datatests
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ datatests ]
   pull_request:
-    branches: [ master ]
+    branches: [ datatests ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  Checking-master-branch:
+  Checking-data-tests:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout to master
+      - name: Checkout to datatests
         uses: actions/checkout@v3
         with:
-          ref: master
-          
+          ref: datatests
+
       - name: Set up running for CI
         run: |
           cd src/main/resources/scriptsCI
           ./ciExit.sh
           cd ../../../../
-          
+
       - name: Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop
-          
+
       - name: Creating MySQL connection
         uses: mirromutth/mysql-action@v1.1
         with:
@@ -48,9 +48,10 @@ jobs:
           mysql user: root # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
           mysql password: root # Required if "mysql user" exists. The password for the "mysql user"
 
-
-      - name: Running master version
+      - name: Building project
         run: |
           mvn clean package
-          cd target
-          java -jar BankSystem-2.1.SHRIMP.jar
+
+      - name: Running tests
+        run: |
+          mvn test

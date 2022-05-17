@@ -11,13 +11,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Objects;
 
+/**
+ * Controller for root pages
+ */
 @Controller
-public class HomePageController {
+public class RootController {
     @Autowired
     ClientRepository clientRepository;
 
+    /**
+     * Root page /
+     * @return redirects to page /start if user is not authorised otherwise to /home
+     */
     @GetMapping("/")
-    public String mainPage() {
+    public String rootPage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
 
@@ -28,6 +35,11 @@ public class HomePageController {
         }
     }
 
+    /**
+     * Page /home - home page for authorised users
+     * @param model
+     * @return home template
+     */
     @GetMapping("/home")
     public String homePage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -37,6 +49,11 @@ public class HomePageController {
         return "home";
     }
 
+    /**
+     * Page /start - home page for unauthorised users
+     * @param model
+     * @return starter template
+     */
     @GetMapping("/start")
     public String startPage(Model model) {
         model.addAttribute("title", "Start work");
