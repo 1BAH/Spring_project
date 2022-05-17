@@ -19,6 +19,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for transactions from one account to another one
+ */
 @Controller
 public class TransactionController {
     @Autowired
@@ -30,8 +33,12 @@ public class TransactionController {
     @Autowired
     private AccountRepository accountRepository;
 
+    /**
+     * Page /transactions - the table of all transactions from current user
+     * @return transactions template
+     */
     @GetMapping("/transactions")
-    private String transactionsPage(Model model) {
+    public String transactionsPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
 
@@ -52,12 +59,27 @@ public class TransactionController {
         return "transactions/transactions";
     }
 
+    /**
+     * Start transaction
+     * @return redirects to step-1 page
+     */
     @GetMapping("/transactions/make")
     public String startTransaction() {
-        return "redirect:/transactions/step-1";
+        return "redirect:/transactions/make/step-1";
     }
 
-    @GetMapping("/transactions/step-1")
+    /**
+     * <b>Transaction creation - step #1</b>
+     * <br>
+     * The choice of the account where transaction will be made from
+     * The choice of strategy:
+     * <br>
+     * - to user's personal accounts
+     * <br>
+     * - to other users' accounts
+     * @return transaction1 template
+     */
+    @GetMapping("/transactions/make/step-1")
     public String step1(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
@@ -68,6 +90,12 @@ public class TransactionController {
         return "transactions/transactions1";
     }
 
+    /**
+     * Switch between strategies mentioned before
+     * @param accountFrom
+     * @param self strategy
+     * @return redirects to step-2 or step-2-self
+     */
     @GetMapping("/transactions/make/step-1/form")
     public String step1results(@RequestParam long accountFrom, @RequestParam boolean self) {
         if (self) {
@@ -77,6 +105,12 @@ public class TransactionController {
         }
     }
 
+    /**
+     * <b>Transaction creation step #2 self</b><br>
+     * Choice of account
+     * @param fromId
+     * @return transaction2-self template
+     */
     @GetMapping("/transactions/make/step-2-self/{fromId}")
     public String step2self(Model model, @PathVariable(value = "fromId") long fromId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -89,6 +123,12 @@ public class TransactionController {
         return "transactions/transactions2-self";
     }
 
+    /**
+     * <b>Transaction creation step #2</b><br>
+     * Choice of account
+     * @param fromId
+     * @return transaction2 template
+     */
     @GetMapping("/transactions/make/step-2/{fromId}")
     public String step2(Model model, @PathVariable(value = "fromId") long fromId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -99,16 +139,36 @@ public class TransactionController {
         return "transactions/transactions2";
     }
 
+
+    /**
+     * Redirection to step #3
+     * @param fromId
+     * @param accountTo
+     * @return redirects to page /transactions/make/step-3/{fromId}/{accountTo}
+     */
     @GetMapping("/transactions/make/step-2-self/{fromId}/form")
     public String step2selfResults(@PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
         return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
     }
 
+    /**
+     * Redirection to step #3
+     * @param fromId
+     * @param accountTo
+     * @return redirects to page /transactions/make/step-3/{fromId}/{accountTo}
+     */
     @GetMapping("/transactions/make/step-2/{fromId}/form")
     public String step2results(@PathVariable(value = "fromId") long fromId, @RequestParam long accountTo) {
         return "redirect:/transactions/make/step-3/" + fromId + "/" + accountTo;
     }
 
+    /**
+     * <b>Transaction creation - step #3</b><br>
+     * Input of the amount
+     * @param fromId
+     * @param toId
+     * @return transactions3 template
+     */
     @GetMapping("/transactions/make/step-3/{fromId}/{toId}")
     public String step3(Model model, @PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -126,6 +186,14 @@ public class TransactionController {
         return "transactions/transactions3";
     }
 
+    /**
+     * <b>Transaction creation - step #4</b><br>
+     * Confirmation
+     * @param amount amount of money
+     * @param fromId money will be transferred from account
+     * @param toId money will be transferred to account
+     * @return transaction4 template
+     */
     @GetMapping("/transactions/make/step-4/{fromId}/{toId}/form")
     public String step4(@RequestParam BigDecimal amount, @PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId, Model model) {
         Account accFrom = accountRepository.findById(fromId).get();
@@ -154,12 +222,20 @@ public class TransactionController {
         return "transactions/transactions4";
     }
 
-    @GetMapping("/transactions/make/{fromId}/{toId}/{amount}/{withCommision}")
-    public String makeTransaction(@PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId, @PathVariable(value = "amount") BigDecimal amount, @PathVariable(value = "withCommision") boolean withCommision) {
+    /**
+     * Completes the transaction and redirects to transactions page or redirects to an error page if there are not enough money on account.
+     * @param amount amount of money
+     * @param fromId money will be transferred from account
+     * @param toId money will be transferred to account
+     * @param withoutCommission false if the commission is provided otherwise true
+     * @return redirects to transactions page or redirects to an error page if there are not enough money on account
+     */
+    @GetMapping("/transactions/make/{fromId}/{toId}/{amount}/{withCommission}")
+    public String makeTransaction(@PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId, @PathVariable(value = "amount") BigDecimal amount, @PathVariable(value = "withCommission") boolean withoutCommission) {
         Account accFrom = accountRepository.findById(fromId).get();
         Account accTo = accountRepository.findById(toId).get();
 
-        if (accFrom.withdrawMoney(amount, !withCommision)) {
+        if (accFrom.withdrawMoney(amount, !withoutCommission)) {
             accTo.setAlert((byte) 1);
             accTo.putMoney(amount);
 
@@ -179,6 +255,10 @@ public class TransactionController {
         }
     }
 
+    /**
+     * Page /transactions/transsaction-error - an error page for transactions
+     * @return unsuccessful template
+     */
     @GetMapping("/transactions/transaction-error")
     public String transactionError(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -190,6 +270,11 @@ public class TransactionController {
         return "operations/unsuccessful";
     }
 
+    /**
+     * Shows info about chosen transaction or rights error
+     * @param id transaction id
+     * @return info template if the transaction is from current user or to him otherwise restricted template
+     */
     @GetMapping("/transaction/{id}")
     public String transactionInfo(Model model, @PathVariable(name = "id") long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

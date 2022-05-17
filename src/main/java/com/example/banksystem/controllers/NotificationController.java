@@ -17,14 +17,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for notifications
+ */
 @Controller
-public class DataController {
+public class NotificationController {
     @Autowired
     ClientRepository clientRepository;
 
     @Autowired
     AccountRepository accountRepository;
 
+    /**
+     * Sends the data of all accounts that has had changes recently.
+     * Responds with map to be parsed to JSON.
+     * @return JSON accoun id: message
+     */
     @GetMapping("/data")
     @ResponseBody
     public Map<String, String> getData() {
@@ -45,6 +53,10 @@ public class DataController {
         return map;
     }
 
+    /**
+     * Set the Alert status 0 - no messages
+     * @param id
+     */
     @GetMapping("/close/{id}")
     @ResponseBody
     public void close(@PathVariable(name = "id") long id) {

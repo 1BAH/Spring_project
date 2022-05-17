@@ -7,7 +7,6 @@ import com.example.banksystem.models.Transaction;
 import com.example.banksystem.repositories.ClientRepository;
 import com.example.banksystem.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for registration and My profile page
+ */
 @Controller
 public class ClientController {
     @Autowired
@@ -26,12 +28,26 @@ public class ClientController {
     @Autowired
     ClientRepository clientRepository;
 
+    /**
+     * Page /registration - registration of the new user
+     * @param model
+     * @return registration template
+     */
     @GetMapping("/registration")
-    public String Registration(Model model) {
+    public String registration(Model model) {
         model.addAttribute("title", "Registration");
         return "registration";
     }
 
+    /**
+     * Get the form request, create account and save it to database.
+     * Also restarts application context in order to refresh database connection.
+     * @param name
+     * @param surname
+     * @param passport
+     * @param address
+     * @return redirects to root
+     */
     @GetMapping("/registration/form")
     public String addClient(@RequestParam String name, @RequestParam String surname, @RequestParam String passport, @RequestParam String address) {
         Client client = new Client();
@@ -57,6 +73,11 @@ public class ClientController {
         return "redirect:/";
     }
 
+    /**
+     * My Profile page - user's personal data, user's accounts and transactions
+     * @param model
+     * @return profile template
+     */
     @GetMapping("/profile")
     public String profile(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

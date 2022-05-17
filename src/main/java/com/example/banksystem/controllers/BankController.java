@@ -12,6 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Controller for bank pages and forms
+ */
 @Controller
 public class BankController {
     @Autowired
@@ -20,6 +23,11 @@ public class BankController {
     @Autowired
     BankRepository bankRepository;
 
+    /**
+     * Page /bank - the table of all banks
+     * @param model
+     * @return bank template
+     */
     @GetMapping("/banks")
     public String banksPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -31,6 +39,11 @@ public class BankController {
         return "banks";
     }
 
+    /**
+     * Page /banks/add - form for creating a new bank
+     * @param model
+     * @return bank-add template
+     */
     @GetMapping("/banks/add")
     public String banksAddPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -40,8 +53,14 @@ public class BankController {
         return "banks-add";
     }
 
+    /**
+     * Get the form request, create bank and save it to database
+     * @param name bank's name
+     * @param percentage bank's percentage (for commission and credit fee)
+     * @return redirects to /banks page
+     */
     @GetMapping("/banks/add/form")
-    public String addPostAccountPage(@RequestParam String name, @RequestParam String percentage) {
+    public String addBank(@RequestParam String name, @RequestParam String percentage) {
         Bank bank = new Bank(name, Float.parseFloat(percentage));
         bankRepository.save(bank);
         return "redirect:/banks";

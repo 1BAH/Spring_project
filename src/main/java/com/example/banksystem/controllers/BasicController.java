@@ -11,11 +11,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Objects;
 
+/**
+ * Controller of basic pages
+ */
 @Controller
-public class FooterController {
+public class BasicController {
     @Autowired
     ClientRepository clientRepository;
 
+    /**
+     * Page /authors - information about authors
+     * @param model
+     * @return authors-un template if user is not authorised otherwise authors template
+     */
     @GetMapping("/authors")
     public String authors(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -30,6 +38,11 @@ public class FooterController {
         }
     }
 
+    /**
+     * Page /faq - frequently asked questions
+     * @param model
+     * @return faq-un template if user is not authorised otherwise faq template
+     */
     @GetMapping("faq")
     public String faq(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

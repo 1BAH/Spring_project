@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 
 
 /**
- * Account entity class with <b>id</b>, <b>amount</b>, <b>type</b>, <b>bank</b> and <b>holder</b> properties.
+ * Account entity class with <b>id</b>, <b>amount</b>, <b>alert</b>, <b>lastTransactionId</b>, <b>type</b>, <b>bank</b> and <b>holder</b> properties.
  */
 @Entity
 public class Account {
-    private static BigDecimal zero = new BigDecimal(0);
+    private static final BigDecimal zero = new BigDecimal(0);
 
     /**
      * Account's id
@@ -23,8 +23,14 @@ public class Account {
      */
     private BigDecimal amount;
 
+    /**
+     * Account's alert
+     */
     private byte alert;
 
+    /**
+     * Account's lastTransactionId
+     */
     private long lastTransactionId;
 
     /**
@@ -189,10 +195,18 @@ public class Account {
         this.bank = bank;
     }
 
+    /**
+     * Get alert on the account
+     * @return alert on the account
+     */
     public byte getAlert() {
         return alert;
     }
 
+    /**
+     * Set alert on the account
+     * @param alert on the account
+     */
     public void setAlert(byte alert) {
         Thread thread = new Thread(() -> {
             try {
@@ -204,18 +218,34 @@ public class Account {
         this.alert = alert;
     }
 
+    /**
+     * Get lastTransactionId - id transaction that was made last
+     * @return lastTransactionId - id transaction that was made last
+     */
     public long getLastTransactionId() {
         return lastTransactionId;
     }
 
+    /**
+     * Set lastTransactionId - id transaction that was made last
+     * @param lastTransactionId - id transaction that was made last
+     */
     public void setLastTransactionId(long lastTransactionId) {
         this.lastTransactionId = lastTransactionId;
     }
 
+    /**
+     * Get holder of this account
+     * @return holder of this account
+     */
     public Client getHolder() {
         return holder;
     }
 
+    /**
+     * Set holder of this account
+     * @param holder of this account
+     */
     public void setHolder(Client holder) {
         this.holder = holder;
     }
