@@ -449,9 +449,6 @@ public class TransactionTest {
         Account account1 = new Account((long) 1, new BigDecimal(1000), "Credit", bank, client);
         Account account2 = new Account((long) 2, new BigDecimal(1000), "Credit", bank, client);
 
-        Transaction transaction = new Transaction((long) 1, account1, account2, new BigDecimal(100));
-        transactionRepository.save(transaction);
-
         Mockito.when(accountRepository.findById((long) 1)).thenReturn(Optional.of(account1));
         Mockito.when(accountRepository.findById((long) 2)).thenReturn(Optional.of(account2));
         Mockito.when(transactionRepository.save(Mockito.any(Transaction.class)))
@@ -467,8 +464,7 @@ public class TransactionTest {
         client.addAccounts(account2);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/transactions/make/1/2/100/true")
-                .param("transaction", "3");;
+                .get("/transactions/make/1/2/100/true");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is3xxRedirection())
@@ -501,9 +497,6 @@ public class TransactionTest {
         bank.addAccounts(account2);
         client.addAccounts(account1);
         client.addAccounts(account2);
-
-        Transaction transaction = new Transaction(1L, account1, account2, new BigDecimal(100));
-        transactionRepository.save(transaction);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/transactions/make/1/2/100/false");
