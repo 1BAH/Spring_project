@@ -53,4 +53,4 @@ jobs:
         run: |
           mvn clean package
           cd target
-          java -jar BankSystem-2.0.RELEASE.jar
+          java -jar BankSystem-2.1.SHRIMP.jar
