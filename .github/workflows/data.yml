@@ -1,40 +1,40 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI-branch-testController
+name: CI-branch-datatests
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ testController ]
+    branches: [ datatests ]
   pull_request:
-    branches: [ testController ]
+    branches: [ datatests ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  Checking-testController-branch:
+  Checking-data-tests:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout to testController
+      - name: Checkout to datatests
         uses: actions/checkout@v3
         with:
-          ref: testController
-          
+          ref: datatests
+
       - name: Set up running for CI
         run: |
           cd src/main/resources/scriptsCI
           ./ciExit.sh
           cd ../../../../
-          
+
       - name: Shutdown Ubuntu MySQL (SUDO)
         run: sudo service mysql stop
-          
+
       - name: Creating MySQL connection
         uses: mirromutth/mysql-action@v1.1
         with:
@@ -50,17 +50,8 @@ jobs:
 
       - name: Building project
         run: |
-          mvn test-compile
+          mvn clean package
 
       - name: Running tests
         run: |
           mvn test
-          
-      - name: Building jar
-        run: |
-          mvn package
-
-      - name: Running testController version
-        run: |
-          cd target
-          java -jar BankSystem-2.0.RELEASE.jar
