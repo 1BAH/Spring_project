@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: bo"></header>
+
+
+<main>
+    <p class="display-3 font-weight-bold mx-5 mt-2 text-warning">Admin</p>
+    <p class="display-6 font-weight-bold mx-5 mt-2">Home page</p>
+
+    <article class="my-3">
+        <p class="display-6 font-weight-bold mx-5 mt-2">Bank officer requests</p>
+
+        <div class="display6 font-weight-bold mx-5 mt-2">
+            <div class="card-group">
+                <div th:each="bo : ${user.bankOfficers}">
+                    <div class="card m-2 border-info" style="width: 11rem;">
+                        <div  class="m-2">
+                            <img src="https://i.ibb.co/Z2y77Jv/banker.png" alt="banker" style="width: 100%">
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text" th:text="'Bank: ' + ${bo.username}"/>
+                            <button type="button" class="btn mx-4 my-2 btn-outline-info"
+                                    th:data-url="'adm/add-bank-officer/' + ${bo.username}"
+                                    onclick="window.location.href = this.getAttribute('data-url');">Response</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+</body>
+</html>

@@ -290,7 +290,7 @@ public class TransactionController {
             return "transactions/info";
         } else {
             model.addAttribute("title", "ERROR");
-            return "restricted";
+            return "errors/restricted";
         }
     }
 }

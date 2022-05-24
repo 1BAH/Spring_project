@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: bo"></header>
+
+<main>
+    <p class="display-5 font-weight-bold mx-5 mt-2">Request to create new bank officer account</p>
+
+    <div class="col-md-4 font-weight-bold mx-5 mt-2">
+        <div class="list-group">
+            <p>Check the information:</p>
+
+            <ul class="list-group">
+                <li class="list-group-item text-warning" th:text="'Account: ' + ${bankOfficer.username}"/>
+                <li class="list-group-item" th:text="'Password : ' + ${bankOfficer.password}"/>
+            </ul>
+        </div>
+    </div>
+
+    <div class="display6 font-weight-bold mx-5 mt-2">
+        <form id="form" th:action="'/adm/add-bank-officer/' + ${bankOfficer.username} + '/process'" method="get" class="row g-3 needs-validation" novalidate>
+            <div class="col-12">
+                <p>Response</p>
+                <input type="radio" class="btn-check"
+                       name="response" id="yes"
+                       value="true"
+                       autocomplete="off" required>
+                <label class="btn btn-outline-dark" for="yes">Accept request</label>
+
+                <input type="radio" class="btn-check"
+                       name="response" id="no"
+                       value="false"
+                       autocomplete="off" required>
+                <label class="btn btn-outline-dark" for="no">Reject request</label>
+
+                <div class="invalid-feedback">
+                    Choose the option
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        I have checked all the information above
+                    </label>
+                    <div class="invalid-feedback">
+                        You must agree before submitting
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/';">Home</button>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+</body>
+</html>

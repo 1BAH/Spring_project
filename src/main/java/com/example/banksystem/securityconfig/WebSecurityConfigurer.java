@@ -1,6 +1,9 @@
 package com.example.banksystem.securityconfig;
 
+import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
+import com.example.banksystem.repositories.BankOfficerRepository;
 import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +28,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private BankOfficerRepository bankOfficerRepository;
+
     /**
      * Set restrictions to pages
      * @param http
@@ -34,7 +40,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/registration", "/registration/form", "/authors", "/faq", "/start").permitAll()
+                .antMatchers("/", "/home", "/registration", "/registration/form", "/bo/registration", "/bo/registration/form", "/authors", "/faq", "/start").permitAll()
+                .antMatchers("/adm/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll()
@@ -48,26 +55,29 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Add users from database and crease two basic users: "user"-"pass" and "root'-"root"
+     * Add users from database and create admin "root"-"root"
      * @param auth
      * @throws Exception
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user")
-                .password(passwordEncoder().encode("pass"))
-                .authorities("ROLE_ADMIN")
-                .and()
                 .withUser("root")
-                .password("root")
-                .authorities("ROLE_USER");
+                .password(passwordEncoder().encode("root"))
+                .authorities("ROLE_ADMIN");
 
 
         for (Client client: clientRepository.findAll()) {
             auth.inMemoryAuthentication()
                     .withUser(client.getPassport())
                     .password(passwordEncoder().encode(client.getSurname()))
+                    .authorities("ROLE_USER");
+        }
+
+        for (BankOfficer bankOfficer: bankOfficerRepository.findAll()) {
+            auth.inMemoryAuthentication()
+                    .withUser(bankOfficer.getUsername())
+                    .password(passwordEncoder().encode(bankOfficer.getPassword()))
                     .authorities("ROLE_USER");
         }
     }

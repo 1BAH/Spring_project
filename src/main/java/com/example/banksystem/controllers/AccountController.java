@@ -2,8 +2,10 @@ package com.example.banksystem.controllers;
 
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.AccountRepository;
+import com.example.banksystem.repositories.BankOfficerRepository;
 import com.example.banksystem.repositories.BankRepository;
 import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller for account pages and forms
@@ -31,6 +35,9 @@ public class AccountController {
     @Autowired
     ClientRepository clientRepository;
 
+    @Autowired
+    BankOfficerRepository bankOfficerRepository;
+
     /**
      * Page /accounts - the table of all user's accounts
      * @param model
@@ -40,6 +47,12 @@ public class AccountController {
     public String accountsPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
@@ -56,6 +69,12 @@ public class AccountController {
     public String addAccountPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         model.addAttribute("user", currentClient);
         Iterable<Bank> banks = bankRepository.findAll();
         model.addAttribute("banks", banks);
@@ -70,11 +89,68 @@ public class AccountController {
      * @return redirects to /accounts page
      */
     @GetMapping("/accounts/add/form")
-    public String addAccount(@RequestParam String type, @RequestParam String bankId) {
+    public String addAccount(@RequestParam String type, @RequestParam String bankId, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         Account account = new Account(new BigDecimal(0), type, bankRepository.findById(Long.parseLong(bankId)).get(), currentClient);
         accountRepository.save(account);
         return "redirect:/accounts";
+    }
+
+    @GetMapping("/account/delete/{id}")
+    public String deleteAccount(@PathVariable(name = "id") long id, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
+        Account account = accountRepository.findById(id).get();
+        BankOfficer bankOfficer = account.getBank().getBankOfficer();
+        bankOfficer.addAccountToRemove(account);
+        bankOfficerRepository.save(bankOfficer);
+        account.setBankOfficer(bankOfficer);
+        accountRepository.save(account);
+        return "redirect:/account/account-delete-request";
+    }
+
+    @GetMapping("/account/delete/try/{id}")
+    public String tryDeleteAccount(@PathVariable(name = "id") long id, Model model) {
+        Account account = accountRepository.findById(id).get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Send request");
+        model.addAttribute("acc", account);
+        return "delete-request";
+    }
+
+    @GetMapping("/account/account-delete-request")
+    public String deleteAccountSuccess(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Request success");
+        return "delete";
     }
 }

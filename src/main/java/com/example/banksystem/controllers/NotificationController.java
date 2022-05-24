@@ -38,6 +38,7 @@ public class NotificationController {
     public Map<String, String> getData() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
         List<Account> accounts = currentClient.getAccounts();
         Map<String, String> map = new LinkedHashMap<>();
 
@@ -47,6 +48,9 @@ public class NotificationController {
             }
             if (account.getAlert() == 2) {
                 map.put(String.valueOf(account.getId()), "Credit account @" + account.getId() + " fee");
+            }
+            if (account.getAlert() == 3) {
+                map.put(String.valueOf(account.getId()), "Account @" + account.getId() + " closure request was rejected");
             }
         }
 
