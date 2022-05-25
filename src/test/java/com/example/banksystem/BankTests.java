@@ -1,11 +1,9 @@
 package com.example.banksystem;
 
 import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -40,6 +38,15 @@ public class BankTests {
     BankRepository bankRepository;
 
     @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerRepository bankOfficerRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
+
+    @MockBean
     TransactionRepository transactionRepository;
 
     @MockBean
@@ -52,9 +59,10 @@ public class BankTests {
 
         ArrayList<Bank> banks = new ArrayList<>();
 
-        Bank bank1 = new Bank("TestBank1", 1);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank1 = new Bank("TestBank1", 1, bankOfficer);
         banks.add(bank1);
-        Bank bank2 = new Bank("TestBank2", 2);
+        Bank bank2 = new Bank("TestBank2", 2, bankOfficer);
         banks.add(bank2);
 
         Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
@@ -71,8 +79,11 @@ public class BankTests {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void redirect() throws Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/banks/add/form")
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+
+        Mockito.when(bankOfficerRepository.findByUsername(Mockito.any())).thenReturn(bankOfficer);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/banks/add/form")
                 .param("name", "TestBank")
                 .param("percentage", "3");
 
@@ -107,15 +118,15 @@ public class BankTests {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void bankAdd() throws Exception {
-        Client client = new Client(3,"user", "sur", "add", "pass");
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
 
-        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+        Mockito.when(bankOfficerRepository.findByUsername(Mockito.any())).thenReturn(bankOfficer);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/banks/add");
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/banks/add");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Bank creation"))
-                .andExpect(model().attribute("user", client));
+                .andExpect(model().attribute("user", bankOfficer));
     }
 }
