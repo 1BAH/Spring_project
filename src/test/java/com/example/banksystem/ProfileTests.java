@@ -1,13 +1,7 @@
 package com.example.banksystem;
 
-import com.example.banksystem.models.Account;
-import com.example.banksystem.models.Bank;
-import com.example.banksystem.models.Client;
-import com.example.banksystem.models.Transaction;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.models.*;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -44,6 +38,15 @@ public class ProfileTests {
     BankRepository bankRepository;
 
     @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerRepository bankOfficerRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
+
+    @MockBean
     TransactionRepository transactionRepository;
 
     @MockBean
@@ -53,7 +56,8 @@ public class ProfileTests {
     @WithMockUser(username = "user", password = "pass")
     public void registration() throws  Exception {
         Client client = new Client(3, "user", "sur", "add", "pass");
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank("bank", 1, bankOfficer);
 
         Account account1 = new Account(1, new BigDecimal(1000), "Account1", bank, client);
         client.addAccounts(account1);
