@@ -18,7 +18,7 @@ public class Admin {
     private long id;
 
     /**
-     * Admin's bankOfficers
+     * Bank officers to be registered
      */
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<BankOfficerPrototype> bankOfficers;
@@ -57,8 +57,8 @@ public class Admin {
     }
 
     /**
-     * This method adds new bank officer to this admin
-     * @param bankOfficer - new bank officer that adds to this admin
+     * This method adds new bank officer to the registration list
+     * @param bankOfficer - new bank officer that adds to the registration list
      */
     public void addBankOfficer (BankOfficerPrototype bankOfficer) {
         bankOfficers.add(bankOfficer);

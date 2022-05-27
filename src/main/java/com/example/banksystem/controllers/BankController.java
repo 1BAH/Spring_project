@@ -46,7 +46,6 @@ public class BankController {
             model.addAttribute("title", "Banks");
             return "banks/banks";
         } else {
-            BankOfficer bankOfficer = bankOfficerRepository.findByUsername(authentication.getName());
             Iterable<Bank> banks = bankRepository.findAll();
             model.addAttribute("banks", banks);
             model.addAttribute("title", "Banks");

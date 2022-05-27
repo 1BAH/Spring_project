@@ -96,7 +96,7 @@ public class BankTests {
     @WithMockUser(username = "user", password = "pass")
     public void nameIsEmpty() throws Exception {
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/banks/add/form")
+                .get("/bo/banks/add/form")
                 .param("percentage", "3");
 
         mockMvc.perform(mockRequest)
@@ -108,7 +108,7 @@ public class BankTests {
     @WithMockUser(username = "user", password = "pass")
     public void percentageIsEmpty() throws Exception {
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .get("/banks/add/form")
+                .get("/bo/banks/add/form")
                 .param("name", "TestBank");
 
         mockMvc.perform(mockRequest)

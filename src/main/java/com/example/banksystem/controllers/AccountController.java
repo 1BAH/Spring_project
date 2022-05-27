@@ -103,6 +103,11 @@ public class AccountController {
         return "redirect:/accounts";
     }
 
+    /**
+     * Add chosen account to the list of accounts to be closed
+     * @param id Account id
+     * @return redirects to page "Success"
+     */
     @GetMapping("/account/delete/{id}")
     public String deleteAccount(@PathVariable(name = "id") long id, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -122,9 +127,13 @@ public class AccountController {
         return "redirect:/account/account-delete-request";
     }
 
+    /**
+     * Form for request to close account
+     * @param id account id
+     * @return "delete-request" template
+     */
     @GetMapping("/account/delete/try/{id}")
     public String tryDeleteAccount(@PathVariable(name = "id") long id, Model model) {
-        Account account = accountRepository.findById(id).get();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
 
@@ -133,12 +142,18 @@ public class AccountController {
             return "errors/403-cl";
         }
 
+        Account account = accountRepository.findById(id).get();
+
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Send request");
         model.addAttribute("acc", account);
         return "delete-request";
     }
 
+    /**
+     * Success page
+     * @return "delete" template
+     */
     @GetMapping("/account/account-delete-request")
     public String deleteAccountSuccess(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

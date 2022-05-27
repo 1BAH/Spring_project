@@ -136,4 +136,69 @@ public class AccountTest {
                 .andExpect(model().attribute("title", "Account form"))
                 .andExpect(model().attribute("user", client));
     }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void tryDelete() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank("bank", 1, bankOfficer);
+
+        Account account = new Account(1, new BigDecimal(1000), "Account1", bank, client);
+
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+        Mockito.when(bankRepository.findById(Mockito.any())).thenReturn(Optional.of(bank));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/account/delete/try/1");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "Send request"))
+                .andExpect(model().attribute("user", client))
+                .andExpect(model().attribute("acc", account));
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void deleteSuccess() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank("bank", 1, bankOfficer);
+
+        Account account = new Account(1, new BigDecimal(1000), "Account1", bank, client);
+
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+        Mockito.when(bankRepository.findById(Mockito.any())).thenReturn(Optional.of(bank));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/account/account-delete-request");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "Request success"));
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void delete() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank("bank", 1, bankOfficer);
+
+        Account account = new Account(1, new BigDecimal(1000), "Account1", bank, client);
+
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+        Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+        Mockito.when(bankRepository.findById(Mockito.any())).thenReturn(Optional.of(bank));
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/account/delete/1");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/account/account-delete-request"));
+    }
 }

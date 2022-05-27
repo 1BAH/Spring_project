@@ -27,6 +27,10 @@ public class AdminController {
     @Autowired
     BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
 
+    /**
+     * Admin's home page
+     * @return home-adm template
+     */
     @GetMapping("/adm")
     public String home(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,6 +40,11 @@ public class AdminController {
         return "admin/home-adm";
     }
 
+    /**
+     * Page of the confirmation of bank officer registration
+     * @param name bank officer's username
+     * @return response template
+     */
     @GetMapping("/adm/add-bank-officer/{name}")
     public String response(Model model, @PathVariable(name = "name") String name) {
         BankOfficerPrototype bankOfficerPrototype = bankOfficerPrototypeRepository.findByUsername(name);
@@ -45,6 +54,11 @@ public class AdminController {
         return "admin/response";
     }
 
+    /**
+     * Process the admin response
+     * @param response true if request was accepted false if was rejected
+     * @return redirects to success or reject page
+     */
     @GetMapping("/adm/add-bank-officer/{name}/process")
     public String response2(@PathVariable(name = "name") String name, @RequestParam boolean response) {
         if (response) {
@@ -72,6 +86,11 @@ public class AdminController {
         }
     }
 
+    /**
+     * Page confirms that bank officer was successfully added
+     * @param id id of bank officer
+     * @return success template
+     */
     @GetMapping("/adm/add-bank-officer-success/{id}")
     public String addBankOfficerSuccess(Model model, @PathVariable(name = "id") long id) {
         model.addAttribute("id", id);
@@ -79,6 +98,11 @@ public class AdminController {
         return "admin/success";
     }
 
+    /**
+     * Page confirms that bank officer registration was successfully rejected
+     * @param name username of bank officer
+     * @return reject template
+     */
     @GetMapping("/adm/add-bank-officer-reject/{name}")
     public String addBankOfficerReject(Model model, @PathVariable(name = "name") String name) {
         BankOfficerPrototype bankOfficerPrototype = bankOfficerPrototypeRepository.findByUsername(name);

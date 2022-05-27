@@ -43,6 +43,9 @@ public class ScheduledTasks {
     }
 
 
+    /**
+     * Creates "root" admin entity
+     */
     @Scheduled(fixedDelay = 500)
     public void init() {
         if (Objects.isNull(adminRepository.findByName("root"))) {

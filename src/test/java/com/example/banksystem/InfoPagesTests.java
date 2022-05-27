@@ -2,11 +2,9 @@ package com.example.banksystem;
 
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -43,6 +41,15 @@ public class InfoPagesTests {
 
     @MockBean
     TransactionRepository transactionRepository;
+
+    @MockBean
+    BankOfficerRepository bankOfficerRepository;
+
+    @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
 
     @MockBean
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;

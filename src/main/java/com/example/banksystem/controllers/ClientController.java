@@ -71,6 +71,10 @@ public class ClientController {
         return "profile";
     }
 
+    /**
+     * Form of changing information
+     * @return change-info template
+     */
     @GetMapping("/change-info")
     public String change(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

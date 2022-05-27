@@ -1,10 +1,9 @@
 package com.example.banksystem;
 
+import com.example.banksystem.models.Admin;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -40,11 +39,20 @@ public class HomePageTests {
     TransactionRepository transactionRepository;
 
     @MockBean
+    BankOfficerRepository bankOfficerRepository;
+
+    @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
+
+    @MockBean
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     @WithMockUser(username = "user", password = "pass")
-    public void homePage() throws Exception {
+    public void homePageClient() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
@@ -55,6 +63,49 @@ public class HomePageTests {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("user", client))
                 .andExpect(model().attribute("title", "Home"));
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void homePageBankOfficer() throws Exception {
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+
+        Mockito.when(bankOfficerRepository.findByUsername(Mockito.any())).thenReturn(bankOfficer);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/home");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("user", bankOfficer))
+                .andExpect(model().attribute("title", "Home"));
+    }
+
+    @Test
+    @WithMockUser(username = "root", password = "root", roles = {"ADMIN"})
+    public void homePageAdmin() throws Exception {
+        Admin admin = new Admin();
+
+        Mockito.when(adminRepository.findByName(Mockito.any())).thenReturn(admin);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/adm");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("user", admin))
+                .andExpect(model().attribute("title", "Home page"));
+    }
+
+    @Test
+    @WithMockUser(username = "root", password = "root", roles = {"USER"})
+    public void homePageAdmin403() throws Exception {
+        Admin admin = new Admin();
+
+        Mockito.when(adminRepository.findByName(Mockito.any())).thenReturn(admin);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/adm");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -77,7 +128,7 @@ public class HomePageTests {
 
     @Test
     @WithMockUser(username = "user", password = "pass")
-    public void rootAuthorised() throws Exception {
+    public void rootAuthorisedClient() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
@@ -87,5 +138,29 @@ public class HomePageTests {
         mockMvc.perform(mockRequest)
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/home"));
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "pass")
+    public void rootAuthorisedBankOfficer() throws Exception {
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+
+        Mockito.when(bankOfficerRepository.findByUsername(Mockito.any())).thenReturn(bankOfficer);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bo/home"));
+    }
+
+    @Test
+    @WithMockUser(username = "root", password = "root")
+    public void rootAuthorisedAdmin() throws Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/adm"));
     }
 }

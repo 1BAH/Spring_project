@@ -1,13 +1,7 @@
 package com.example.banksystem;
 
-import com.example.banksystem.models.Account;
-import com.example.banksystem.models.Bank;
-import com.example.banksystem.models.Client;
-import com.example.banksystem.models.Transaction;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.models.*;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -48,13 +42,23 @@ public class TransactionTest {
     TransactionRepository transactionRepository;
 
     @MockBean
+    BankOfficerRepository bankOfficerRepository;
+
+    @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
+
+    @MockBean
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void transactionPage() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Account account1 = new Account(1, new BigDecimal(1000), "Account1", bank, client);
         Account account2 = new Account(2, new BigDecimal(2000), "Account2", bank, client);
         bank.addAccounts(account1);
@@ -96,7 +100,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void step1() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -124,7 +129,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void redirectToStep2self() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -152,7 +158,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void redirectToStep2() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -180,7 +187,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void redirectToStep2SelfIsMissing() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -206,7 +214,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void redirectToStep2AccountFromIsMissing() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -232,7 +241,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void step2self() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -261,7 +271,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void step2() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -333,7 +344,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void step3() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -366,7 +378,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void step4WithoutCommision() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -404,8 +417,9 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void step4WithCommision() throws Exception {
-        Bank bank1 = new Bank(1, "bank1", 10);
-        Bank bank2 = new Bank(2, "bank2", 20);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank1 = new Bank(1, "bank", 10, bankOfficer);
+        Bank bank2 = new Bank(2, "bank2", 20, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -444,7 +458,8 @@ public class TransactionTest {
     @WithMockUser(username = "user", password = "pass")
     public void transactionWithoutCommision() throws Exception {
         Client client = new Client(3, "user", "sur", "add", "pass");
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
 
         Account account1 = new Account((long) 1, new BigDecimal(1000), "Credit", bank, client);
         Account account2 = new Account((long) 2, new BigDecimal(1000), "Credit", bank, client);
@@ -478,7 +493,8 @@ public class TransactionTest {
     @WithMockUser(username = "user", password = "pass")
     public void transactionWithCommision() throws Exception {
         Client client = new Client(3, "user", "sur", "add", "pass");
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
 
         Account account1 = new Account(1L, new BigDecimal(1000), "Credit", bank, client);
         Account account2 = new Account(2L, new BigDecimal(1000), "Credit", bank, client);
@@ -513,7 +529,8 @@ public class TransactionTest {
     @WithMockUser(username = "user", password = "pass")
     public void transactionError() throws Exception {
         Client client = new Client(3, "user", "sur", "add", "pass");
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
 
         Account account1 = new Account(1L, new BigDecimal(0), "Debit", bank, client);
         Account account2 = new Account(2L, new BigDecimal(1000), "Credit", bank, client);
@@ -539,7 +556,8 @@ public class TransactionTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void errorRedirect() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
 
         ArrayList<Account> accounts = new ArrayList<>();
