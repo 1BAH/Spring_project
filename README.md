@@ -7,7 +7,7 @@
 >
 >>Zaretskaia Mariia
 
-Current status: `version 2.0 is available`
+Current status: `version 3.0 is available`
 
 
 ## What's new
@@ -17,6 +17,9 @@ Current status: `version 2.0 is available`
 >3. Navigation bar
 >4. FAQ and About us pages
 >5. Jar distribution
+>6. Bank Officers added
+>7. Close accounts
+>8. Change personal information
 
 
 ## Run Settings
