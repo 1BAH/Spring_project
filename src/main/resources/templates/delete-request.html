@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<aside th:insert="blocks/aside :: aside"></aside>
+
+<main>
+    <p class="display-5 font-weight-bold mx-5 mt-2">Account closure request</p>
+
+    <div class="col-md-4 font-weight-bold mx-5 mt-2">
+        <div class="list-group">
+            <p>Check the information:</p>
+
+            <ul class="list-group">
+                <li class="list-group-item" th:text="'Account: ' + ${acc.id}"/>
+                <li id="amount" th:class="${acc.amount < 0} ? 'list-group-item text-danger' : 'list-group-item'" th:text="'Amount: ' + ${acc.amount}"/>
+                <li class="list-group-item" th:text="'Bank: ' + ${acc.getBank().getName()}"/>
+            </ul>
+        </div>
+    </div>
+
+    <div class="display6 font-weight-bold mx-5 mt-2">
+        <form id="form" th:action="'/account/delete/' + ${acc.id}" method="get" class="row g-3 needs-validation" novalidate>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        I have checked all the information above
+                    </label>
+                    <div class="invalid-feedback">
+                        You must agree before submitting
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+
+        <div id="err" class="text-danger">
+            Account balance is below 0. Top up before sending request.
+        </div>
+    </div>
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/accounts';">Back to accounts</button>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            let amount = document.getElementById('amount').innerHTML;
+
+            if (amount[8] == '-') {
+                document.getElementById('form').hidden = true;
+                document.getElementById('err').hidden = false;
+            } else {
+                document.getElementById('form').hidden = false;
+                document.getElementById('err').hidden = true;
+            }
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+<div th:insert="blocks/notification :: script"></div>
+
+</body>
+</html>

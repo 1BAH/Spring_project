@@ -33,6 +33,10 @@ public class Bank {
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Account> accounts;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bankOfficer")
+    private BankOfficer bankOfficer;
+
     public Bank() {
         this.accounts = new ArrayList<>();
     }
@@ -42,10 +46,11 @@ public class Bank {
      * @param name - bank's name
      * @param percentage - what percentage does the bank give money
      */
-    public Bank(String name, float percentage) {
+    public Bank(String name, float percentage, BankOfficer bankOfficer) {
         this.name = name;
         this.percentage = percentage;
         this.accounts = new ArrayList<>();
+        this.bankOfficer = bankOfficer;
     }
 
     /**
@@ -54,11 +59,12 @@ public class Bank {
      * @param name - bank's name
      * @param percentage - what percentage does the bank give money
      */
-    public Bank(long id, String name, float percentage) {
+    public Bank(long id, String name, float percentage, BankOfficer bankOfficer) {
         this.id = id;
         this.name = name;
         this.percentage = percentage;
         this.accounts = new ArrayList<>();
+        this.bankOfficer = bankOfficer;
     }
 
     /**
@@ -131,5 +137,13 @@ public class Bank {
      */
     public void addAccounts(Account account) {
         accounts.add(account);
+    }
+
+    public BankOfficer getBankOfficer() {
+        return bankOfficer;
+    }
+
+    public void setBankOfficer(BankOfficer bankOfficer) {
+        this.bankOfficer = bankOfficer;
     }
 }

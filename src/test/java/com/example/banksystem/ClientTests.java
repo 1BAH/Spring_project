@@ -1,6 +1,5 @@
 package com.example.banksystem;
 
-import com.example.banksystem.models.Admin;
 import com.example.banksystem.models.Client;
 import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
@@ -10,6 +9,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
-public class RegistrationTests {
+public class ClientTests {
     @Autowired
     MockMvc mockMvc;
 
@@ -48,22 +48,15 @@ public class RegistrationTests {
     @MockBean
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    @Test
-    public void registration() throws  Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration");
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "Registration"));
-    }
 
     @Test
+    @WithMockUser(username = "user", password = "pass")
     public void redirect() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/change-info/form")
                 .param("name", "user")
                 .param("surname", "sur")
                 .param("address", "add")
@@ -71,16 +64,17 @@ public class RegistrationTests {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"));
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test
+    @WithMockUser(username = "user", password = "pass")
     public void nameIsEmpty() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/change-info/form")
                 .param("surname", "sur")
                 .param("address", "add")
                 .param("passport", "pass");
@@ -90,12 +84,13 @@ public class RegistrationTests {
     }
 
     @Test
+    @WithMockUser(username = "user", password = "pass")
     public void surnameIsEmpty() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/change-info/form")
                 .param("name", "user")
                 .param("address", "add")
                 .param("passport", "pass");
@@ -105,12 +100,13 @@ public class RegistrationTests {
     }
 
     @Test
+    @WithMockUser(username = "user", password = "pass")
     public void addressIsEmpty() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/change-info/form")
                 .param("name", "user")
                 .param("surname", "sur")
                 .param("passport", "pass");
@@ -120,12 +116,13 @@ public class RegistrationTests {
     }
 
     @Test
+    @WithMockUser(username = "user", password = "pass")
     public void passportIsEmpty() throws Exception {
         Client client = new Client(3,"user", "sur", "add", "pass");
 
-        Mockito.when(clientRepository.save(Mockito.any())).thenReturn(client);
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/registration/form")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/change-info/form")
                 .param("name", "user")
                 .param("surname", "sur")
                 .param("address", "add");
@@ -135,51 +132,17 @@ public class RegistrationTests {
     }
 
     @Test
-    public void boRegistration() throws  Exception {
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/registration");
+    @WithMockUser(username = "user", password = "pass")
+    public void changeInfo() throws Exception {
+        Client client = new Client(3,"user", "sur", "add", "pass");
+
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/change-info");
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "Registration"));
-    }
-
-    @Test
-    public void boNameIsEmpty() throws Exception {
-        Admin admin = new Admin();
-
-        Mockito.when(adminRepository.findByName(Mockito.any())).thenReturn(admin);
-
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/registration/form")
-                .param("pass", "user");
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().is4xxClientError());
-    }
-
-    @Test
-    public void boPasswordIsEmpty() throws Exception {
-        Admin admin = new Admin();
-
-        Mockito.when(adminRepository.findByName(Mockito.any())).thenReturn(admin);
-
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/registration/form")
-                .param("name", "user");
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().is4xxClientError());
-    }
-
-    @Test
-    public void boRegSuccess() throws Exception {
-        Admin admin = new Admin();
-
-        Mockito.when(adminRepository.findByName(Mockito.any())).thenReturn(admin);
-
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/registration/form")
-                .param("name", "user")
-                .param("pass", "pass");
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isOk());
+                .andExpect(model().attribute("title", "Change personal information"))
+                .andExpect(model().attribute("user", client));
     }
 }

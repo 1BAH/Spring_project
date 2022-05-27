@@ -2,11 +2,9 @@ package com.example.banksystem;
 
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -46,12 +44,22 @@ public class WithdrawTest {
     TransactionRepository transactionRepository;
 
     @MockBean
+    BankOfficerRepository bankOfficerRepository;
+
+    @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
+
+    @MockBean
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void withdraw() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
@@ -72,7 +80,8 @@ public class WithdrawTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void choose() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
@@ -94,13 +103,16 @@ public class WithdrawTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void withdrawOperation() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1111), "Credit", bank, client);
         bank.addAccounts(account);
         client.addAccounts(account);
 
         Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw/2")
@@ -116,7 +128,8 @@ public class WithdrawTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void chooseIdIsEmpty() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
@@ -134,13 +147,15 @@ public class WithdrawTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void withdrawAmountIsEmpty() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
         client.addAccounts(account);
 
         Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw/2");
@@ -152,13 +167,16 @@ public class WithdrawTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void withdrawCreditBelowZero() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(0), "Credit", bank, client);
         bank.addAccounts(account);
         client.addAccounts(account);
 
         Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw/2")
@@ -174,13 +192,16 @@ public class WithdrawTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void withdrawDebitBelowZero() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(0), "Debit", bank, client);
         bank.addAccounts(account);
         client.addAccounts(account);
 
         Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(Optional.of(account));
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/withdraw/2")
@@ -196,7 +217,8 @@ public class WithdrawTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void withdrawError() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(0), "Debit", bank, client);
         bank.addAccounts(account);

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller for registration and My profile page
@@ -29,34 +30,81 @@ public class ClientController {
     ClientRepository clientRepository;
 
     /**
-     * Page /registration - registration of the new user
+     * My Profile page - user's personal data, user's accounts and transactions
      * @param model
-     * @return registration template
+     * @return profile template
      */
-    @GetMapping("/registration")
-    public String registration(Model model) {
-        model.addAttribute("title", "Registration");
-        return "registration";
+    @GetMapping("/profile")
+    public String profile(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
+        List<Account> accounts = currentClient.getAccounts();
+
+        Iterable<Transaction> transactions = transactionRepository.findAll();
+
+        List<Transaction> currentClientTransactions = new ArrayList<>();
+        List<Account> accountRequests = new ArrayList<>();
+
+        for (Transaction transaction: transactions) {
+            if (accounts.contains(transaction.getAccountFrom())) {
+                currentClientTransactions.add(transaction);
+            }
+        }
+
+        for (Account account: accounts) {
+            if (!Objects.isNull(account.getBankOfficer())) {
+                accountRequests.add(account);
+            }
+        }
+
+        model.addAttribute("transactions", currentClientTransactions);
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Profile");
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("accountRequests", accountRequests);
+        return "profile";
     }
 
     /**
-     * Get the form request, create account and save it to database.
-     * Also restarts application context in order to refresh database connection.
-     * @param name
-     * @param surname
-     * @param passport
-     * @param address
-     * @return redirects to root
+     * Form of changing information
+     * @return change-info template
      */
-    @GetMapping("/registration/form")
-    public String addClient(@RequestParam String name, @RequestParam String surname, @RequestParam String passport, @RequestParam String address) {
-        Client client = new Client();
-        client.setName(name);
-        client.setSurname(surname);
-        client.setPassport(passport);
-        client.setAddress(address);
+    @GetMapping("/change-info")
+    public String change(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
 
-        clientRepository.save(client);
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
+        model.addAttribute("user", currentClient);
+        model.addAttribute("title", "Change personal information");
+        return "change-info";
+    }
+
+    @GetMapping("/change-info/form")
+    public String change(@RequestParam String name, @RequestParam String surname, @RequestParam String passport, @RequestParam String address, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
+        currentClient.setName(name);
+        currentClient.setSurname(surname);
+        currentClient.setAddress(address);
+        currentClient.setPassport(passport);
+        clientRepository.save(currentClient);
 
         Thread restartThread = new Thread(() -> {
             try {
@@ -70,34 +118,6 @@ public class ClientController {
         restartThread.setDaemon(false);
         restartThread.start();
 
-        return "redirect:/";
-    }
-
-    /**
-     * My Profile page - user's personal data, user's accounts and transactions
-     * @param model
-     * @return profile template
-     */
-    @GetMapping("/profile")
-    public String profile(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByPassport(authentication.getName());
-        List<Account> accounts = currentClient.getAccounts();
-
-        Iterable<Transaction> transactions = transactionRepository.findAll();
-
-        List<Transaction> currentClientTransactions = new ArrayList<>();
-
-        for (Transaction transaction: transactions) {
-            if (accounts.contains(transaction.getAccountFrom())) {
-                currentClientTransactions.add(transaction);
-            }
-        }
-
-        model.addAttribute("transactions", currentClientTransactions);
-        model.addAttribute("user", currentClient);
-        model.addAttribute("title", "Profile");
-        model.addAttribute("accounts", accounts);
-        return "profile";
+        return "redirect:/login";
     }
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: bo"></header>
+
+
+<main>
+    <p class="display-3 font-weight-bold mx-5 mt-2 text-warning" th:text="'User #' + ${user.id}"/>
+    <p class="display-6 font-weight-bold mx-5 mt-2">Information</p>
+
+    <article class="my-3">
+        <div class="col-md-4 font-weight-bold mx-5 mt-2 align-self-start" style="left: 200px;">
+            <div class="list-group border-warning">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-3 list-group-item-warning">Name:</li>
+                    <li class="list-group-item col-7" th:text="${user.username}"/>
+                </ul>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-3 list-group-item-warning">Password:</li>
+                    <li class="list-group-item col-7" th:text="${user.password}"/>
+                </ul>
+            </div>
+        </div>
+
+        <p class="display-6 font-weight-bold mx-5 mt-2">My banks</p>
+
+        <div class="display6 font-weight-bold mx-5 mt-2">
+            <div class="card-group">
+                <div th:each="bank : ${user.banks}">
+                    <div style="width: 11rem;" class="border-info card m-2">
+                        <div class="m-2">
+                            <img src="https://i.ibb.co/qYCWPSz/bank.png" alt="bank" style="width: 100%">
+                        </div>
+                        <div class="card-body ">
+                            <h5 class="card-title" th:text="${bank.id}"/>
+                            <p class="card-text" th:text="'Name: ' + ${bank.name}"/>
+                            <p class="card-text" th:text="'Percentage: ' + ${bank.percentage}"/>
+                            <button type="button" class="btn mx-4 my-2 btn-outline-info" th:onclick="'window.location.href = \'/bo/bank-info/' + ${bank.id} + '\';'">See information</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/banks';">All banks</button>
+
+        <p class="display-6 font-weight-bold mx-5 mt-2">Account closure requests</p>
+        <div class="display6 font-weight-bold mx-5 mt-2">
+            <div class="card-group">
+                <div th:each="acc : ${user.accountsToRemove}">
+                    <div class="card m-2 border-info" style="width: 11rem;">
+                        <div  class="m-2">
+                            <img src="https://i.ibb.co/ZBXjJQS/request.png" alt="request" style="width: 100%">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${acc.id}"/>
+                            <p class="card-text" th:text="'Bank: ' + ${acc.bank.name}"/>
+                            <p class="card-text text-warning">Holder</p>
+                            <p class="card-text" th:text="'> id: ' + ${acc.getHolder().id}"/>
+                            <p class="card-text" th:text="'> surname: ' + ${acc.getHolder().surname}"/>
+                            <p class="card-text" th:text="'> name: ' + ${acc.getHolder().name}"/>
+                            <p class="card-text" th:text="'Type: ' + ${acc.type}"/>
+                            <button type="button" class="btn mx-4 my-2 btn-outline-info"
+                                    th:onclick="'window.location.href = \'/bo/account-delete/' + ${acc.id} + '\';'">Close account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+</body>
+</html>

@@ -2,11 +2,9 @@ package com.example.banksystem;
 
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -15,7 +13,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,8 +20,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,7 +38,16 @@ public class DataTest {
     AccountRepository accountRepository;
 
     @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
+
+    @MockBean
     BankRepository bankRepository;
+
+    @MockBean
+    BankOfficerRepository bankOfficerRepository;
 
     @MockBean
     TransactionRepository transactionRepository;
@@ -55,7 +59,8 @@ public class DataTest {
     @WithMockUser(username = "user", password = "pass")
     public void data() throws Exception{
         Client client = new Client(3,"user", "sur", "add", "pass");
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank("bank", 1, bankOfficer);
 
         Account account1 = new Account(1, new BigDecimal(1000), "Account1", bank, client);
         client.addAccounts(account1);
@@ -89,7 +94,8 @@ public class DataTest {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void close() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank("bank", 1, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         account.setAlert((byte) 2);

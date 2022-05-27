@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: start"></header>
+
+<main>
+    <p class="display-5 font-weight-bold mx-5 mt-2 text-warning">Registration</p>
+    <p class="fs-3 font-weight-bold mx-5 mt-2 text-warning">Bank officer</p>
+
+    <div class="display6 font-weight-bold mx-5 mt-2">
+        <form name="reg" action="/bo/registration/form" method="get" class="row g-3 needs-validation" novalidate>
+            <div class="col-md-8">
+                <div class="input-group has-validation">
+                    <span class="input-group-text col-3" id="Name">Enter username:</span>
+                    <input name="name" type="text" class="form-control"
+                           id="validationName" aria-describedby="Name" required
+                           placeholder="Must start with BO-...">
+                    <div class="valid-feedback">
+                        OK
+                    </div>
+                    <div class="invalid-feedback">
+                        Enter your name
+                    </div>
+                </div>
+                <div class="input-group has-validation">
+                    <span class="input-group-text col-3" id="Pass">Enter passport:</span>
+                    <input name="pass" type="password" class="form-control"
+                           id="validationPass" aria-describedby="Pass" required>
+                    <div class="valid-feedback">
+                        OK
+                    </div>
+                    <div class="invalid-feedback">
+                        Enter the passport
+                    </div>
+                </div>
+                <div class="input-group has-validation">
+                    <span class="input-group-text col-3" id="SubmitPass">Enter passport again:</span>
+                    <input name="subpass" type="password" class="form-control"
+                           id="validationSubmitPass" aria-describedby="SubmitPass" required>
+                    <div class="valid-feedback">
+                        OK
+                    </div>
+                    <div class="invalid-feedback">
+                        Passwords do not match
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-outline-info" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        var username = document.getElementById('validationName').value;
+                        var passToBeChecked = document.getElementById('validationPass').value;
+                        var passCheck = document.getElementById('validationSubmitPass').value;
+
+
+
+                        if (!username || username[0] !== 'B' || username[1] !== 'O' || username[2] !== '-') {
+                            document.getElementById('validationName').classList.add('is-invalid')
+                            event.preventDefault()
+                            event.stopPropagation()
+                        } else {
+                            document.getElementById('validationName').classList.remove('is-invalid')
+                            document.getElementById('validationName').classList.add('is-valid')
+                        }
+
+                        if (!passToBeChecked) {
+                            document.getElementById('validationPass').classList.add('is-invalid')
+                            event.preventDefault()
+                            event.stopPropagation()
+                        } else {
+                            document.getElementById('validationPass').classList.remove('is-invalid')
+                            document.getElementById('validationPass').classList.add('is-valid')
+                        }
+
+                        if (!passCheck) {
+                            document.getElementById('validationSubmitPass').classList.add('is-invalid')
+                            event.preventDefault()
+                            event.stopPropagation()
+                        } else {
+                            document.getElementById('validationSubmitPass').classList.remove('is-invalid')
+                            document.getElementById('validationSubmitPass').classList.add('is-valid')
+                        }
+
+
+                        if (passCheck && passToBeChecked && username) {
+                            if (passCheck !== passToBeChecked) {
+                                document.getElementById('validationSubmitPass').classList.remove('is-valid')
+                                document.getElementById('validationSubmitPass').classList.add('is-invalid')
+                                event.preventDefault()
+                                event.stopPropagation()
+                            } else {
+                                document.getElementById('validationSubmitPass').classList.remove('is-invalid')
+                                document.getElementById('validationSubmitPass').classList.add('is-valid')
+                            }
+                        }
+                    }, false)
+                })
+        })()
+    </script>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+
+</html>

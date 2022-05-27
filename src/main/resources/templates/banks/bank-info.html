@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: bo"></header>
+
+
+<main>
+    <p class="display-3 font-weight-bold mx-5 mt-2 text-warning" th:text="'Bank #' + ${bank.id}"/>
+    <p class="display-6 font-weight-bold mx-5 mt-2">Information</p>
+
+    <article class="my-3">
+        <div class="col-md-4 font-weight-bold mx-5 mt-2 align-self-start" style="left: 200px;">
+            <div class="list-group border-warning">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-3 list-group-item-warning">Name:</li>
+                    <li class="list-group-item col-7" th:text="${bank.name}"/>
+                </ul>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-3 list-group-item-warning">Percentage:</li>
+                    <li class="list-group-item col-7" th:text="${bank.percentage}"/>
+                </ul>
+            </div>
+        </div>
+
+        <button type="button" class="btn mx-4 my-2 btn-outline-warning" th:onclick="'window.location.href = \'/bo/bank-change-info/' + ${bank.id} + '\';'">Change bank information</button>
+
+        <p class="display-6 font-weight-bold mx-5 mt-2">Accounts</p>
+
+        <div class="display6 font-weight-bold mx-5 mt-2">
+            <div class="card-group">
+                <div th:each="acc : ${bank.accounts}">
+                    <div style="width: 11rem;" th:class="${acc.amount < 0} ? 'card m-2 border-danger' : 'card m-2 border-warning'">
+                        <div class="m-2">
+                            <img src="https://i.ibb.co/Bj6cbwD/money-bag.png" style="width: 100%" alt="money-bag">
+                        </div>
+                        <div class="card-body ">
+                            <h5 class="card-title" th:text="${acc.id}"/>
+                            <p th:class="${acc.amount < 0} ? 'card-text text-danger'" th:text="'Amount: ' + ${acc.amount}"/>
+                            <p class="card-text text-warning">Holder</p>
+                            <p class="card-text" th:text="'> id: ' + ${acc.getHolder().id}"/>
+                            <p class="card-text" th:text="'> surname: ' + ${acc.getHolder().surname}"/>
+                            <p class="card-text" th:text="'> name: ' + ${acc.getHolder().name}"/>
+                            <p class="card-text" th:text="'Type: ' + ${acc.type}"/>
+                            <button type="button" class="btn mx-4 my-2 btn-outline-info" th:onclick="'window.location.href = \'/bo/bank-info/' + ${bank.id} + '\';'">See information</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/';">Home</button>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+
+</body>
+</html>

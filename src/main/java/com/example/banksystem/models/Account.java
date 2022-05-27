@@ -52,6 +52,13 @@ public class Account {
     @JoinColumn(name = "account", nullable = false)
     private Client holder;
 
+    /**
+     * Account's bankOfficer
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bankOfficer", nullable = true)
+    private BankOfficer bankOfficer;
+
     public Account() {}
 
     /**
@@ -67,6 +74,7 @@ public class Account {
         this.bank = bank;
         this.holder = holder;
         this.alert = 0;
+        this.bankOfficer = null;
     }
 
     /**
@@ -84,6 +92,7 @@ public class Account {
         this.bank = bank;
         this.holder = holder;
         this.alert = 0;
+        this.bankOfficer = null;
     }
 
     /**
@@ -248,5 +257,21 @@ public class Account {
      */
     public void setHolder(Client holder) {
         this.holder = holder;
+    }
+
+    /**
+     * Get bank officer who works with this account
+     * @return bankOfficer who works with this account
+     */
+    public BankOfficer getBankOfficer() {
+        return bankOfficer;
+    }
+
+    /**
+     * Set bank officer who works with this account
+     * @param bankOfficer who works with this account
+     */
+    public void setBankOfficer(BankOfficer bankOfficer) {
+        this.bankOfficer = bankOfficer;
     }
 }

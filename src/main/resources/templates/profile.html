@@ -33,6 +33,10 @@
             </div>
         </div>
 
+
+        <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/change-info';">Change personal information</button>
+
+
         <p class="display-6 font-weight-bold mx-5 mt-2">My accounts</p>
 
         <div class="display6 font-weight-bold mx-5 mt-2">
@@ -47,6 +51,8 @@
                             <p th:class="${acc.amount < 0} ? 'card-text text-danger'" th:text="'Amount: ' + ${acc.amount}"/>
                             <p class="card-text" th:text="'Bank: ' + ${acc.getBank().name}"/>
                             <p class="card-text" th:text="'Type: ' + ${acc.type}"/>
+                            <button type="button" th:class="${acc.amount < 0} ? 'btn mx-4 my-2 btn-outline-danger' : 'btn mx-4 my-2 btn-outline-warning'"
+                                    th:onclick="'window.location.href = \'/account/delete/try/' + ${acc.id} + '\';'">Close account</button>
                         </div>
                     </div>
                 </div>
@@ -73,6 +79,22 @@
         </div>
     </div>
 
+    <p class="display-6 font-weight-bold mx-5 mt-2">Account closure requests</p>
+    <div class="display6 font-weight-bold mx-5 mt-2">
+        <div class="card-group">
+            <div th:each="acc : ${accountRequests}">
+                <div class="card m-2 border-info" style="width: 11rem;">
+                    <div  class="m-2">
+                        <img src="https://i.ibb.co/ZBXjJQS/request.png" alt="request" style="width: 100%">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${acc.id}"/>
+                        <p class="card-text" th:text="'Bank: ' + ${acc.bank.name}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <footer th:insert="blocks/footer :: footer"></footer>
