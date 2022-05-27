@@ -73,4 +73,4 @@ jobs:
         with:
           name: Bank System Application
           path: |
-            target/BankSystem-3.0.FOX.jar
+            target/BankSystem-3.0.1.FOX.jar

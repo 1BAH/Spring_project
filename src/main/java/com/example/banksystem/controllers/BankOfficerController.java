@@ -3,9 +3,11 @@ package com.example.banksystem.controllers;
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Bank;
 import com.example.banksystem.models.BankOfficer;
+import com.example.banksystem.models.Transaction;
 import com.example.banksystem.repositories.AccountRepository;
 import com.example.banksystem.repositories.BankOfficerRepository;
 import com.example.banksystem.repositories.BankRepository;
+import com.example.banksystem.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -27,6 +30,9 @@ public class BankOfficerController {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    TransactionRepository transactionRepository;
 
     @GetMapping("/bo/bank-info/{id}")
     public String bankInfo(Model model, @PathVariable(name = "id") long id) {
@@ -125,6 +131,19 @@ public class BankOfficerController {
 
         if (response) {
             Account account = accountRepository.findById(id).get();
+
+            List<Transaction> transactions = transactionRepository.findAllByAccountTo(account);
+
+            for (Transaction transaction: transactions) {
+                transactionRepository.delete(transaction);
+            }
+
+            transactions = transactionRepository.findAllByAccountFrom(account);
+
+            for (Transaction transaction: transactions) {
+                transactionRepository.delete(transaction);
+            }
+
             accountRepository.delete(account);
             return "redirect:/bo/account-delete-success/" + id;
         } else {

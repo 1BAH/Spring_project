@@ -12,8 +12,8 @@
 
     <groupId>com.example</groupId>
     <artifactId>BankSystem</artifactId>
-    <version>3.0.FOX</version>
-    <name>BankSystem-v2.1-fox</name>
+    <version>3.0.1.FOX</version>
+    <name>BankSystem-v3.0.1-fox</name>
     <description>Bank system application</description>
 
     <properties>
