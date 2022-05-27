@@ -55,4 +55,4 @@ jobs:
         run: |
           mvn clean package
           cd target
-          java -jar BankSystem-2.1.SHRIMP.jar
+          java -jar BankSystem-3.0.FOX.jar
