@@ -53,7 +53,7 @@ jobs:
         run: |
           mvn clean package
           cd target
-          java -jar BankSystem-3.0.FOX.jar
+          java -jar BankSystem-3.0.1.FOX.jar
 
   Destribution:
     runs-on: ubuntu-latest
