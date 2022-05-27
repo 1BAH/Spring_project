@@ -13,7 +13,7 @@
             <div class="col-md-4">
                 <label for="validationCustom01" class="form-label" >Bank name</label>
                 <input name="name" type="text" class="form-control"
-                       id="validationCustom01" th:placeholder="${bank.name}" required>
+                       id="validationCustom01" th:value="${bank.name}" required>
                 <div class="valid-feedback">
                     OK
                 </div>
@@ -25,7 +25,7 @@
                 <div class="input-group has-validation">
                     <input name="percentage" type="text" class="form-control"
                            id="validationCustomUsername" aria-describedby="inputGroupPrepend"
-                           required th:placeholder="${bank.percentage}">
+                           required th:value="${bank.percentage}">
                     <span class="input-group-text" id="inputGroupPrepend">%</span>
                     <div class="valid-feedback">
                         OK
