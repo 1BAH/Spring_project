@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: bo"></header>
+
+<main>
+    <p class="display-2 font-weight-bold mx-5 mt-2">Banks</p>
+
+    <article>
+        <div class="bd mt-5 mb-3 mt-xl-0 mb-xl-2" style="display: block; text-align: left;">
+            <table class="table table-warning table-striped mt-2">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Percentage</th>
+                </tr>
+                </thead>
+                <tbody th:each="el : ${banks}">
+                <tr>
+                    <th scope="row" th:text="${el.id}"/>
+                    <td th:text="${el.name}"/>
+                    <td th:text="${el.percentage}"/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </article>
+
+    <button type="button" class="btn mx-4 my-2 btn-outline-warning" onclick="window.location.href = '/bo/banks/add';">Create new bank</button>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

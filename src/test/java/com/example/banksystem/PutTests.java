@@ -2,11 +2,9 @@ package com.example.banksystem;
 
 import com.example.banksystem.models.Account;
 import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
@@ -45,12 +43,22 @@ public class PutTests {
     TransactionRepository transactionRepository;
 
     @MockBean
+    BankOfficerRepository bankOfficerRepository;
+
+    @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
+
+    @MockBean
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void putFirstPage() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
@@ -71,7 +79,8 @@ public class PutTests {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void choose() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
@@ -93,7 +102,8 @@ public class PutTests {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void chooseIdIsEmpty() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
@@ -111,13 +121,15 @@ public class PutTests {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void put() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
         client.addAccounts(account);
 
         Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(java.util.Optional.of(account));
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/put/2")
@@ -133,13 +145,16 @@ public class PutTests {
     @Test
     @WithMockUser(username = "user", password = "pass")
     public void putAmountIsEmpty() throws Exception {
-        Bank bank = new Bank(1, "bank", 10);
+        BankOfficer bankOfficer = new BankOfficer("username", "120");
+        Bank bank = new Bank(1, "bank", 10, bankOfficer);
         Client client = new Client(3,"user", "sur", "add", "pass");
         Account account = new Account(2, new BigDecimal(1000), "Credit", bank, client);
         bank.addAccounts(account);
         client.addAccounts(account);
 
         Mockito.when(accountRepository.findById(Mockito.any())).thenReturn(java.util.Optional.of(account));
+        Mockito.when(clientRepository.findByPassport(Mockito.any())).thenReturn(client);
+
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
                 .get("/put/2");

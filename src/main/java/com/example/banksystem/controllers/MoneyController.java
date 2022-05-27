@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller for money operations
@@ -36,6 +37,12 @@ public class MoneyController {
     public String withdrawMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("accounts", accounts);
         model.addAttribute("user", currentClient);
@@ -54,6 +61,12 @@ public class MoneyController {
         model.addAttribute("choice", accountId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Withdraw money");
         return "operations/withdraw";
@@ -66,7 +79,15 @@ public class MoneyController {
      * @return redirects to /accounts page if there are enough money on account otherwise to /withdraw/withdraw-error page
      */
     @GetMapping("/withdraw/{accountId}")
-    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
+    public String withdrawMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         Account account = accountRepository.findById(accountId).get();
         if (account.withdrawMoney(amount, false)) {
             accountRepository.save(account);
@@ -84,6 +105,12 @@ public class MoneyController {
     public String transactionError(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
@@ -100,6 +127,12 @@ public class MoneyController {
     public String putMoney(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("accounts", accounts);
         model.addAttribute("user", currentClient);
@@ -118,6 +151,12 @@ public class MoneyController {
         model.addAttribute("choice", accountId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Put money");
         return "operations/put";
@@ -130,7 +169,14 @@ public class MoneyController {
      * @return redirects to /accounts page
      */
     @GetMapping("/put/{accountId}")
-    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount) {
+    public String putMoneyGet(@PathVariable(value = "accountId") long accountId, @RequestParam BigDecimal amount, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
         Account account = accountRepository.findById(accountId).get();
         account.putMoney(amount);
         accountRepository.save(account);

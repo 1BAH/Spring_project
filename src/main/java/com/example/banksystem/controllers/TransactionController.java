@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Controller for transactions from one account to another one
@@ -41,6 +42,11 @@ public class TransactionController {
     public String transactionsPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
 
         List<Account> accounts = currentClient.getAccounts();
         Iterable<Transaction> transactions = transactionRepository.findAll();
@@ -83,6 +89,10 @@ public class TransactionController {
     public String step1(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
@@ -115,6 +125,10 @@ public class TransactionController {
     public String step2self(Model model, @PathVariable(value = "fromId") long fromId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
@@ -133,6 +147,10 @@ public class TransactionController {
     public String step2(Model model, @PathVariable(value = "fromId") long fromId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
         model.addAttribute("user", currentClient);
         model.addAttribute("title", "Step 2");
         model.addAttribute("chosenAcc", fromId);
@@ -173,6 +191,12 @@ public class TransactionController {
     public String step3(Model model, @PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
         List<Account> accounts = currentClient.getAccounts();
 
         Account accFrom = accountRepository.findById(fromId).get();
@@ -196,11 +220,16 @@ public class TransactionController {
      */
     @GetMapping("/transactions/make/step-4/{fromId}/{toId}/form")
     public String step4(@RequestParam BigDecimal amount, @PathVariable(value = "fromId") long fromId, @PathVariable(value = "toId") long toId, Model model) {
-        Account accFrom = accountRepository.findById(fromId).get();
-        Account accTo = accountRepository.findById(toId).get();
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
+
+        Account accFrom = accountRepository.findById(fromId).get();
+        Account accTo = accountRepository.findById(toId).get();
 
         float commision = 0;
         boolean colored = true;
@@ -263,6 +292,10 @@ public class TransactionController {
     public String transactionError(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
         List<Account> accounts = currentClient.getAccounts();
         model.addAttribute("user", currentClient);
         model.addAttribute("accounts", accounts);
@@ -279,6 +312,10 @@ public class TransactionController {
     public String transactionInfo(Model model, @PathVariable(name = "id") long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
+        if (Objects.isNull(currentClient)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-cl";
+        }
         model.addAttribute("user", currentClient);
 
         Transaction transaction = transactionRepository.findById(id).get();
@@ -290,7 +327,7 @@ public class TransactionController {
             return "transactions/info";
         } else {
             model.addAttribute("title", "ERROR");
-            return "restricted";
+            return "errors/restricted";
         }
     }
 }

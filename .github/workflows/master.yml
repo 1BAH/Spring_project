@@ -53,4 +53,24 @@ jobs:
         run: |
           mvn clean package
           cd target
-          java -jar BankSystem-2.1.SHRIMP.jar
+          java -jar BankSystem-3.0.FOX.jar
+
+  Destribution:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to master
+          uses: actions/checkout@v3
+          with:
+            ref: master
+
+      - name: Creating jar file
+          run: |
+            mvn clean package
+
+      - name: Uploading artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: Bank System Application
+              path: |
+                target/BankSystem-3.0.FOX.jar

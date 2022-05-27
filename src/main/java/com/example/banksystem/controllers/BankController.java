@@ -1,7 +1,9 @@
 package com.example.banksystem.controllers;
 
 import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.BankOfficer;
 import com.example.banksystem.models.Client;
+import com.example.banksystem.repositories.BankOfficerRepository;
 import com.example.banksystem.repositories.BankRepository;
 import com.example.banksystem.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Objects;
 
 /**
  * Controller for bank pages and forms
@@ -23,6 +27,9 @@ public class BankController {
     @Autowired
     BankRepository bankRepository;
 
+    @Autowired
+    BankOfficerRepository bankOfficerRepository;
+
     /**
      * Page /bank - the table of all banks
      * @param model
@@ -32,11 +39,18 @@ public class BankController {
     public String banksPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Client currentClient = clientRepository.findByPassport(authentication.getName());
-        model.addAttribute("user", currentClient);
-        Iterable<Bank> banks = bankRepository.findAll();
-        model.addAttribute("banks", banks);
-        model.addAttribute("title", "Banks");
-        return "banks";
+        if (!Objects.isNull(currentClient)) {
+            model.addAttribute("user", currentClient);
+            Iterable<Bank> banks = bankRepository.findAll();
+            model.addAttribute("banks", banks);
+            model.addAttribute("title", "Banks");
+            return "banks/banks";
+        } else {
+            Iterable<Bank> banks = bankRepository.findAll();
+            model.addAttribute("banks", banks);
+            model.addAttribute("title", "Banks");
+            return "banks/banks-bo";
+        }
     }
 
     /**
@@ -44,13 +58,18 @@ public class BankController {
      * @param model
      * @return bank-add template
      */
-    @GetMapping("/banks/add")
+    @GetMapping("/bo/banks/add")
     public String banksAddPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Client currentClient = clientRepository.findByPassport(authentication.getName());
-        model.addAttribute("user", currentClient);
+        BankOfficer bankOfficer = bankOfficerRepository.findByUsername(authentication.getName());
+
+        if (Objects.isNull(bankOfficer)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-bo";
+        }
+        model.addAttribute("user", bankOfficer);
         model.addAttribute("title", "Bank creation");
-        return "banks-add";
+        return "banks/banks-add";
     }
 
     /**
@@ -59,9 +78,17 @@ public class BankController {
      * @param percentage bank's percentage (for commission and credit fee)
      * @return redirects to /banks page
      */
-    @GetMapping("/banks/add/form")
-    public String addBank(@RequestParam String name, @RequestParam String percentage) {
-        Bank bank = new Bank(name, Float.parseFloat(percentage));
+    @GetMapping("/bo/banks/add/form")
+    public String addBank(@RequestParam String name, @RequestParam String percentage, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BankOfficer bankOfficer = bankOfficerRepository.findByUsername(authentication.getName());
+
+        if (Objects.isNull(bankOfficer)) {
+            model.addAttribute("title", "403 FORBIDDEN");
+            return "errors/403-bo";
+        }
+
+        Bank bank = new Bank(name, Float.parseFloat(percentage),  bankOfficer);
         bankRepository.save(bank);
         return "redirect:/banks";
     }

@@ -1,12 +1,8 @@
 package com.example.banksystem;
 
-import com.example.banksystem.models.Account;
-import com.example.banksystem.models.Bank;
+import com.example.banksystem.models.Admin;
 import com.example.banksystem.models.Client;
-import com.example.banksystem.repositories.AccountRepository;
-import com.example.banksystem.repositories.BankRepository;
-import com.example.banksystem.repositories.ClientRepository;
-import com.example.banksystem.repositories.TransactionRepository;
+import com.example.banksystem.repositories.*;
 import com.example.banksystem.securityconfig.CustomAuthenticationEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -36,6 +32,15 @@ public class RegistrationTests {
 
     @MockBean
     BankRepository bankRepository;
+
+    @MockBean
+    AdminRepository adminRepository;
+
+    @MockBean
+    BankOfficerRepository bankOfficerRepository;
+
+    @MockBean
+    BankOfficerPrototypeRepository bankOfficerPrototypeRepository;
 
     @MockBean
     TransactionRepository transactionRepository;
@@ -127,5 +132,54 @@ public class RegistrationTests {
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void boRegistration() throws  Exception {
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/registration");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "Registration"));
+    }
+
+    @Test
+    public void boNameIsEmpty() throws Exception {
+        Admin admin = new Admin();
+
+        Mockito.when(adminRepository.findByName(Mockito.any())).thenReturn(admin);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/registration/form")
+                .param("pass", "user");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void boPasswordIsEmpty() throws Exception {
+        Admin admin = new Admin();
+
+        Mockito.when(adminRepository.findByName(Mockito.any())).thenReturn(admin);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/registration/form")
+                .param("name", "user");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void boRegSuccess() throws Exception {
+        Admin admin = new Admin();
+
+        Mockito.when(adminRepository.findByName(Mockito.any())).thenReturn(admin);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/bo/registration/form")
+                .param("name", "user")
+                .param("pass", "pass");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk());
     }
 }

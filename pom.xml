@@ -12,8 +12,8 @@
 
     <groupId>com.example</groupId>
     <artifactId>BankSystem</artifactId>
-    <version>2.1.SHRIMP</version>
-    <name>BankSystem-v2.1-shrimp</name>
+    <version>3.0.FOX</version>
+    <name>BankSystem-v2.1-fox</name>
     <description>Bank system application</description>
 
     <properties>

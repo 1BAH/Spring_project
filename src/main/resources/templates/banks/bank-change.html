@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+<header th:insert="blocks/header :: bo"></header>
+
+<main>
+    <p class="display-5 font-weight-bold mx-5 mt-2">Change info</p>
+
+    <div class="display6 font-weight-bold mx-5 mt-2">
+        <form th:action="'/bo/bank-change-info/form/' + ${bank.id}" method="get" class="row g-3 needs-validation" novalidate>
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label" >Bank name</label>
+                <input name="name" type="text" class="form-control"
+                       id="validationCustom01" th:value="${bank.name}" required>
+                <div class="valid-feedback">
+                    OK
+                </div>
+                <div class="invalid-feedback">
+                    Input bank name
+                </div>
+
+                <label for="validationCustomUsername" class="form-label">Percentage</label>
+                <div class="input-group has-validation">
+                    <input name="percentage" type="text" class="form-control"
+                           id="validationCustomUsername" aria-describedby="inputGroupPrepend"
+                           required th:value="${bank.percentage}">
+                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                    <div class="valid-feedback">
+                        OK
+                    </div>
+                    <div class="invalid-feedback">
+                        Input percentage
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-outline-warning" type="submit">Submit form</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</main>
+
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>
